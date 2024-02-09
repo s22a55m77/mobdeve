@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "175759106789",
+    "project_id": "checkinface-c90fb",
+    "storage_bucket": "checkinface-c90fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175759106789:android:ffa9e64e68910fd54b6a0c",
+        "android_client_info": {
+          "package_name": "com.checkinface"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175759106789-bhf7ame0eapc5hf43i1mhil3pbfksl66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.checkinface",
+            "certificate_hash": "9700f2cb509f3f0389c7311bdd322728f4f2797b"
+          }
+        },
+        {
+          "client_id": "175759106789-hpl54md8t9scorsgh23nj6389cdcjsq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDX157UVcbhZ835nsburNI9u9hF_tsWBJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175759106789-hpl54md8t9scorsgh23nj6389cdcjsq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
