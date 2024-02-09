@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import com.checkinface.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,13 +22,13 @@ class LoginActivity: Activity() {
     }
 
     private lateinit var auth: FirebaseAuth
-
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var viewBinding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Configure Google Sign In
+        //Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("175759106789-p60f9h0ubg8hhta2lpcfp008f49412lt.apps.googleusercontent.com")
             .requestEmail()
@@ -36,6 +37,14 @@ class LoginActivity: Activity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         auth = Firebase.auth
+
+        this.viewBinding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+
+
+        viewBinding.btnLogin.setOnClickListener {
+            signIn()
+        }
     }
 
     override fun onStart() {
