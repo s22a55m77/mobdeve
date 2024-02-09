@@ -1,6 +1,11 @@
 package com.checkinface.dashboard
 
 import com.checkinface.model.DashboardModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.GregorianCalendar
+import java.util.Locale
 
 class DashboardDataGenerator {
     companion object {
@@ -8,29 +13,24 @@ class DashboardDataGenerator {
             val data = ArrayList<DashboardModel>()
             data.add(DashboardModel(
                 "GEETHIC",
-                3,
-                2
+                SimpleDateFormat("24/1/2024", Locale.TAIWAN)
             )
             )
             data.add(DashboardModel(
                 "ITPLANN",
-                5,
-                0
+                SimpleDateFormat("2/1/2024", Locale.TAIWAN)
             ))
             data.add(DashboardModel(
                 "GERPHIS",
-                0,
-                2
+                SimpleDateFormat("24/2/2024", Locale.TAIWAN)
             ))
             data.add(DashboardModel(
                 "GEMATMW",
-                1,
-                3
+                SimpleDateFormat("4/3/2024", Locale.TAIWAN)
             ))
             data.add(DashboardModel(
                 "ISDEVOP",
-                6,
-                10
+                SimpleDateFormat("12/2/2024", Locale.TAIWAN)
             ))
             return data
         }
