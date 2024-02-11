@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
@@ -39,6 +40,28 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.tool_bar))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            navView.menu.findItem(destination.id)?.isChecked = true
+        }
+
+        navView.setOnItemSelectedListener {item ->
+            when (item.itemId) {
+                R.id.navigation_dashboard -> {
+                    navController.navigate(R.id.navigation_dashboard)
+                    true
+                }
+                R.id.navigation_user_profile -> {
+                    navController.navigate(R.id.navigation_user_profile)
+                    true
+                }
+                R.id.navigation_camera -> {
+                    navController.navigate(R.id.navigation_camera)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -55,5 +78,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
