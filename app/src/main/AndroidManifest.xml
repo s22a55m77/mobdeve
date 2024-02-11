@@ -20,9 +20,6 @@
             android:value="barcode_ui"/>
 
         <activity
-            android:name=".CourseActivity"
-            android:exported="false" />
-        <activity
             android:name=".InitializeActivity"
             android:exported="false" />
         <activity

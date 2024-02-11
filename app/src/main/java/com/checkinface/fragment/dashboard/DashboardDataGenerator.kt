@@ -10,7 +10,7 @@ class DashboardDataGenerator {
             data.add(
                 DashboardModel(
                 "GEETHIC",
-                SimpleDateFormat("24/1/2024", Locale.TAIWAN)
+                SimpleDateFormat("24/1/2024", Locale.ENGLISH)
             )
             )
             data.add(
