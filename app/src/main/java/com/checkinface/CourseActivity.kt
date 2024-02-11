@@ -11,7 +11,7 @@ class CourseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
 
-        this.tv_appbar = findViewById(R.id.appbar_top)
-        tv_appbar.title = "Course"
+//        this.tv_appbar = findViewById(R.id.appbar_top)
+//        tv_appbar.title = "Course"
     }
 }

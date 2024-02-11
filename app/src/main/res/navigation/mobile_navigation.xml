@@ -8,12 +8,18 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.checkinface.fragment.dashboard.DashboardFragment"
-        android:label="dashboard"
+        android:label="@string/dashboard"
         tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.checkinface.fragment.camera.CameraFragment"
+        android:label="@string/camera"
+        tools:layout="@layout/fragment_camera" />
 
     <fragment
         android:id="@+id/navigation_user_profile"
         android:name="com.checkinface.fragment.user_profile.UserProfileFragment"
-        android:label="notification"
+        android:label="@string/user_profile"
         tools:layout="@layout/fragment_user_profile" />
 </navigation>
