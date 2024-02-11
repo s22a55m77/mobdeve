@@ -5,9 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InitializeActivity">
-    <include
-        android:id="@+id/include2"
-        layout="@layout/appbar" />
 
     <LinearLayout
         android:id="@+id/initializeTitleLl"
