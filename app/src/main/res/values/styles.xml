@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="course_status_present">
+        <item name="android:src">@drawable/ic_check</item>
+    </style>
+    <style name="course_status_absent">
+        <item name="android:src">@drawable/ic_close</item>
+    </style>
+    <style name="course_status_late">
+        <item name="android:src">@drawable/ic_clock</item>
+    </style>
+</resources>
