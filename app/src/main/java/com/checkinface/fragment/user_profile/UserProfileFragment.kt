@@ -17,9 +17,10 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.viewBinding.tvEmail.text = authUser?.email.takeUnless { it.isNullOrEmpty() } ?: "no user"
-        this.viewBinding.tvUsername.text = authUser?.displayName
-        Picasso.get().load(authUser?.photoUrl).into(this.viewBinding.ivAvatar)
+        this.viewBinding.tvUserEmail.text = authUser?.email
+        this.viewBinding.tvUsername.text = authUser?.displayName.takeUnless { it.isNullOrEmpty() } ?: "Not Login"
+        if(authUser?.photoUrl != null)
+            Picasso.get().load(authUser?.photoUrl).into(this.viewBinding.ivAvatar)
     }
 
     override fun onCreateView(
@@ -30,4 +31,5 @@ class UserProfileFragment : Fragment() {
         this.viewBinding = FragmentUserProfileBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
+
 }
