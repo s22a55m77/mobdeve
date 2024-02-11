@@ -1,4 +1,4 @@
-package com.checkinface.model
+package com.checkinface.fragment.dashboard
 
 import java.text.SimpleDateFormat
 

@@ -1,10 +1,9 @@
-package com.checkinface.dashboard
+package com.checkinface.fragment.dashboard
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
-import com.checkinface.model.DashboardModel
 import java.util.Date
 
 class DashboardViewHolder(itemView: View): ViewHolder(itemView) {

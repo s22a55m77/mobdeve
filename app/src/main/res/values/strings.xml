@@ -3,4 +3,5 @@
     <string name="dashboard">Dashboard</string>
     <string name="user_profile">User Profile</string>
     <string name="camera">Camera</string>
+    <string name="hello_blank_fragment">Hello dashboard fragment</string>
 </resources>

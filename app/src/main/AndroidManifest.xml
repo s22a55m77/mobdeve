@@ -13,12 +13,6 @@
         android:theme="@style/Theme.CheckInFace"
         tools:targetApi="31">
         <activity
-            android:name=".UserProfile"
-            android:exported="false" />
-        <activity
-            android:name=".dashboard.DashboardActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity

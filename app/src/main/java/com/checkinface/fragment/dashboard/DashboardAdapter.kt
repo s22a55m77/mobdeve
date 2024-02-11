@@ -1,10 +1,9 @@
-package com.checkinface.dashboard
+package com.checkinface.fragment.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
-import com.checkinface.model.DashboardModel
 
 class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<DashboardViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
