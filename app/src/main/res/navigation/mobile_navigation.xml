@@ -8,12 +8,12 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.checkinface.fragment.dashboard.DashboardFragment"
-        android:label="dashboard"
+        android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_user_profile"
         android:name="com.checkinface.fragment.user_profile.UserProfileFragment"
-        android:label="notification"
+        android:label="User Profile"
         tools:layout="@layout/fragment_user_profile" />
 </navigation>
