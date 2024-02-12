@@ -1,12 +1,17 @@
 package com.checkinface.fragment.user_profile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.checkinface.LoginActivity
 import com.checkinface.databinding.FragmentUserProfileBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.squareup.picasso.Picasso
 
@@ -21,6 +26,16 @@ class UserProfileFragment : Fragment() {
         this.viewBinding.tvUsername.text = authUser?.displayName.takeUnless { it.isNullOrEmpty() } ?: "Not Login"
         if(authUser?.photoUrl != null)
             Picasso.get().load(authUser?.photoUrl).into(this.viewBinding.ivAvatar)
+
+        viewBinding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val googleSignInClient = GoogleSignIn.getClient(requireActivity().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)
+            googleSignInClient.signOut()
+            // TODO remove global user
+
+            val intentToLogin = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intentToLogin)
+        }
     }
 
     override fun onCreateView(
