@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.checkinface.LoginActivity
 import com.checkinface.databinding.FragmentUserProfileBinding
+import com.checkinface.util.UserSharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
@@ -31,7 +32,9 @@ class UserProfileFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             val googleSignInClient = GoogleSignIn.getClient(requireActivity().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)
             googleSignInClient.signOut()
-            // TODO remove global user
+
+            val userPreference = UserSharedPreference(requireContext())
+            userPreference.removeUserData()
 
             val intentToLogin = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intentToLogin)
