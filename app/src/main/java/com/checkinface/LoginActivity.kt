@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.checkinface.databinding.ActivityLoginBinding
+import com.checkinface.util.UserRole
+import com.checkinface.util.UserSharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -95,5 +97,10 @@ class LoginActivity: Activity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
+        if (user !== null) {
+            val userPreference = UserSharedPreference(this)
+            // TODO fix the role
+            userPreference.saveUserData(user, UserRole.STUDENT)
+        }
     }
 }
