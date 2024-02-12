@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
-import java.util.Date
+import com.checkinface.util.DateUtil
 
 class CourseViewHolder(itemView: View): ViewHolder(itemView) {
     private val tvCourseDate: TextView = itemView.findViewById(R.id.tv_attendance_date)
@@ -14,15 +14,14 @@ class CourseViewHolder(itemView: View): ViewHolder(itemView) {
 
     fun bindData(courseModel: CourseModel) {
         val status = courseModel.status.toString()
-        tvCourseDate.text = courseModel.date.format(Date(System.currentTimeMillis()))
+        tvCourseDate.text = DateUtil.getFormattedDate(courseModel.date)
         tvAttendanceStatus.text = status.lowercase().replaceFirstChar { it.uppercase() }
 
-        if (status == "PRESENT")
-            ivAttendanceIconStatus.setImageResource(R.drawable.ic_check)
-        else if (status == "ABSENT")
-            ivAttendanceIconStatus.setImageResource(R.drawable.ic_close)
-        else if (status == "LATE")
-            ivAttendanceIconStatus.setImageResource(R.drawable.ic_clock)
+        when (status) {
+            "PRESENT" -> ivAttendanceIconStatus.setImageResource(R.drawable.ic_check)
+            "ABSENT" -> ivAttendanceIconStatus.setImageResource(R.drawable.ic_close)
+            "LATE" -> ivAttendanceIconStatus.setImageResource(R.drawable.ic_clock)
+        }
     }
 
 }

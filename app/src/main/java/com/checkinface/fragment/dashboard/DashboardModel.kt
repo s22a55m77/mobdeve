@@ -1,10 +1,10 @@
 package com.checkinface.fragment.dashboard
 
-import java.text.SimpleDateFormat
+import java.util.Date
 
 data class DashboardModel(
     val course: String,
     val backgroundColor: String,
-    val nextCheckTime: SimpleDateFormat?,
+    val nextCheckTime: Date?,
     val studentCount: Number?
 )

@@ -1,7 +1,6 @@
 package com.checkinface.fragment.course
 
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.checkinface.util.DateUtil
 
 class CourseDataGenerator {
     companion object {
@@ -9,31 +8,31 @@ class CourseDataGenerator {
             val data = ArrayList<CourseModel>()
             data.add(
                 CourseModel(
-                    SimpleDateFormat("24/1/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     CourseStatus.PRESENT
                 )
             )
             data.add(
                 CourseModel(
-                    SimpleDateFormat("26/1/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     CourseStatus.ABSENT
                 )
             )
             data.add(
                 CourseModel(
-                    SimpleDateFormat("28/1/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     CourseStatus.LATE
                 )
             )
             data.add(
                 CourseModel(
-                    SimpleDateFormat("30/1/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     CourseStatus.PRESENT
                 )
             )
             data.add(
                 CourseModel(
-                    SimpleDateFormat("1/2/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     CourseStatus.PRESENT
                 )
             )

@@ -1,7 +1,6 @@
 package com.checkinface.fragment.dashboard
 
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.checkinface.util.DateUtil
 
 class DashboardDataGenerator {
     companion object {
@@ -11,7 +10,7 @@ class DashboardDataGenerator {
                 DashboardModel(
                     "GEETHIC",
                     "#4f8045",
-                    SimpleDateFormat("24/1/2024", Locale.ENGLISH),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     25
             )
             )
@@ -19,7 +18,7 @@ class DashboardDataGenerator {
                 DashboardModel(
                 "ITPLANN",
                     "#1a7f93",
-                SimpleDateFormat("2/1/2024", Locale.TAIWAN),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     30
             )
             )
@@ -27,7 +26,7 @@ class DashboardDataGenerator {
                 DashboardModel(
                 "GERPHIS",
                     "#cb3f77",
-                SimpleDateFormat("24/2/2024", Locale.TAIWAN),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     40
             )
             )
@@ -35,7 +34,7 @@ class DashboardDataGenerator {
                 DashboardModel(
                 "GEMATMW",
                     "#63a290",
-                SimpleDateFormat("4/3/2024", Locale.TAIWAN),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     33
             )
             )
@@ -43,7 +42,7 @@ class DashboardDataGenerator {
                 DashboardModel(
                 "ISDEVOP",
                     "#8366b4",
-                SimpleDateFormat("12/2/2024", Locale.TAIWAN),
+                    DateUtil.getDate("2024-02-12T07:00:01+08:00"),
                     12
             )
             )

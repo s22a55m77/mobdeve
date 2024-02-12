@@ -1,8 +1,8 @@
 package com.checkinface.fragment.course
 
-import java.text.SimpleDateFormat
+import java.util.Date
 
 data class CourseModel(
-    val date: SimpleDateFormat,
+    val date: Date,
     val status: CourseStatus
 )
