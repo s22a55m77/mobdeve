@@ -36,7 +36,7 @@ class LoginActivity: Activity() {
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient = GoogleSignIn.getClient(applicationContext, gso)
 
         auth = Firebase.auth
 
@@ -101,6 +101,9 @@ class LoginActivity: Activity() {
             val userPreference = UserSharedPreference(this)
             // TODO fix the role
             userPreference.saveUserData(user, UserRole.STUDENT)
+
+            val intentToDashboard = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intentToDashboard)
         }
     }
 }

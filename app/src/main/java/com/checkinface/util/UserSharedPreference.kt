@@ -22,4 +22,12 @@ class UserSharedPreference(context: Context) {
         val role = if (roleString != null) UserRole.valueOf(roleString) else null
         return Triple(displayName, email, role)
     }
+
+    fun removeUserData() {
+        val editor = sharedPreferences.edit()
+        editor.remove("displayName")
+        editor.remove("email")
+        editor.remove("role")
+        editor.apply()
+    }
 }
