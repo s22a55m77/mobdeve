@@ -9,32 +9,42 @@ class DashboardDataGenerator {
             val data = ArrayList<DashboardModel>()
             data.add(
                 DashboardModel(
-                "GEETHIC",
-                SimpleDateFormat("24/1/2024", Locale.ENGLISH)
+                    "GEETHIC",
+                    "#4f8045",
+                    SimpleDateFormat("24/1/2024", Locale.ENGLISH),
+                    25
             )
             )
             data.add(
                 DashboardModel(
                 "ITPLANN",
-                SimpleDateFormat("2/1/2024", Locale.TAIWAN)
+                    "#1a7f93",
+                SimpleDateFormat("2/1/2024", Locale.TAIWAN),
+                    30
             )
             )
             data.add(
                 DashboardModel(
                 "GERPHIS",
-                SimpleDateFormat("24/2/2024", Locale.TAIWAN)
+                    "#cb3f77",
+                SimpleDateFormat("24/2/2024", Locale.TAIWAN),
+                    40
             )
             )
             data.add(
                 DashboardModel(
                 "GEMATMW",
-                SimpleDateFormat("4/3/2024", Locale.TAIWAN)
+                    "#63a290",
+                SimpleDateFormat("4/3/2024", Locale.TAIWAN),
+                    33
             )
             )
             data.add(
                 DashboardModel(
                 "ISDEVOP",
-                SimpleDateFormat("12/2/2024", Locale.TAIWAN)
+                    "#8366b4",
+                SimpleDateFormat("12/2/2024", Locale.TAIWAN),
+                    12
             )
             )
             return data

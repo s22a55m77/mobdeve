@@ -4,5 +4,7 @@ import java.text.SimpleDateFormat
 
 data class DashboardModel(
     val course: String,
-    val nextCheckTime: SimpleDateFormat
+    val backgroundColor: String,
+    val nextCheckTime: SimpleDateFormat?,
+    val studentCount: Number?
 )

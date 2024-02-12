@@ -1,17 +1,25 @@
 package com.checkinface.fragment.dashboard
 
+import android.graphics.Color
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
 import java.util.Date
 
 class DashboardViewHolder(itemView: View): ViewHolder(itemView) {
-    private val dashboardCourseTv: TextView = itemView.findViewById(R.id.dashboardCourseTv);
-    private val dashboardCheckTimeTv: TextView = itemView.findViewById(R.id.dashboardCheckTimeTv);
+    private val tvDashboardCourse: TextView = itemView.findViewById(R.id.tv_dashboard_course);
+    private val tvDashboardCheckTime: TextView = itemView.findViewById(R.id.tv_dashboard_check_time);
+    private val frameTitleContainer: FrameLayout = itemView.findViewById(R.id.frame_title_container)
 
     fun bindData(dashboardModel: DashboardModel) {
-        dashboardCourseTv.text = dashboardModel.course
-        dashboardCheckTimeTv.text = dashboardModel.nextCheckTime.format(Date(System.currentTimeMillis()))
+        tvDashboardCourse.text = dashboardModel.course
+        if (dashboardModel.nextCheckTime !== null)
+            tvDashboardCheckTime.text = dashboardModel.nextCheckTime.format(Date(System.currentTimeMillis()))
+        else
+            tvDashboardCheckTime.visibility = View.GONE
+
+        frameTitleContainer.setBackgroundColor(Color.parseColor(dashboardModel.backgroundColor))
     }
 }
