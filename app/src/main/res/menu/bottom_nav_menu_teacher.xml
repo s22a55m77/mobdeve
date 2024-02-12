@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:enabled="true"
+        android:icon="@drawable/ic_list"
+        android:title="@string/student_list"/>
+    <item
+        android:id="@+id/navigation_camera"
+        android:enabled="true"
+        android:icon="@drawable/ic_attendance"
+        android:title="@string/attendance_list"/>
+</menu>
