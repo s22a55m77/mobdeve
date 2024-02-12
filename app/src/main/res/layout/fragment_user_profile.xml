@@ -11,6 +11,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:focusable="true"
+    android:background="@color/background_gray"
     tools:context=".UserProfile">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView

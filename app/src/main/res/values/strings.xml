@@ -4,4 +4,6 @@
     <string name="user_profile">User Profile</string>
     <string name="camera">Camera</string>
     <string name="hello_blank_fragment">Hello dashboard fragment</string>
+    <string name="student_list">Student List</string>
+    <string name="attendance_list">Attendance List</string>
 </resources>
