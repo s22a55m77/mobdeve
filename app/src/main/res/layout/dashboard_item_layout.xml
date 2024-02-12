@@ -52,6 +52,15 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:paddingTop="10dp"
+                    android:text="Student: "
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
                     android:text="Next Check Time: "
                     android:textSize="12sp" />
 
