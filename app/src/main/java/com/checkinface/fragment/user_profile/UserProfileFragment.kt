@@ -1,10 +1,12 @@
 package com.checkinface.fragment.user_profile
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.checkinface.R
 import com.checkinface.databinding.FragmentUserProfileBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -13,6 +15,12 @@ import com.squareup.picasso.Picasso
 class UserProfileFragment : Fragment() {
     private lateinit var viewBinding: FragmentUserProfileBinding
     private val authUser = Firebase.auth.currentUser
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

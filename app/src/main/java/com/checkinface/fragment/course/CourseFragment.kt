@@ -1,24 +1,32 @@
 package com.checkinface.fragment.course
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+import android.view.ViewTreeObserver
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
-import com.checkinface.fragment.dashboard.DashboardAdapter
-import com.checkinface.fragment.dashboard.DashboardDataGenerator
+
 
 class CourseFragment : Fragment() {
 
     private val courseModelList = CourseDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        postponeEnterTransition()
 
         this.recyclerView = view.findViewById(R.id.rv_course)
 
@@ -26,6 +34,14 @@ class CourseFragment : Fragment() {
         this.recyclerView.layoutManager = linearLayoutManager
 
         this.recyclerView.adapter = CourseAdapter(this.courseModelList)
+
+        view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                view.viewTreeObserver.removeOnPreDrawListener(this)
+                startPostponedEnterTransition()
+                return true
+            }
+        })
     }
 
     override fun onCreateView(
