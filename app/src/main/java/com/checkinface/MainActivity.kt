@@ -1,13 +1,14 @@
 package com.checkinface
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -15,18 +16,30 @@ import androidx.navigation.ui.setupWithNavController
 import com.checkinface.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.internal.ViewUtils.hideKeyboard
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = Firebase.auth
+
+        if (auth.currentUser == null) {
+            val intentToLogin = Intent(this@MainActivity, LoginActivity::class.java)
+            intentToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intentToLogin)
+            finish()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        val intent = Intent(this, DashboardActivity::class.java)
-//        startActivity(intent)
 
         val navView: BottomNavigationView = binding.navView
 
