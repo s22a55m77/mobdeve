@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.checkinface.R
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -15,17 +14,7 @@ import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
 import java.util.Date
 
-data class SelectedDays (
-    val monday: Boolean,
-    val tuesday: Boolean,
-    val wednesday: Boolean,
-    val thursday: Boolean,
-    val friday: Boolean,
-    val saturday: Boolean,
-    val sunday: Boolean,
-)
-
-class CreateAttendance : AppCompatActivity() {
+class CreateAttendanceActivity : AppCompatActivity() {
     private lateinit var selectedDateRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +25,12 @@ class CreateAttendance : AppCompatActivity() {
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select Date Range")
+                .build()
+
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Date Range")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build()
 
         val startTimePicker =
@@ -57,8 +52,12 @@ class CreateAttendance : AppCompatActivity() {
                 .build()
 
 
-        viewBinding.btnDatePicker.setOnClickListener {
+        viewBinding.btnDateRangePicker.setOnClickListener {
             dateRangePicker.show(supportFragmentManager, dateRangePicker.toString())
+        }
+
+        viewBinding.btnDatePicker.setOnClickListener {
+            datePicker.show(supportFragmentManager, datePicker.toString())
         }
 
         viewBinding.btnStartTimePicker.setOnClickListener {
@@ -95,10 +94,13 @@ class CreateAttendance : AppCompatActivity() {
             if(isChecked) {
                 viewBinding.cardViewRecurringDayGroup.visibility = View.VISIBLE
                 viewBinding.cardViewRecurringDateGroup.visibility = View.VISIBLE
+                viewBinding.cardViewRecurringSelectedDateGroup.visibility = View.VISIBLE
+                viewBinding.cardViewDateGroup.visibility = View.GONE
             }
             else {
                 viewBinding.cardViewRecurringDayGroup.visibility = View.GONE
                 viewBinding.cardViewRecurringDateGroup.visibility = View.GONE
+                viewBinding.cardViewRecurringSelectedDateGroup.visibility = View.GONE
             }
         }
 
@@ -168,6 +170,26 @@ class CreateAttendance : AppCompatActivity() {
 
                 selectedDateRecyclerView.adapter = SelectedDateAdapter(dateModelList)
             }
+        }
+
+        datePicker.addOnPositiveButtonClickListener {
+            viewBinding.tvSelectedDate.text = DateUtil.getFormattedDate(Date(datePicker.selection!!))
+            viewBinding.tvSelectedDate.visibility = View.VISIBLE
+        }
+
+        startTimePicker.addOnPositiveButtonClickListener {
+            val message = "Select Start Time: " + startTimePicker.hour + ":" + startTimePicker.minute
+            viewBinding.btnStartTimePicker.text = message
+        }
+
+        lateTimePicker.addOnPositiveButtonClickListener {
+            val message = "Select Late Time: " + lateTimePicker.hour + ":" + lateTimePicker.minute
+            viewBinding.btnLateTimePicker.text = message
+        }
+
+        absentTimePicker.addOnPositiveButtonClickListener {
+            val message = "Select Absent Time: " + absentTimePicker.hour + ":" + absentTimePicker.minute
+            viewBinding.btnAbsentTimePicker.text = message
         }
 
     }

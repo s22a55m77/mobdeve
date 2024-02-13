@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_gray"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_create_attendance"
@@ -32,6 +34,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_create_attendance_title">
@@ -82,6 +85,7 @@
             android:layout_marginTop="10dp"
             android:text="Select Geolocation"
             android:visibility="gone"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_view_option_group" />
@@ -94,6 +98,7 @@
             android:layout_marginTop="10dp"
             android:text="Select Pattern"
             android:visibility="gone"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_geolocation" />
@@ -106,6 +111,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_pattern">
@@ -127,21 +133,69 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="10dp"
-                    android:text="Select Start Time"/>
+                    android:text="Select Start Time"
+                    app:strokeWidth="0dp"/>
                 <Button
                     android:id="@+id/btn_late_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="Select Late Time"/>
+                    android:text="Select Late Time"
+                    app:strokeWidth="0dp"/>
                 <Button
                     android:id="@+id/btn_absent_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="Select Absent Time"/>
+                    android:text="Select Absent Time"
+                    app:strokeWidth="0dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_date_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/seed"
+            app:strokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_time_group">
+            <LinearLayout
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/md_theme_light_surface"
+                    android:text="Date"/>
+
+                <TextView
+                    android:id="@+id/tv_selected_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Sample Date"
+                    android:visibility="gone"
+                    android:textColor="@color/md_theme_light_surface"
+                    android:textSize="15sp" />
+                <Button
+                    android:id="@+id/btn_date_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Select Date"
+                    app:strokeWidth="0dp"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -154,9 +208,10 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
             android:visibility="gone"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_time_group">
+            app:layout_constraintTop_toBottomOf="@+id/card_view_date_group">
             <LinearLayout
                 android:padding="10dp"
                 android:orientation="vertical"
@@ -222,6 +277,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
             android:visibility="gone"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_view_recurring_day_group">
@@ -238,13 +294,14 @@
                 android:textColor="@color/md_theme_light_surface"
                 android:text="Date Range"/>
             <Button
-                android:id="@+id/btn_date_picker"
+                android:id="@+id/btn_date_range_picker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
                 android:text="Select Date"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_pattern" />
@@ -258,7 +315,9 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/seed"
+            android:backgroundTint="@color/md_theme_light_secondaryContainer"
+            android:visibility="gone"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_view_recurring_date_group">
@@ -271,7 +330,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textColor="@color/md_theme_light_surface"
                 android:text="Selected Date"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -285,10 +343,12 @@
             android:id="@+id/btn_create_attendance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="2dp"
             android:text="Create"
+            app:strokeWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
