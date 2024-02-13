@@ -6,22 +6,21 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
+import com.checkinface.databinding.DashboardItemLayoutBinding
 import com.checkinface.util.DateUtil
+import com.checkinface.util.UserSharedPreference
 
-class DashboardViewHolder(itemView: View): ViewHolder(itemView) {
-    private val tvDashboardCourse: TextView = itemView.findViewById(R.id.tv_dashboard_course)
-    private val tvDashboardCheckTime: TextView = itemView.findViewById(R.id.tv_dashboard_check_time)
-    private val frameTitleContainer: FrameLayout = itemView.findViewById(R.id.frame_title_container)
-
+class DashboardViewHolder(private val binding: DashboardItemLayoutBinding): ViewHolder(binding.root) {
     fun bindData(dashboardModel: DashboardModel) {
-        tvDashboardCourse.text = dashboardModel.course
+        binding.tvDashboardCourse.text = dashboardModel.course
         if (dashboardModel.nextCheckTime !== null) {
-            tvDashboardCheckTime.text = DateUtil.getFormattedDate(dashboardModel.nextCheckTime)
+            binding.tvDashboardCheckTime.text = DateUtil.getFormattedDate(dashboardModel.nextCheckTime)
         }
 
-        else
-            tvDashboardCheckTime.visibility = View.GONE
+        if (dashboardModel.studentCount !== null) {
+            binding.tvDashboardStudent.text = dashboardModel.studentCount.toString()
+        }
 
-        frameTitleContainer.setBackgroundColor(Color.parseColor(dashboardModel.backgroundColor))
+        binding.frameTitleContainer.setBackgroundColor(Color.parseColor(dashboardModel.backgroundColor))
     }
 }

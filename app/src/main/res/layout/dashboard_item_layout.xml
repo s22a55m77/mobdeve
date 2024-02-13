@@ -48,15 +48,25 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_dashboard_student_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:paddingTop="10dp"
                     android:text="Student: "
-                    android:textSize="12sp"
-                    android:visibility="gone"/>
+                    android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_dashboard_student"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="20dp"
+                    android:text="TextView"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_dashboard_check_time_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
