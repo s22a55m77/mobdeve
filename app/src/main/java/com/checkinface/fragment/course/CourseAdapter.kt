@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
+import com.checkinface.databinding.CouseItemLayoutBinding
 
 class CourseAdapter(private val data: ArrayList<CourseModel>): Adapter<CourseViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.couse_item_layout, parent, false)
+        val binding = CouseItemLayoutBinding.inflate(inflater, parent, false)
 
-        return CourseViewHolder(view)
+        return CourseViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
