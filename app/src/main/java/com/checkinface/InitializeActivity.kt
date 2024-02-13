@@ -18,13 +18,13 @@ class InitializeActivity : AppCompatActivity() {
         val userPreference = UserSharedPreference(this)
 
 
-        viewBinding.initializeStudentGroup.setOnClickListener {
+        viewBinding.btnStudent.setOnClickListener {
             val intentToDashboard = Intent(this@InitializeActivity, MainActivity::class.java)
             userPreference.setRole(UserRole.STUDENT)
             startActivity(intentToDashboard)
         }
 
-        viewBinding.initializeTeacherGroup.setOnClickListener {
+        viewBinding.btnTeacher.setOnClickListener {
             val intentToDashboard = Intent(this@InitializeActivity, MainActivity::class.java)
             userPreference.setRole(UserRole.TEACHER)
             startActivity(intentToDashboard)
