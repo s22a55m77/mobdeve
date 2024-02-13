@@ -14,7 +14,7 @@ import com.checkinface.R
 
 class CourseFragment : Fragment() {
 
-    private val courseModelList = CourseDataGenerator.loadData()
+    private val attendanceModelList = CourseDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class CourseFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = CourseAdapter(this.courseModelList)
+        this.recyclerView.adapter = CourseAdapter(this.attendanceModelList)
 
         view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
