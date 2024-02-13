@@ -14,6 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.checkinface.databinding.ActivityMainBinding
+import com.checkinface.util.UserRole
+import com.checkinface.util.UserSharedPreference
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.firebase.Firebase
@@ -75,6 +77,13 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val userSharedPreference = UserSharedPreference(applicationContext)
+        if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
+        }
+
     }
 
     @SuppressLint("RestrictedApi")

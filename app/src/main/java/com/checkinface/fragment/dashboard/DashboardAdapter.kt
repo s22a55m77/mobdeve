@@ -16,10 +16,10 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         val binding = DashboardItemLayoutBinding.inflate(inflater, parent, false)
 
         val userSharedPreference = UserSharedPreference(parent.context)
-        if (userSharedPreference.getUserData().third?.equals(UserRole.STUDENT) == true) {
+        if (userSharedPreference.getRole()?.equals(UserRole.STUDENT) == true) {
             binding.tvDashboardStudentTitle.visibility = View.GONE
             binding.tvDashboardStudent.visibility = View.GONE
-        } else if (userSharedPreference.getUserData().third?.equals(UserRole.TEACHER) == true) {
+        } else if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
             binding.tvDashboardCheckTimeTitle.visibility = View.GONE
             binding.tvDashboardCheckTime.visibility = View.GONE
         }

@@ -98,12 +98,8 @@ class LoginActivity: Activity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user !== null) {
-            val userPreference = UserSharedPreference(this)
-            // TODO fix the role
-            userPreference.saveUserData(user, UserRole.STUDENT)
-
-            val intentToDashboard = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intentToDashboard)
+            val intentToInitialize = Intent(this@LoginActivity, InitializeActivity::class.java)
+            startActivity(intentToInitialize)
         }
     }
 }
