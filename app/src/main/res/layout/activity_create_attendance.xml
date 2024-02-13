@@ -10,7 +10,7 @@
         android:id="@+id/cl_create_attendance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".CreateAttendance">
+        tools:context=".activity.create_attendance.CreateAttendance">
 
         <TextView
             android:id="@+id/tv_create_attendance_title"
@@ -273,9 +273,11 @@
                 android:textSize="20sp"
                 android:textColor="@color/md_theme_light_surface"
                 android:text="Selected Date"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_selected_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

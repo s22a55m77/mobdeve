@@ -15,7 +15,7 @@
         android:theme="@style/Theme.CheckInFace"
         tools:targetApi="31">
         <activity
-            android:name=".CreateAttendance"
+            android:name=".activity.create_attendance.CreateAttendance"
             android:exported="false" />
 
         <meta-data

@@ -1,21 +1,19 @@
-package com.checkinface
+package com.checkinface.activity.create_attendance
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.util.Pair
-import androidx.core.util.component1
-import androidx.core.util.component2
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.checkinface.R
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
+import com.checkinface.util.DateUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 data class SelectedDays (
     val monday: Boolean,
@@ -28,6 +26,8 @@ data class SelectedDays (
 )
 
 class CreateAttendance : AppCompatActivity() {
+    private lateinit var selectedDateRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding = ActivityCreateAttendanceBinding.inflate(layoutInflater)
@@ -114,11 +114,6 @@ class CreateAttendance : AppCompatActivity() {
             )
             val date = dateRangePicker.selection
 
-            fun getFormatTimeWithTZ(currentTime:Date):String {
-                val timeZoneDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                return timeZoneDate.format(currentTime)
-            }
-
             fun getDatesInRange(startDate: Date, endDate: Date, days: SelectedDays): List<Date> {
                 val dates = mutableListOf<Date>()
                 val calendar = Calendar.getInstance()
@@ -153,18 +148,25 @@ class CreateAttendance : AppCompatActivity() {
             if (date != null) {
                 val startDate = Date(date.first)
                 val endDate = Date(date.second)
-                val formattedStartDate = getFormatTimeWithTZ(startDate)
-                val formattedEndDate = getFormatTimeWithTZ(endDate)
+                val formattedStartDate = DateUtil.getFormattedDate(startDate)
+                val formattedEndDate = DateUtil.getFormattedDate(endDate)
+
+                selectedDateRecyclerView = viewBinding.rvSelectedDate
+
+                val linearLayoutManager = LinearLayoutManager(applicationContext)
+                selectedDateRecyclerView.layoutManager = linearLayoutManager
 
                 val message = "Start Date: $formattedStartDate\nEnd Date: $formattedEndDate"
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
                 val datesInRange = getDatesInRange(startDate, endDate, selectedDay)
-                // Do something with the list of Mondays, such as displaying them
+                val dateModelList = ArrayList<DateModel>()
                 for (date in datesInRange) {
-                    val formattedMonday = getFormatTimeWithTZ(date)
-                    Log.d("Monday", formattedMonday) // Log the Mondays to Logcat
+                    val model = DateModel(DateUtil.getFormattedDate(date))
+                    dateModelList.add(model)
                 }
+
+                selectedDateRecyclerView.adapter = SelectedDateAdapter(dateModelList)
             }
         }
 
