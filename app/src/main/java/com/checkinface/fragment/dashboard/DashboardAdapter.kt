@@ -3,13 +3,10 @@ package com.checkinface.fragment.dashboard
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.DashboardItemLayoutBinding
-import com.checkinface.fragment.course.CourseFragment
 import com.checkinface.util.UserRole
 import com.checkinface.util.UserSharedPreference
 
@@ -38,7 +35,10 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         holder.bindData(data[position])
 
         holder.itemView.setOnClickListener {
-            holder.itemView.findNavController().navigate(R.id.action_dashboard_to_course)
+            val navController = holder.itemView.findNavController()
+
+            navController.navigate(R.id.action_dashboard_to_course)
+            navController.currentDestination?.label = data[position].course
         }
     }
 }
