@@ -1,23 +1,23 @@
-package com.checkinface.fragment.course
+package com.checkinface.fragment.student_attendance_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.databinding.CouseItemLayoutBinding
 
-class CourseAdapter(private val data: ArrayList<AttendanceModel>): Adapter<CourseViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
+class StudentAttendanceListAdapter(private val data: ArrayList<StudentAttendanceModel>): Adapter<StudentAttendanceListViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentAttendanceListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CouseItemLayoutBinding.inflate(inflater, parent, false)
 
-        return CourseViewHolder(binding)
+        return StudentAttendanceListViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StudentAttendanceListViewHolder, position: Int) {
         holder.bindData(data[position])
     }
 

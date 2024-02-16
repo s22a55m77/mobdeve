@@ -1,4 +1,4 @@
-package com.checkinface.fragment.course
+package com.checkinface.fragment.student_attendance_list
 
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 
 
-class CourseFragment : Fragment() {
+class StudentAttendanceListFragment : Fragment() {
 
-    private val attendanceModelList = CourseDataGenerator.loadData()
+    private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class CourseFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = CourseAdapter(this.attendanceModelList)
+        this.recyclerView.adapter = StudentAttendanceListAdapter(this.attendanceModelList)
 
         view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {

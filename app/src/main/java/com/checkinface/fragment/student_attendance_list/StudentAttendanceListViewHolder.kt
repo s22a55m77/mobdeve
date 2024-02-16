@@ -1,15 +1,15 @@
-package com.checkinface.fragment.course
+package com.checkinface.fragment.student_attendance_list
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
 import com.checkinface.databinding.CouseItemLayoutBinding
 import com.checkinface.util.DateUtil
 
-class CourseViewHolder(private val binding: CouseItemLayoutBinding): ViewHolder(binding.root) {
+class StudentAttendanceListViewHolder(private val binding: CouseItemLayoutBinding): ViewHolder(binding.root) {
 
-    fun bindData(attendanceModel: AttendanceModel) {
-        val status = attendanceModel.status.toString()
-        binding.tvAttendanceDate.text = DateUtil.getFormattedDate(attendanceModel.date)
+    fun bindData(studentAttendanceModel: StudentAttendanceModel) {
+        val status = studentAttendanceModel.status.toString()
+        binding.tvAttendanceDate.text = DateUtil.getFormattedDate(studentAttendanceModel.date)
         binding.tvAttendanceStatus.text = status.lowercase().replaceFirstChar { it.uppercase() }
 
         when (status) {

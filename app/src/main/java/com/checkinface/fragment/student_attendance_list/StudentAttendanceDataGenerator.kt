@@ -1,39 +1,39 @@
-package com.checkinface.fragment.course
+package com.checkinface.fragment.student_attendance_list
 
 import com.checkinface.util.DateUtil
 
-class CourseDataGenerator {
+class StudentAttendanceDataGenerator {
     companion object {
-        fun loadData(): ArrayList<AttendanceModel> {
-            val data = ArrayList<AttendanceModel>()
+        fun loadData(): ArrayList<StudentAttendanceModel> {
+            val data = ArrayList<StudentAttendanceModel>()
             data.add(
-                AttendanceModel(
+                StudentAttendanceModel(
                     DateUtil.getDate("2024-02-12T07:00:01+08:00"),
-                    CourseStatus.PRESENT
+                    AttendanceStatus.PRESENT
                 )
             )
             data.add(
-                AttendanceModel(
+                StudentAttendanceModel(
                     DateUtil.getDate("2024-02-12T07:00:01+08:00"),
-                    CourseStatus.ABSENT
+                    AttendanceStatus.ABSENT
                 )
             )
             data.add(
-                AttendanceModel(
+                StudentAttendanceModel(
                     DateUtil.getDate("2024-02-12T07:00:01+08:00"),
-                    CourseStatus.LATE
+                    AttendanceStatus.LATE
                 )
             )
             data.add(
-                AttendanceModel(
+                StudentAttendanceModel(
                     DateUtil.getDate("2024-02-12T07:00:01+08:00"),
-                    CourseStatus.PRESENT
+                    AttendanceStatus.PRESENT
                 )
             )
             data.add(
-                AttendanceModel(
+                StudentAttendanceModel(
                     DateUtil.getDate("2024-02-12T07:00:01+08:00"),
-                    CourseStatus.PRESENT
+                    AttendanceStatus.PRESENT
                 )
             )
             return data
