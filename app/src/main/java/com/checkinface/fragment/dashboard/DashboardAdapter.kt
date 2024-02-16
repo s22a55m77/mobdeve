@@ -37,8 +37,14 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         holder.itemView.setOnClickListener {
             val navController = holder.itemView.findNavController()
 
-            navController.navigate(R.id.action_dashboard_to_course)
-            navController.currentDestination?.label = data[position].course
+            val user = UserSharedPreference(holder.itemView.context)
+            if (user.getRole()?.equals(UserRole.STUDENT) == true) {
+                navController.navigate(R.id.action_dashboard_to_course)
+                navController.currentDestination?.label = data[position].course
+            } else if (user.getRole()?.equals(UserRole.TEACHER) == true) {
+                navController.navigate(R.id.action_dashboard_to_teacher_course)
+                navController.currentDestination?.label = data[position].course
+            }
         }
     }
 }

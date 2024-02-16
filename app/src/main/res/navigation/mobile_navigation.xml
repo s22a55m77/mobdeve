@@ -14,6 +14,9 @@
         <action android:id="@+id/action_dashboard_to_course"
             app:destination="@+id/navigation_course" />
 
+        <action android:id="@+id/action_dashboard_to_teacher_course"
+            app:destination="@+id/navigation_teacher_course" />
+
     </fragment>
 
     <fragment
@@ -33,5 +36,11 @@
         android:name="com.checkinface.fragment.course.CourseFragment"
         android:label="Course"
         tools:layout="@layout/fragment_course" />
+
+    <fragment
+        android:id="@+id/navigation_teacher_course"
+        android:name="com.checkinface.fragment.teacher_course.TeacherCourseFragment"
+        android:label="Course"
+        tools:layout="@layout/fragment_teacher_course" />
 
 </navigation>
