@@ -3,10 +3,12 @@ package com.checkinface.fragment.teacher_course.attendance_list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.AttendanceItemLayoutBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>): Adapter<AttendanceListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceListViewHolder {
@@ -27,6 +29,11 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
         details.setOnClickListener {
             val navController = holder.itemView.findNavController()
             navController.navigate(R.id.action_attendance_list_to_detail)
+        }
+
+        val qrcode = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_item_qr_code)
+        qrcode.setOnClickListener {
+            
         }
     }
 }
