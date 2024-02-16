@@ -1,4 +1,4 @@
-package com.checkinface.fragment.teacher_course
+package com.checkinface.fragment.teacher_course.student_list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

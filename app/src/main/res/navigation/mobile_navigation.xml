@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/navigation_teacher_course_student_list"
-        android:name="com.checkinface.fragment.teacher_course.TeacherCourseStudentListFragment"
+        android:name="com.checkinface.fragment.teacher_course.student_list.TeacherCourseStudentListFragment"
         android:label="Course"
         tools:layout="@layout/fragment_teacher_course_student_list" >
 
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/navigation_teacher_course_attendance_list"
-        android:name="com.checkinface.fragment.teacher_course.TeacherCourseAttendanceListFragment"
+        android:name="com.checkinface.fragment.teacher_course.attendance_list.TeacherCourseAttendanceListFragment"
         android:label="Course"
         tools:layout="@layout/fragment_teacher_course_attendance_list" >
 
