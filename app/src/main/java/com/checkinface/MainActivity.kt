@@ -64,12 +64,15 @@ class MainActivity : AppCompatActivity() {
             navView.menu.findItem(destination.id)?.isChecked = true
 
             if (destination.id == R.id.navigation_teacher_course_student_list &&
-                previousDestinationId != R.id.navigation_teacher_course_attendance_list) {
+                previousDestinationId != R.id.navigation_teacher_course_attendance_list &&
+                previousDestinationId != R.id.navigation_teacher_course_student_list) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
             }
 
-            if (destination.id == R.id.navigation_dashboard && previousDestinationId != R.id.navigation_user_profile) {
+            if (destination.id == R.id.navigation_dashboard &&
+                previousDestinationId != R.id.navigation_user_profile &&
+                previousDestinationId != R.id.navigation_dashboard) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
             }
