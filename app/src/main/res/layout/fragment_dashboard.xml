@@ -14,7 +14,7 @@
         app:spanCount="2"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_scan"
+        android:id="@+id/btn_teacher_add_course"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
