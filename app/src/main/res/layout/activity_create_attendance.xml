@@ -178,15 +178,6 @@
                     android:textColor="@color/md_theme_light_surface"
                     android:text="Date"/>
 
-                <TextView
-                    android:id="@+id/tv_selected_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="Sample Date"
-                    android:visibility="gone"
-                    android:textColor="@color/md_theme_light_surface"
-                    android:textSize="15sp" />
                 <Button
                     android:id="@+id/btn_date_picker"
                     android:layout_width="match_parent"

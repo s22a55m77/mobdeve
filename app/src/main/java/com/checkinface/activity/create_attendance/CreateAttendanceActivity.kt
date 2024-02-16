@@ -173,8 +173,8 @@ class CreateAttendanceActivity : AppCompatActivity() {
         }
 
         datePicker.addOnPositiveButtonClickListener {
-            viewBinding.tvSelectedDate.text = DateUtil.getFormattedDate(Date(datePicker.selection!!))
-            viewBinding.tvSelectedDate.visibility = View.VISIBLE
+            val message = "Select Date: " + DateUtil.getFormattedDate(Date(datePicker.selection!!))
+            viewBinding.btnDatePicker.text = message
         }
 
         startTimePicker.addOnPositiveButtonClickListener {

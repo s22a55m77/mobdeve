@@ -22,6 +22,7 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         } else if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
             binding.tvDashboardCheckTimeTitle.visibility = View.GONE
             binding.tvDashboardCheckTime.visibility = View.GONE
+            binding.ivNextCheckTimeIcon.visibility = View.GONE
         }
 
         return DashboardViewHolder(binding)
