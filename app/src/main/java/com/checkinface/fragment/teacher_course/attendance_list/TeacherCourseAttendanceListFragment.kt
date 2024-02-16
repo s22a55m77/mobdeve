@@ -1,13 +1,16 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.activity.create_attendance.CreateAttendanceActivity
 
 class TeacherCourseAttendanceListFragment : Fragment() {
     private val attendanceList: ArrayList<TeacherAttendanceModel> = AttendanceDataGenerator.loadData()
@@ -27,6 +30,12 @@ class TeacherCourseAttendanceListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val addAttendanceBtn = view.findViewById<Button>(R.id.btn_add_attendace)
+
+        addAttendanceBtn.setOnClickListener {
+            val intent = Intent(requireActivity().applicationContext, CreateAttendanceActivity::class.java)
+            startActivity(intent)
+        }
 
         this.recyclerView = view.findViewById(R.id.rv_attendance_list)
 
