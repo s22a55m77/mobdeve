@@ -1,4 +1,4 @@
-package com.checkinface.fragment.teacher_course
+package com.checkinface.fragment.teacher_course.student_list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,7 +27,7 @@ class TeacherCourseStudentListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.recyclerView = view.findViewById(R.id.rv_attendace_list)
+        this.recyclerView = view.findViewById(R.id.rv_student_list)
 
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager

@@ -1,4 +1,4 @@
-package com.checkinface.fragment.teacher_course
+package com.checkinface.fragment.teacher_course.student_list
 
 data class StudentModel(
     val name: String,
