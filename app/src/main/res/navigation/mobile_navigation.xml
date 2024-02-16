@@ -15,7 +15,7 @@
             app:destination="@+id/navigation_course" />
 
         <action android:id="@+id/action_dashboard_to_teacher_course"
-            app:destination="@+id/navigation_teacher_course" />
+            app:destination="@+id/navigation_teacher_course_student_list" />
 
     </fragment>
 
@@ -38,9 +38,23 @@
         tools:layout="@layout/fragment_course" />
 
     <fragment
-        android:id="@+id/navigation_teacher_course"
-        android:name="com.checkinface.fragment.teacher_course.TeacherCourseFragment"
+        android:id="@+id/navigation_teacher_course_student_list"
+        android:name="com.checkinface.fragment.teacher_course.TeacherCourseStudentListFragment"
         android:label="Course"
-        tools:layout="@layout/fragment_teacher_course" />
+        tools:layout="@layout/fragment_teacher_course_student_list" >
+
+        <action android:id="@+id/action_student_list_to_attendance_list"
+            app:destination="@+id/navigation_teacher_course_attendance_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_teacher_course_attendance_list"
+        android:name="com.checkinface.fragment.teacher_course.TeacherCourseAttendanceListFragment"
+        android:label="Course"
+        tools:layout="@layout/fragment_teacher_course_attendance_list" >
+
+        <action android:id="@+id/action_attendance_list_to_student_list"
+            app:destination="@+id/navigation_teacher_course_student_list" />
+    </fragment>
 
 </navigation>

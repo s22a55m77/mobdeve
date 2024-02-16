@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -58,17 +59,17 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // control the highlight of the navbar
             navView.menu.findItem(destination.id)?.isChecked = true
 
-            if (destination.id == R.id.navigation_teacher_course) {
+            if (destination.id == R.id.navigation_teacher_course_student_list &&
+                previousDestinationId != R.id.navigation_teacher_course_attendance_list) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
             }
 
-            if (previousDestinationId === R.id.navigation_teacher_course && destination.id !== R.id.navigation_teacher_course) {
+            if (destination.id == R.id.navigation_dashboard && previousDestinationId != R.id.navigation_user_profile) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
             }
@@ -89,6 +90,22 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_camera -> {
                     navController.navigate(R.id.navigation_camera)
+                    true
+                }
+                R.id.navigation_teacher_course_student_list -> {
+                    navController.navigate(R.id.navigation_teacher_course_student_list,
+                        null,
+                        NavOptions.Builder()
+                            .setPopUpTo(navController.graph.startDestinationId, false)
+                            .build())
+                    true
+                }
+                R.id.navigation_teacher_course_attendance_list -> {
+                    navController.navigate(R.id.navigation_teacher_course_attendance_list,
+                        null,
+                        NavOptions.Builder()
+                            .setPopUpTo(navController.graph.startDestinationId, false)
+                            .build())
                     true
                 }
                 else -> false

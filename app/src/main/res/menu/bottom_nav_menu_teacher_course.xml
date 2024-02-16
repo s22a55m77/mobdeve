@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_student_list"
+        android:id="@+id/navigation_teacher_course_student_list"
         android:enabled="true"
         android:icon="@drawable/ic_list"
         android:title="@string/student_list"/>
     <item
-        android:id="@+id/navigation_attendance_list"
+        android:id="@+id/navigation_teacher_course_attendance_list"
         android:enabled="true"
         android:icon="@drawable/ic_attendance"
         android:title="@string/attendance_list"/>
