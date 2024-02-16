@@ -50,7 +50,6 @@
     <fragment
         android:id="@+id/navigation_teacher_course_attendance_list"
         android:name="com.checkinface.fragment.teacher_course.attendance_list.TeacherCourseAttendanceListFragment"
-        android:label="Course"
         tools:layout="@layout/fragment_teacher_course_attendance_list" >
 
         <action android:id="@+id/action_attendance_list_to_student_list"
