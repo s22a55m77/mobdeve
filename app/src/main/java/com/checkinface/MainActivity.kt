@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    private var previousDestinationId: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,8 +58,23 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // control the highlight of the navbar
             navView.menu.findItem(destination.id)?.isChecked = true
+
+            if (destination.id == R.id.navigation_teacher_course) {
+                navView.menu.clear()
+                navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
+            }
+
+            if (previousDestinationId === R.id.navigation_teacher_course && destination.id !== R.id.navigation_teacher_course) {
+                navView.menu.clear()
+                navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
+            }
+
+            previousDestinationId = destination.id
+
         }
 
         navView.setOnItemSelectedListener {item ->
