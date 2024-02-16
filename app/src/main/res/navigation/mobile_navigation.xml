@@ -33,8 +33,7 @@
 
     <fragment
         android:id="@+id/navigation_course"
-        android:name="com.checkinface.fragment.course.CourseFragment"
-        android:label="Course"
+        android:name="com.checkinface.fragment.student_attendance_list.StudentAttendanceListFragment"
         tools:layout="@layout/fragment_course" />
 
     <fragment
@@ -45,6 +44,9 @@
 
         <action android:id="@+id/action_student_list_to_attendance_list"
             app:destination="@+id/navigation_teacher_course_attendance_list" />
+
+        <action android:id="@+id/action_student_list_to_student_attendance"
+            app:destination="@+id/navigation_course" />
     </fragment>
 
     <fragment
@@ -54,6 +56,14 @@
 
         <action android:id="@+id/action_attendance_list_to_student_list"
             app:destination="@+id/navigation_teacher_course_student_list" />
+
+        <action android:id="@+id/action_attendance_list_to_detail"
+            app:destination="@+id/navigation_attendance_detail_student_list"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_attendance_detail_student_list"
+        android:name="com.checkinface.fragment.teacher_course.attendance_detail_student_list.AttendanceDetailStudentListFragment"
+        tools:layout="@layout/fragment_attendance_detail_student_list" />
 
 </navigation>
