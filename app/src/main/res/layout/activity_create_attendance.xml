@@ -28,12 +28,14 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_option_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,12 +107,14 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_time_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,12 +160,14 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_date_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,6 +198,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_recurring_day_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -199,6 +206,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
             android:visibility="gone"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -261,6 +269,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_recurring_date_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -268,6 +277,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/seed"
             android:visibility="gone"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -301,6 +311,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_recurring_selected_date_group"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -308,6 +319,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/md_theme_light_secondaryContainer"
             android:visibility="gone"
+            app:cardElevation="5dp"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
