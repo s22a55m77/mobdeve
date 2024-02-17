@@ -10,12 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.databinding.FragmentCourseBinding
+import com.checkinface.util.UserRole
+import com.checkinface.util.UserSharedPreference
 
 
 class StudentAttendanceListFragment : Fragment() {
 
     private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewBinding: FragmentCourseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +46,12 @@ class StudentAttendanceListFragment : Fragment() {
                 return true
             }
         })
+
+        val user = UserSharedPreference(requireContext())
+
+        if (user.getRole() == UserRole.TEACHER) {
+            viewBinding.fabCheck.visibility = View.GONE
+        }
     }
 
     override fun onCreateView(
@@ -49,6 +59,7 @@ class StudentAttendanceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course, container, false)
+        viewBinding = FragmentCourseBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 }
