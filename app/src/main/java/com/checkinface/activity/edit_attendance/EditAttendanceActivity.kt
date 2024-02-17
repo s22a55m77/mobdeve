@@ -104,6 +104,7 @@ class EditAttendanceActivity : AppCompatActivity() {
                 viewBinding.cardViewRecurringSelectedDateGroup.visibility = View.VISIBLE
                 viewBinding.cardViewDateGroup.visibility = View.GONE
             } else {
+                viewBinding.cardViewDateGroup.visibility = View.VISIBLE
                 viewBinding.cardViewRecurringDayGroup.visibility = View.GONE
                 viewBinding.cardViewRecurringDateGroup.visibility = View.GONE
                 viewBinding.cardViewRecurringSelectedDateGroup.visibility = View.GONE
