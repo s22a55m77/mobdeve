@@ -14,6 +14,9 @@ import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
+import com.checkinface.databinding.FragmentCourseBinding
+import com.checkinface.util.UserRole
+import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -21,6 +24,7 @@ class StudentAttendanceListFragment : Fragment() {
 
     private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewBinding: FragmentCourseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,12 @@ class StudentAttendanceListFragment : Fragment() {
                 return true
             }
         })
+
+        val user = UserSharedPreference(requireContext())
+
+        if (user.getRole() == UserRole.TEACHER) {
+            viewBinding.fabCheck.visibility = View.GONE
+        }
 
         // Pattern Lock
         val patternView = layoutInflater.inflate(R.layout.create_attendance_pattern_lock_layout, null)
@@ -90,6 +100,7 @@ class StudentAttendanceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course, container, false)
+        viewBinding = FragmentCourseBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 }
