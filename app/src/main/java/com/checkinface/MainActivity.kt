@@ -63,9 +63,11 @@ class MainActivity : AppCompatActivity() {
             // control the highlight of the navbar
             navView.menu.findItem(destination.id)?.isChecked = true
 
+            // avoid unnecessary rerender of nav
             if (destination.id == R.id.navigation_teacher_course_student_list &&
                 previousDestinationId != R.id.navigation_teacher_course_attendance_list &&
-                previousDestinationId != R.id.navigation_teacher_course_student_list) {
+                previousDestinationId != R.id.navigation_teacher_course_student_list &&
+                previousDestinationId != R.id.navigation_course) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
             }
