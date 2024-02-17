@@ -2,6 +2,7 @@ package com.checkinface.fragment.student_attendance_list
 
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,11 @@ import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.andrognito.patternlockview.PatternLockView
+import com.andrognito.patternlockview.listener.PatternLockViewListener
+import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class StudentAttendanceListFragment : Fragment() {
@@ -42,6 +47,42 @@ class StudentAttendanceListFragment : Fragment() {
                 return true
             }
         })
+
+        // Pattern Lock
+        val patternView = layoutInflater.inflate(R.layout.create_attendance_pattern_lock_layout, null)
+        val mPatternLockView: PatternLockView = patternView.findViewById(R.id.pattern_lock_view)
+        val mPatternLockViewListener: PatternLockViewListener = object : PatternLockViewListener {
+            override fun onStarted() {
+                Log.d(javaClass.name, "Pattern drawing started")
+            }
+
+            override fun onProgress(progressPattern: List<PatternLockView.Dot>) {
+                Log.d(
+                    javaClass.name, "Pattern progress: " +
+                            PatternLockUtils.patternToString(mPatternLockView, progressPattern)
+                )
+            }
+
+            override fun onComplete(pattern: List<PatternLockView.Dot>) {
+                Log.d(
+                    javaClass.name, "Pattern complete: " +
+                            PatternLockUtils.patternToString(mPatternLockView, pattern)
+                )
+            }
+
+            override fun onCleared() {
+                Log.d(javaClass.name, "Pattern has been cleared")
+            }
+        }
+        mPatternLockView.addPatternLockListener(mPatternLockViewListener)
+        val dialog = MaterialAlertDialogBuilder(this.requireContext()).setView(patternView)
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Submit") { dialog, which ->
+                dialog.cancel()
+            }
+        val patternModal = dialog.create()
     }
 
     override fun onCreateView(
