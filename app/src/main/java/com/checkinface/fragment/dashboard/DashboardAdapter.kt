@@ -19,6 +19,7 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         if (userSharedPreference.getRole()?.equals(UserRole.STUDENT) == true) {
             binding.tvDashboardStudentTitle.visibility = View.GONE
             binding.tvDashboardStudent.visibility = View.GONE
+            binding.llTeacherSideStudentCount.visibility = View.GONE
         } else if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
             binding.tvDashboardCheckTimeTitle.visibility = View.GONE
             binding.tvDashboardCheckTime.visibility = View.GONE
