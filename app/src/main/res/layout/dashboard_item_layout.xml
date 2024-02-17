@@ -61,8 +61,8 @@
 
                     <ImageView
                         android:id="@+id/iv_student_icon"
-                        android:layout_width="15sp"
-                        android:layout_height="15sp"
+                        android:layout_width="16sp"
+                        android:layout_height="16sp"
                         android:paddingEnd="3dp"
                         android:src="@drawable/ic_user"
                         app:tint="@android:color/black" />
