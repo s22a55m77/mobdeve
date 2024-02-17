@@ -2,16 +2,16 @@
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_gray"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:focusableInTouchMode="true"
     android:focusable="true"
-    android:background="@color/background_gray"
     tools:context=".UserProfile">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
@@ -55,6 +55,7 @@
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/seed"
         app:cardCornerRadius="30dp"
+        app:cardElevation="10dp"
         app:strokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,6 +111,7 @@
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/seed"
         app:cardCornerRadius="30dp"
+        app:cardElevation="10dp"
         app:strokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +145,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/md_theme_light_error"
-        android:text="Logout"
+        android:elevation="10dp"
+        android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_view_notification" />
