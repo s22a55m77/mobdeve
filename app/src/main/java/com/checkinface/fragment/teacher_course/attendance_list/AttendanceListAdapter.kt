@@ -1,5 +1,6 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
+import com.checkinface.activity.edit_attendance.EditAttendanceActivity
 import com.checkinface.databinding.AttendanceItemLayoutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.BarcodeFormat
@@ -39,7 +41,8 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
 
         val settings = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_settings)
         settings.setOnClickListener {
-
+            val intent = Intent(holder.itemView.context, EditAttendanceActivity::class.java)
+            holder.itemView.context.startActivity(intent)
         }
 
         val qrcode = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_item_qr_code)
