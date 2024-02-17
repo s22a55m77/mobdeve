@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ import com.checkinface.databinding.FragmentCourseBinding
 import com.checkinface.util.UserRole
 import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
 
 class StudentAttendanceListFragment : Fragment() {
@@ -90,9 +94,33 @@ class StudentAttendanceListFragment : Fragment() {
                 dialog.dismiss()
             }
             .setPositiveButton("Submit") { dialog, which ->
+                Toast.makeText(
+                    requireContext(),
+                    "Attendance Checked",
+                    Toast.LENGTH_LONG
+                ).show()
                 dialog.cancel()
             }
         val patternModal = dialog.create()
+
+        //check listener
+        this.viewBinding.fabCheck.setOnClickListener {
+            val options = GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(
+                    Barcode.FORMAT_QR_CODE)
+                .enableAutoZoom()
+                .build()
+
+            val scanner = GmsBarcodeScanning.getClient(requireActivity().applicationContext, options)
+
+            scanner.startScan()
+                .addOnSuccessListener { barcode ->
+                    barcode.rawValue?.let {
+                        patternModal.show()
+                        Log.d("CheckAttendance", it)
+                    }
+                }
+        }
     }
 
     override fun onCreateView(
