@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/navigation_course"
         android:name="com.checkinface.fragment.student_attendance_list.StudentAttendanceListFragment"
-        tools:layout="@layout/fragment_course" />
+        tools:layout="@layout/fragment_student_attendance" />
 
     <fragment
         android:id="@+id/navigation_teacher_course_student_list"
