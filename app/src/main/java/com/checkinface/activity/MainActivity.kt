@@ -1,4 +1,4 @@
-package com.checkinface
+package com.checkinface.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.checkinface.R
 import com.checkinface.databinding.ActivityMainBinding
 import com.checkinface.util.UserRole
 import com.checkinface.util.UserSharedPreference
@@ -67,14 +68,16 @@ class MainActivity : AppCompatActivity() {
             if (destination.id == R.id.navigation_teacher_course_student_list &&
                 previousDestinationId != R.id.navigation_teacher_course_attendance_list &&
                 previousDestinationId != R.id.navigation_teacher_course_student_list &&
-                previousDestinationId != R.id.navigation_course) {
+                previousDestinationId != R.id.navigation_course
+            ) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
             }
 
             if (destination.id == R.id.navigation_dashboard &&
                 previousDestinationId != R.id.navigation_user_profile &&
-                previousDestinationId != R.id.navigation_dashboard) {
+                previousDestinationId != R.id.navigation_dashboard
+            ) {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
             }
@@ -98,7 +101,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_teacher_course_student_list -> {
-                    navController.navigate(R.id.navigation_teacher_course_student_list,
+                    navController.navigate(
+                        R.id.navigation_teacher_course_student_list,
                         null,
                         NavOptions.Builder()
                             .setPopUpTo(navController.graph.startDestinationId, false)
@@ -106,7 +110,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_teacher_course_attendance_list -> {
-                    navController.navigate(R.id.navigation_teacher_course_attendance_list,
+                    navController.navigate(
+                        R.id.navigation_teacher_course_attendance_list,
                         null,
                         NavOptions.Builder()
                             .setPopUpTo(navController.graph.startDestinationId, false)
