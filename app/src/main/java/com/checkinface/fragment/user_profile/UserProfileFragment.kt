@@ -3,12 +3,11 @@ package com.checkinface.fragment.user_profile
 import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.transition.Visibility
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.checkinface.LoginActivity
+import com.checkinface.activity.LoginActivity
 import com.checkinface.R
 import com.checkinface.databinding.FragmentUserProfileBinding
 import com.checkinface.util.UserRole

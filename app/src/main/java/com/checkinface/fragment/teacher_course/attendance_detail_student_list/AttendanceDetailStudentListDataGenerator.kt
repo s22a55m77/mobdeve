@@ -42,6 +42,42 @@ class AttendanceDetailStudentListDataGenerator {
                     AttendanceStatus.LATE
                 )
             )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 7",
+                    AttendanceStatus.ABSENT
+                )
+            )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 8",
+                    AttendanceStatus.PRESENT
+                )
+            )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 9",
+                    AttendanceStatus.ABSENT
+                )
+            )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 10",
+                    AttendanceStatus.LATE
+                )
+            )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 11",
+                    AttendanceStatus.PRESENT
+                )
+            )
+            data.add(
+                AttendanceDetailStudentModel(
+                    "Student 12",
+                    AttendanceStatus.PRESENT
+                )
+            )
 
             return data
         }

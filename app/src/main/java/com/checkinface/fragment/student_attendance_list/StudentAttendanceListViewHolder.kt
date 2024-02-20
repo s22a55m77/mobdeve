@@ -2,10 +2,10 @@ package com.checkinface.fragment.student_attendance_list
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.checkinface.R
-import com.checkinface.databinding.CouseItemLayoutBinding
+import com.checkinface.databinding.StudentAttendanceItemLayoutBinding
 import com.checkinface.util.DateUtil
 
-class StudentAttendanceListViewHolder(private val binding: CouseItemLayoutBinding): ViewHolder(binding.root) {
+class StudentAttendanceListViewHolder(private val binding: StudentAttendanceItemLayoutBinding): ViewHolder(binding.root) {
 
     fun bindData(studentAttendanceModel: StudentAttendanceModel) {
         val status = studentAttendanceModel.status.toString()

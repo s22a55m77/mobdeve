@@ -15,7 +15,7 @@ import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
-import com.checkinface.databinding.FragmentCourseBinding
+import com.checkinface.databinding.FragmentStudentAttendanceBinding
 import com.checkinface.util.UserRole
 import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +28,7 @@ class StudentAttendanceListFragment : Fragment() {
 
     private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewBinding: FragmentCourseBinding
+    private lateinit var viewBinding: FragmentStudentAttendanceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class StudentAttendanceListFragment : Fragment() {
 
         postponeEnterTransition()
 
-        this.recyclerView = view.findViewById(R.id.rv_course)
+        this.recyclerView = view.findViewById(R.id.rv_student_attendance_list)
 
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
@@ -128,7 +128,7 @@ class StudentAttendanceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        viewBinding = FragmentCourseBinding.inflate(inflater, container, false)
+        viewBinding = FragmentStudentAttendanceBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 }
