@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation("com.azure.android:azure-maps-control:1.+")
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     implementation("com.squareup.picasso:picasso:2.8")
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))

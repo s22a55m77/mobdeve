@@ -1,5 +1,6 @@
 package com.checkinface.activity.create_attendance
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +13,7 @@ import com.andrognito.patternlockview.PatternLockView.Dot
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
+import com.checkinface.activity.AzureMapActivity
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -87,6 +89,11 @@ class CreateAttendanceActivity : AppCompatActivity() {
             else {
                 viewBinding.btnGeolocation.visibility = View.GONE
             }
+        }
+
+        viewBinding.btnGeolocation.setOnClickListener {
+            val intentToMap = Intent(this@CreateAttendanceActivity, AzureMapActivity::class.java)
+            startActivity(intentToMap)
         }
 
         viewBinding.checkboxPatternPassword.setOnCheckedChangeListener { buttonView, isChecked ->

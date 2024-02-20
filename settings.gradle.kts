@@ -6,11 +6,14 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         jcenter()
         google()
         mavenCentral()
+        maven {
+            url = uri("https://atlas.microsoft.com/sdk/android")
+        }
     }
 }
 
