@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:padding="20dp"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Present"
+        app:icon="@drawable/ic_check"
+        app:iconGravity="textStart"
+        app:iconTint="#4CAF50" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Absent"
+        app:icon="@drawable/ic_close"
+        app:iconGravity="textStart"
+        app:iconTint="#F44336" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:pointerIcon="arrow"
+        android:text="Late"
+        app:icon="@drawable/ic_clock"
+        app:iconGravity="textStart"
+        app:iconTint="#ff9966" />
+
+</LinearLayout>
