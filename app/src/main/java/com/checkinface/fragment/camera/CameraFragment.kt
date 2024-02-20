@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.checkinface.R
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -26,6 +27,12 @@ class CameraFragment : Fragment() {
             .addOnSuccessListener { barcode ->
                 barcode.rawValue?.let { Log.d("CameraFragment", it) }
             }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val navController = findNavController()
+        navController.navigate(R.id.navigation_dashboard)
     }
 
     override fun onCreateView(

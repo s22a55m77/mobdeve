@@ -61,26 +61,38 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        val userSharedPreference = UserSharedPreference(applicationContext)
+        if (userSharedPreference.getRole() == UserRole.TEACHER) {
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
+        } else {
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.bottom_nav_menu)
+        }
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // control the highlight of the navbar
             navView.menu.findItem(destination.id)?.isChecked = true
 
-            // avoid unnecessary rerender of nav
-            if (destination.id == R.id.navigation_teacher_course_student_list &&
-                previousDestinationId != R.id.navigation_teacher_course_attendance_list &&
-                previousDestinationId != R.id.navigation_teacher_course_student_list &&
-                previousDestinationId != R.id.navigation_course
-            ) {
-                navView.menu.clear()
-                navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
-            }
+            // only teacher side will need this logic
+            if (userSharedPreference.getRole() == UserRole.TEACHER) {
+                // avoid unnecessary rerender of nav
+                if (destination.id == R.id.navigation_teacher_course_student_list &&
+                    previousDestinationId != R.id.navigation_teacher_course_attendance_list &&
+                    previousDestinationId != R.id.navigation_teacher_course_student_list &&
+                    previousDestinationId != R.id.navigation_course
+                ) {
+                    navView.menu.clear()
+                    navView.inflateMenu(R.menu.bottom_nav_menu_teacher_course)
+                }
 
-            if (destination.id == R.id.navigation_dashboard &&
-                previousDestinationId != R.id.navigation_user_profile &&
-                previousDestinationId != R.id.navigation_dashboard
-            ) {
-                navView.menu.clear()
-                navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
+                if (destination.id == R.id.navigation_dashboard &&
+                    previousDestinationId != R.id.navigation_user_profile &&
+                    previousDestinationId != R.id.navigation_dashboard
+                ) {
+                    navView.menu.clear()
+                    navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
+                }
             }
 
             previousDestinationId = destination.id
@@ -122,12 +134,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
-
-        val userSharedPreference = UserSharedPreference(applicationContext)
-        if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
-            navView.menu.clear()
-            navView.inflateMenu(R.menu.bottom_nav_menu_teacher)
         }
 
     }
