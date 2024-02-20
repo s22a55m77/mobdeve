@@ -39,6 +39,7 @@ class StudentAttendanceListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // stop animation
         postponeEnterTransition()
 
         this.recyclerView = view.findViewById(R.id.rv_student_attendance_list)
@@ -48,6 +49,7 @@ class StudentAttendanceListFragment : Fragment() {
 
         this.recyclerView.adapter = StudentAttendanceListAdapter(this.attendanceModelList)
 
+        // resume animation
         view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 view.viewTreeObserver.removeOnPreDrawListener(this)
@@ -89,6 +91,7 @@ class StudentAttendanceListFragment : Fragment() {
             }
         }
         mPatternLockView.addPatternLockListener(mPatternLockViewListener)
+        //modal for pattern lock
         val dialog = MaterialAlertDialogBuilder(this.requireContext()).setView(patternView)
             .setNegativeButton("Cancel") { dialog, which ->
                 dialog.dismiss()

@@ -25,6 +25,7 @@ class UserProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // animation
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide)
     }
@@ -39,6 +40,7 @@ class UserProfileFragment : Fragment() {
 
         val userPreference = UserSharedPreference(requireContext())
 
+        // logout
         viewBinding.btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             val googleSignInClient = GoogleSignIn.getClient(requireActivity().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)

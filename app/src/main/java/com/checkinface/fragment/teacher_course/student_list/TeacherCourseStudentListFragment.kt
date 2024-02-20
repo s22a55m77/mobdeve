@@ -27,6 +27,7 @@ class TeacherCourseStudentListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // animation
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide)
     }
@@ -50,8 +51,8 @@ class TeacherCourseStudentListFragment : Fragment() {
         this.recyclerView.adapter = StudentListAdapter(this.studentList)
 
         this.btnShowQR = view.findViewById(R.id.btn_show_qr_code)
+        // show QR code for the course
         this.btnShowQR.setOnClickListener {
-            Log.d("Test", "Test")
             val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
             this.ivQrCode = qrModalView.findViewById(R.id.iv_qr_code_container)
             fun generateQR() {

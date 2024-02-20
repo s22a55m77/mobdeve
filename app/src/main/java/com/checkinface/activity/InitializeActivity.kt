@@ -18,6 +18,7 @@ class InitializeActivity : AppCompatActivity() {
         val userPreference = UserSharedPreference(this)
 
 
+        // button for choosing of role
         viewBinding.btnStudent.setOnClickListener {
             val intentToDashboard = Intent(this@InitializeActivity, MainActivity::class.java)
             userPreference.setRole(UserRole.STUDENT)

@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        // redirect to login page if not login
         if (auth.currentUser == null) {
             val intentToLogin = Intent(this@MainActivity, LoginActivity::class.java)
             intentToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -98,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        // handle navbar click
         navView.setOnItemSelectedListener {item ->
             when (item.itemId) {
                 R.id.navigation_dashboard -> {
@@ -136,6 +138,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // handle focus for material text field
     @SuppressLint("RestrictedApi")
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
