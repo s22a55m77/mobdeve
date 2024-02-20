@@ -30,6 +30,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
         val viewBinding = ActivityCreateAttendanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        // initialize date picker
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select Date Range")
@@ -60,6 +61,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 .build()
 
 
+        // listener binding
         viewBinding.btnDateRangePicker.setOnClickListener {
             dateRangePicker.show(supportFragmentManager, dateRangePicker.toString())
         }
@@ -113,6 +115,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
             }
         }
 
+        // handle checkbox select for recurring event
         dateRangePicker.addOnPositiveButtonClickListener {
             val selectedDay = SelectedDays(
                 monday = viewBinding.checkboxMonday.isChecked,
