@@ -1,13 +1,10 @@
 package com.checkinface.fragment.dashboard
 
-import android.app.AlertDialog
-import android.content.DialogInterface.OnShowListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -15,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.util.UserRole
+import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.zxing.BarcodeFormat
@@ -61,9 +60,16 @@ class DashboardFragment : Fragment() {
 
         // Add Course Dialog
         val modalView = layoutInflater.inflate(R.layout.create_course, null)
+
         this.btnAddCourse = view.findViewById(R.id.btn_teacher_add_course)
         this.edAddCourse = modalView.findViewById(R.id.ed_add_course_name)
-        val dialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
+
+        val user = UserSharedPreference(requireContext())
+        if (user.getRole() === UserRole.STUDENT) {
+            this.edAddCourse.hint = "Course Code"
+        }
+
+        val teacherDialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
             .setView(modalView)
             .setTitle("Add Course")
             .setNegativeButton("Cancel") { dialog, which ->
@@ -79,11 +85,31 @@ class DashboardFragment : Fragment() {
                     qrModal.show()
                 }
             }
-        val addCourseModal = dialogBuilder.create()
+        val teacherCourseModal = teacherDialogBuilder.create()
+
+        val studentDialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
+            .setView(modalView)
+            .setTitle("Add Course")
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.cancel()
+            }
+            .setPositiveButton("Submit") { dialog, which ->
+                if(edAddCourse.text.isNullOrEmpty()) {
+                    Toast.makeText(this.context, "Please enter the course code", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    dialog.cancel()
+                }
+            }
+
+        val studentCourseModal = studentDialogBuilder.create()
 
         // Button Click
         btnAddCourse.setOnClickListener {
-            addCourseModal.show()
+            if (user.getRole() == UserRole.TEACHER)
+                teacherCourseModal.show()
+            else if (user.getRole() == UserRole.STUDENT)
+                studentCourseModal.show()
         }
     }
 
