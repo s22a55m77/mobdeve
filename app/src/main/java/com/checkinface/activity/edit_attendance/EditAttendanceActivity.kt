@@ -1,16 +1,19 @@
 package com.checkinface.activity.edit_attendance
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
+import com.checkinface.activity.AzureMapActivity
 import com.checkinface.activity.create_attendance.DateModel
 import com.checkinface.activity.create_attendance.SelectedDateAdapter
 import com.checkinface.activity.create_attendance.SelectedDays
@@ -25,6 +28,13 @@ import java.util.Date
 
 class EditAttendanceActivity : AppCompatActivity() {
     private lateinit var selectedDateRecyclerView: RecyclerView
+
+    private val azureMapResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // TODO get the lon and lat
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +99,11 @@ class EditAttendanceActivity : AppCompatActivity() {
             } else {
                 viewBinding.btnGeolocation.visibility = View.GONE
             }
+        }
+
+        viewBinding.btnGeolocation.setOnClickListener {
+            val intentToMap = Intent(this@EditAttendanceActivity, AzureMapActivity::class.java)
+            azureMapResultLauncher.launch(intentToMap)
         }
 
         viewBinding.checkboxPatternPassword.setOnCheckedChangeListener { buttonView, isChecked ->

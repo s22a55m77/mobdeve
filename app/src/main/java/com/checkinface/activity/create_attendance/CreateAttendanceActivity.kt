@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,13 @@ import java.util.Date
 
 class CreateAttendanceActivity : AppCompatActivity() {
     private lateinit var selectedDateRecyclerView: RecyclerView
+
+    private val azureMapResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) {result ->
+        if (result.resultCode == RESULT_OK) {
+            // TODO get the lon and lat
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +104,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
 
         viewBinding.btnGeolocation.setOnClickListener {
             val intentToMap = Intent(this@CreateAttendanceActivity, AzureMapActivity::class.java)
-            startActivity(intentToMap)
+            azureMapResultLauncher.launch(intentToMap)
         }
 
         viewBinding.checkboxPatternPassword.setOnCheckedChangeListener { buttonView, isChecked ->
