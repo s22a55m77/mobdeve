@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.checkinface.databinding.ActivityLoginBinding
+import com.checkinface.fragment.dashboard.DashboardFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class LoginActivity: Activity() {
     companion object {
@@ -97,7 +99,18 @@ class LoginActivity: Activity() {
     private fun updateUI(user: FirebaseUser?) {
         if (user !== null) {
             val intentToInitialize = Intent(this@LoginActivity, InitializeActivity::class.java)
-            startActivity(intentToInitialize)
+            val intentToDashboard = Intent(this@LoginActivity, MainActivity::class.java)
+            val db = Firebase.firestore
+            db.collection("users")
+                .whereEqualTo("email", user.email)
+                .get()
+                .addOnSuccessListener { document ->
+                    Log.d("TEST: ", document.toObjects())
+                    if(document != null)
+                        startActivity(intentToDashboard)
+                    else
+                        startActivity(intentToInitialize)
+                }
         }
     }
 }
