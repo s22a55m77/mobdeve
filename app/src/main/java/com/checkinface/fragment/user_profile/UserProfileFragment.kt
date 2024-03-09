@@ -7,17 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.checkinface.activity.LoginActivity
 import com.checkinface.R
 import com.checkinface.databinding.FragmentUserProfileBinding
+import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.UserSharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
     private lateinit var viewBinding: FragmentUserProfileBinding
@@ -38,23 +40,23 @@ class UserProfileFragment : Fragment() {
         if(authUser?.photoUrl != null)
             Picasso.get().load(authUser?.photoUrl).into(this.viewBinding.ivAvatar)
 
-        val userPreference = UserSharedPreference(requireContext())
-
         // logout
         viewBinding.btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             val googleSignInClient = GoogleSignIn.getClient(requireActivity().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)
             googleSignInClient.signOut()
 
-            userPreference.removeUserData()
-
             val intentToLogin = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intentToLogin)
         }
 
-        if (userPreference.getRole() == UserRole.TEACHER) {
-            this.viewBinding.cardViewId.visibility = View.GONE
-            this.viewBinding.cardViewNotification.visibility = View.GONE
+        lifecycleScope.launch {
+            val firestoreUserHelper = FirestoreUserHelper()
+            val role = firestoreUserHelper.getRole()
+            if (role == UserRole.TEACHER) {
+                viewBinding.cardViewId.visibility = View.GONE
+                viewBinding.cardViewNotification.visibility = View.GONE
+            }
         }
     }
 

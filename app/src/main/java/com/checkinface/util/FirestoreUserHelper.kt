@@ -1,8 +1,9 @@
 package com.checkinface.util
 
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
 class FirestoreUserHelper {
     private val db = Firebase.firestore
@@ -35,5 +36,17 @@ class FirestoreUserHelper {
                 else
                     onNotFound()
             }
+    }
+
+    suspend fun getRole(): UserRole? {
+        val currentUserEmail = Firebase.auth.currentUser?.email
+        if (currentUserEmail != null) {
+            val querySnapshot = db.collection(USERS_COLLECTION).whereEqualTo(EMAIL_FIELD, currentUserEmail).get().await()
+            if (!querySnapshot.isEmpty) {
+                val roleString = querySnapshot.documents[0].getString(ROLE_FIELD)
+                return if (roleString != null) UserRole.valueOf(roleString) else null
+            }
+        }
+        return null
     }
 }

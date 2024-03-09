@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrognito.patternlockview.PatternLockView
@@ -16,12 +17,13 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.databinding.FragmentStudentAttendanceBinding
+import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import kotlinx.coroutines.launch
 
 
 class StudentAttendanceListFragment : Fragment() {
@@ -29,6 +31,8 @@ class StudentAttendanceListFragment : Fragment() {
     private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewBinding: FragmentStudentAttendanceBinding
+    private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
+    private var userRole: UserRole? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,11 @@ class StudentAttendanceListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = StudentAttendanceListAdapter(this.attendanceModelList)
+        lifecycleScope.launch {
+            userRole = firestoreUserHelper.getRole()
+            if (userRole != null)
+                recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
+        }
 
         // resume animation
         view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -58,9 +66,7 @@ class StudentAttendanceListFragment : Fragment() {
             }
         })
 
-        val user = UserSharedPreference(requireContext())
-
-        if (user.getRole() == UserRole.TEACHER) {
+        if (userRole == UserRole.TEACHER) {
             viewBinding.fabCheck.visibility = View.GONE
         }
 

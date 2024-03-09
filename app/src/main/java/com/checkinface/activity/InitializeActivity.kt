@@ -6,10 +6,8 @@ import android.os.Bundle
 import com.checkinface.databinding.ActivityInitializeBinding
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.UserSharedPreference
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
 
 class InitializeActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityInitializeBinding

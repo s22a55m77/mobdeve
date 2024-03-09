@@ -10,12 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.util.CourseUtil
+import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.Firebase
@@ -25,6 +26,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import kotlinx.coroutines.launch
 
 
 class DashboardFragment : Fragment() {
@@ -34,7 +36,8 @@ class DashboardFragment : Fragment() {
     private lateinit var ivQrCode: ImageView
     private lateinit var edAddCourse: EditText
     private lateinit var tvCreateCourseCode: TextView
-
+    private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
+    private var userRole: UserRole? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,7 +46,11 @@ class DashboardFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(activity?.applicationContext, 2)
         this.recyclerView.layoutManager = gridLayoutManager
 
-        this.recyclerView.adapter = DashboardAdapter(this.dashboardModelList)
+        lifecycleScope.launch {
+            userRole = firestoreUserHelper.getRole()
+            if (userRole != null)
+                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+        }
 
         // Course QR Code Dialog
         val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
@@ -69,8 +76,7 @@ class DashboardFragment : Fragment() {
         this.tvCreateCourseCode = qrModalView.findViewById(R.id.tv_create_course_code)
         this.edAddCourse = modalView.findViewById(R.id.ed_add_course_name)
 
-        val user = UserSharedPreference(requireContext())
-        if (user.getRole() === UserRole.STUDENT) {
+        if (userRole === UserRole.STUDENT) {
             this.edAddCourse.hint = "Course Code"
         }
 
@@ -135,10 +141,13 @@ class DashboardFragment : Fragment() {
 
         // Button Click
         btnAddCourse.setOnClickListener {
-            if (user.getRole() == UserRole.TEACHER)
+            if (userRole == UserRole.TEACHER)
                 teacherCourseModal.show()
-            else if (user.getRole() == UserRole.STUDENT)
+            else if (userRole == UserRole.STUDENT) {
+                edAddCourse.hint = "Course Code"
                 studentCourseModal.show()
+            }
+
         }
     }
 

@@ -8,19 +8,17 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.DashboardItemLayoutBinding
 import com.checkinface.util.UserRole
-import com.checkinface.util.UserSharedPreference
 
-class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<DashboardViewHolder>() {
+class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val role: UserRole): Adapter<DashboardViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DashboardItemLayoutBinding.inflate(inflater, parent, false)
 
-        val userSharedPreference = UserSharedPreference(parent.context)
-        if (userSharedPreference.getRole()?.equals(UserRole.STUDENT) == true) {
+        if (role === UserRole.STUDENT) {
             binding.tvDashboardStudentTitle.visibility = View.GONE
             binding.tvDashboardStudent.visibility = View.GONE
             binding.llTeacherSideStudentCount.visibility = View.GONE
-        } else if (userSharedPreference.getRole()?.equals(UserRole.TEACHER) == true) {
+        } else if (role === UserRole.TEACHER) {
             binding.tvDashboardCheckTimeTitle.visibility = View.GONE
             binding.tvDashboardCheckTime.visibility = View.GONE
             binding.ivNextCheckTimeIcon.visibility = View.GONE
@@ -39,11 +37,10 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>): Adapter<Das
         holder.itemView.setOnClickListener {
             val navController = holder.itemView.findNavController()
 
-            val user = UserSharedPreference(holder.itemView.context)
-            if (user.getRole()?.equals(UserRole.STUDENT) == true) {
+            if (role === UserRole.STUDENT) {
                 navController.navigate(R.id.action_dashboard_to_course)
                 navController.currentDestination?.label = data[position].course
-            } else if (user.getRole()?.equals(UserRole.TEACHER) == true) {
+            } else if (role === UserRole.TEACHER) {
                 navController.navigate(R.id.action_dashboard_to_teacher_course)
                 navController.currentDestination?.label = data[position].course
             }
