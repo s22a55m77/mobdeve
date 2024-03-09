@@ -7,15 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.util.CourseUtil
 import com.checkinface.util.UserRole
 import com.checkinface.util.UserSharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -29,6 +33,7 @@ class DashboardFragment : Fragment() {
     private lateinit var btnAddCourse: ExtendedFloatingActionButton
     private lateinit var ivQrCode: ImageView
     private lateinit var edAddCourse: EditText
+    private lateinit var tvCreateCourseCode: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,11 +48,10 @@ class DashboardFragment : Fragment() {
         // Course QR Code Dialog
         val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
         this.ivQrCode = qrModalView.findViewById(R.id.iv_qr_code_container)
-        fun generateQR() {
-            val text = "Test"
+        fun generateQR(code: String) {
             val writer = MultiFormatWriter()
             try {
-                val matrix: BitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 400, 400)
+                val matrix: BitMatrix = writer.encode(code, BarcodeFormat.QR_CODE, 400, 400)
                 val encoder = BarcodeEncoder()
                 val bitmap = encoder.createBitmap(matrix)
                 ivQrCode.setImageBitmap(bitmap)
@@ -62,6 +66,7 @@ class DashboardFragment : Fragment() {
         val modalView = layoutInflater.inflate(R.layout.create_course, null)
 
         this.btnAddCourse = view.findViewById(R.id.btn_teacher_add_course)
+        this.tvCreateCourseCode = qrModalView.findViewById(R.id.tv_create_course_code)
         this.edAddCourse = modalView.findViewById(R.id.ed_add_course_name)
 
         val user = UserSharedPreference(requireContext())
@@ -69,6 +74,31 @@ class DashboardFragment : Fragment() {
             this.edAddCourse.hint = "Course Code"
         }
 
+        // Process Teacher Add Course Event
+        fun teacherAddCourse() {
+            val db = Firebase.firestore
+            val course = hashMapOf(
+                "course_name" to edAddCourse.text.toString(),
+                "course_color" to CourseUtil.generateColor()
+            )
+            var courseCode: String? = null;
+            // Create Course
+            db.collection("course")
+                .add(course)
+                .addOnSuccessListener { documentReference ->
+                    // Generate Course Code based on Id
+                    courseCode = CourseUtil.generateCode(documentReference.id)
+                    // Update with Course Code
+                    db.document(documentReference.path)
+                        .update("course_code", courseCode)
+                        .addOnSuccessListener {
+                            generateQR(courseCode!!)
+                            tvCreateCourseCode.text = courseCode
+                            qrModal.show()}
+                }
+        }
+
+        // Teacher Dialog for Add Course
         val teacherDialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
             .setView(modalView)
             .setTitle("Add Course")
@@ -81,8 +111,7 @@ class DashboardFragment : Fragment() {
                 }
                 else {
                     dialog.cancel()
-                    generateQR()
-                    qrModal.show()
+                    teacherAddCourse()
                 }
             }
         val teacherCourseModal = teacherDialogBuilder.create()
