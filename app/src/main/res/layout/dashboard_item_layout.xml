@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingStart="20dp"
-                    android:text="TextView"
+                    android:text="0"
                     android:textSize="14sp" />
 
                 <LinearLayout
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingStart="20dp"
-                    android:text="TextView"
+                    android:text="No Event"
                     android:textSize="14sp" />
             </LinearLayout>
 
