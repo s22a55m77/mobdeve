@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.checkinface.databinding.ActivityLoginBinding
 import com.checkinface.fragment.dashboard.DashboardFragment
+import com.checkinface.util.FirestoreUserHelper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -100,17 +101,16 @@ class LoginActivity: Activity() {
         if (user !== null) {
             val intentToInitialize = Intent(this@LoginActivity, InitializeActivity::class.java)
             val intentToDashboard = Intent(this@LoginActivity, MainActivity::class.java)
-            val db = Firebase.firestore
-            db.collection("users")
-                .whereEqualTo("email", user.email)
-                .get()
-                .addOnSuccessListener { document ->
-                    Log.d("TEST: ", document.toObjects())
-                    if(document != null)
-                        startActivity(intentToDashboard)
-                    else
-                        startActivity(intentToInitialize)
+            val firestoreUserHelper = FirestoreUserHelper()
+            firestoreUserHelper.getUserByEmail(
+                user.email!!,
+                onFound = {
+                    startActivity(intentToDashboard)
+                },
+                onNotFound = {
+                    startActivity(intentToInitialize)
                 }
+            )
         }
     }
 }
