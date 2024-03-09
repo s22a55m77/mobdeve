@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.util.CourseUtil
 import com.checkinface.util.FirestoreUserHelper
+import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.UserRole
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -30,17 +31,17 @@ import kotlinx.coroutines.launch
 
 
 class DashboardFragment : Fragment() {
-    private val dashboardModelList = DashboardDataGenerator.loadData()
+    private var dashboardModelList: ArrayList<DashboardModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnAddCourse: ExtendedFloatingActionButton
     private lateinit var ivQrCode: ImageView
     private lateinit var edAddCourse: EditText
     private lateinit var tvCreateCourseCode: TextView
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
+    private val firestoreCourseHelper: FirestoreCourseHelper = FirestoreCourseHelper()
     private var userRole: UserRole? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         this.recyclerView = view.findViewById(R.id.dashboardRv)
 
         val gridLayoutManager = GridLayoutManager(activity?.applicationContext, 2)
@@ -48,6 +49,7 @@ class DashboardFragment : Fragment() {
 
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
+            dashboardModelList = firestoreCourseHelper.getCourses()
             if (userRole != null)
                 recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
         }
@@ -80,30 +82,6 @@ class DashboardFragment : Fragment() {
             this.edAddCourse.hint = "Course Code"
         }
 
-        // Process Teacher Add Course Event
-        fun teacherAddCourse() {
-            val db = Firebase.firestore
-            val course = hashMapOf(
-                "course_name" to edAddCourse.text.toString(),
-                "course_color" to CourseUtil.generateColor()
-            )
-            var courseCode: String? = null;
-            // Create Course
-            db.collection("course")
-                .add(course)
-                .addOnSuccessListener { documentReference ->
-                    // Generate Course Code based on Id
-                    courseCode = CourseUtil.generateCode(documentReference.id)
-                    // Update with Course Code
-                    db.document(documentReference.path)
-                        .update("course_code", courseCode)
-                        .addOnSuccessListener {
-                            generateQR(courseCode!!)
-                            tvCreateCourseCode.text = courseCode
-                            qrModal.show()}
-                }
-        }
-
         // Teacher Dialog for Add Course
         val teacherDialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
             .setView(modalView)
@@ -117,7 +95,15 @@ class DashboardFragment : Fragment() {
                 }
                 else {
                     dialog.cancel()
-                    teacherAddCourse()
+                    firestoreCourseHelper.addCourse(edAddCourse.text.toString(), fun(courseCode) {
+                        generateQR(courseCode)
+                        tvCreateCourseCode.text = courseCode
+                        qrModal.show()
+                        lifecycleScope.launch {
+                            dashboardModelList = firestoreCourseHelper.getCourses()
+                            recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                        }
+                    })
                 }
             }
         val teacherCourseModal = teacherDialogBuilder.create()
