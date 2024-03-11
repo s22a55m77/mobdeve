@@ -108,6 +108,7 @@ class DashboardFragment : Fragment() {
             }
         val teacherCourseModal = teacherDialogBuilder.create()
 
+        // Student Dialog For Add Course
         val studentDialogBuilder = MaterialAlertDialogBuilder(this.requireContext())
             .setView(modalView)
             .setTitle("Add Course")
@@ -119,7 +120,9 @@ class DashboardFragment : Fragment() {
                     Toast.makeText(this.context, "Please enter the course code", Toast.LENGTH_LONG).show()
                 }
                 else {
-                    dialog.cancel()
+                    firestoreCourseHelper.addStudent(edAddCourse.text.toString(), fun() {
+                        Toast.makeText(this.context, "Successfully Added to Course", Toast.LENGTH_LONG).show()
+                    })
                 }
             }
 
@@ -133,7 +136,6 @@ class DashboardFragment : Fragment() {
                 edAddCourse.hint = "Course Code"
                 studentCourseModal.show()
             }
-
         }
     }
 
