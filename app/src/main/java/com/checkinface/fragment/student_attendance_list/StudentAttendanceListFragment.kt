@@ -1,5 +1,6 @@
 package com.checkinface.fragment.student_attendance_list
 
+import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -17,9 +18,12 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.databinding.FragmentStudentAttendanceBinding
+import com.checkinface.util.FirestoreStudentHelper
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.UserRole
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
@@ -28,10 +32,11 @@ import kotlinx.coroutines.launch
 
 class StudentAttendanceListFragment : Fragment() {
 
-    private val attendanceModelList = StudentAttendanceDataGenerator.loadData()
+    private var attendanceModelList: ArrayList<StudentAttendanceModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewBinding: FragmentStudentAttendanceBinding
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
+    private val firestoreStudentHelper: FirestoreStudentHelper = FirestoreStudentHelper()
     private var userRole: UserRole? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +56,12 @@ class StudentAttendanceListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
+        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+        val courseCode = sp.getString("COURSE_CODE", "")
+
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
+            attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
             if (userRole != null)
                 recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
         }
