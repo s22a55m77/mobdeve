@@ -1,5 +1,6 @@
 package com.checkinface.fragment.teacher_course.student_list
 
+import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
@@ -24,6 +27,7 @@ class TeacherCourseStudentListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnShowQR: ExtendedFloatingActionButton
     private lateinit var ivQrCode: ImageView
+    private lateinit var tvQrCode: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +59,10 @@ class TeacherCourseStudentListFragment : Fragment() {
         this.btnShowQR.setOnClickListener {
             val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
             this.ivQrCode = qrModalView.findViewById(R.id.iv_qr_code_container)
-            fun generateQR() {
-                val text = "Test"
+            fun generateQR(courseCode: String) {
                 val writer = MultiFormatWriter()
                 try {
-                    val matrix: BitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 400, 400)
+                    val matrix: BitMatrix = writer.encode(courseCode, BarcodeFormat.QR_CODE, 400, 400)
                     val encoder = BarcodeEncoder()
                     val bitmap = encoder.createBitmap(matrix)
                     this.ivQrCode.setImageBitmap(bitmap)
@@ -69,8 +72,17 @@ class TeacherCourseStudentListFragment : Fragment() {
             }
             val qrDialog = MaterialAlertDialogBuilder(this.requireContext()).setView(qrModalView)
             val qrModal = qrDialog.create()
-            generateQR()
-            qrModal.show()
+            val sp = view.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+            val courseCode = sp.getString("COURSE_CODE", "")
+            if(courseCode != "" || courseCode.isNotEmpty()) {
+                generateQR(courseCode!!)
+                this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)
+                tvQrCode.text = courseCode
+                qrModal.show()
+            } else {
+                Toast.makeText(view.context, "Error while generating QR Code", Toast.LENGTH_LONG).show()
+            }
+
         }
     }
 }
