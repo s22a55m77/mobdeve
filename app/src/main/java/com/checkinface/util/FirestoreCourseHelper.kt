@@ -3,6 +3,7 @@ package com.checkinface.util
 import android.util.Log
 import android.widget.Toast
 import com.checkinface.fragment.dashboard.DashboardModel
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -72,7 +73,7 @@ class FirestoreCourseHelper {
             }
     }
 
-    fun addStudent(courseCode: String, onSuccessListener: () -> Unit) {
+    fun addStudent(courseCode: String, onSuccessListener: () -> Unit, onFailureListener: () -> Unit) {
         val db = Firebase.firestore
         val student = hashMapOf(
             "student_email" to Firebase.auth.currentUser?.email.toString(),
@@ -88,6 +89,7 @@ class FirestoreCourseHelper {
                             onSuccessListener()
                         }
                         .addOnFailureListener { e ->
+                            onFailureListener()
                             Log.e("Firestore","Error adding student document to course document: $e")
                         }
                 }

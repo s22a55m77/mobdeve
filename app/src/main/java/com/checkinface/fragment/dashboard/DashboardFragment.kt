@@ -120,8 +120,12 @@ class DashboardFragment : Fragment() {
                     Toast.makeText(this.context, "Please enter the course code", Toast.LENGTH_LONG).show()
                 }
                 else {
-                    firestoreCourseHelper.addStudent(edAddCourse.text.toString(), fun() {
-                        Toast.makeText(this.context, "Successfully Added to Course", Toast.LENGTH_LONG).show()
+                    firestoreCourseHelper.addStudent(edAddCourse.text.toString(),
+                        fun() {
+                            Toast.makeText(this.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
+                        },
+                        fun() {
+                            Toast.makeText(this.context, "Error While Adding to the Course", Toast.LENGTH_LONG).show()
                     })
                 }
             }
