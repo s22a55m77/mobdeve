@@ -43,7 +43,8 @@ class FirestoreCourseHelper {
                     course.get(NAME_FIELD).toString(),
                     course.get(COLOR_FIELD).toString(),
                     date,
-                    studentCount
+                    studentCount,
+                    course.get(CODE_FIELD).toString(),
                 )
             )
         }
@@ -52,7 +53,6 @@ class FirestoreCourseHelper {
     }
 
     fun addCourse(courseName: String, onSuccessListener: (courseCode: String) -> Unit) {
-        val db = Firebase.firestore
         val course = hashMapOf(
             NAME_FIELD to courseName,
             COLOR_FIELD to CourseUtil.generateColor()
@@ -74,7 +74,6 @@ class FirestoreCourseHelper {
     }
 
     fun addStudent(courseCode: String, onSuccessListener: () -> Unit, onFailureListener: () -> Unit) {
-        val db = Firebase.firestore
         val student = hashMapOf(
             "student_email" to Firebase.auth.currentUser?.email.toString(),
         )

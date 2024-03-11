@@ -6,5 +6,6 @@ data class DashboardModel(
     val course: String,
     val backgroundColor: String,
     val nextCheckTime: Date?,
-    val studentCount: Number?
+    val studentCount: Number?,
+    val courseCode: String,
 )

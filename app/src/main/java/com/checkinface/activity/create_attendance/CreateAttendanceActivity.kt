@@ -1,5 +1,6 @@
 package com.checkinface.activity.create_attendance
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrognito.patternlockview.PatternLockView
@@ -18,16 +20,28 @@ import com.checkinface.R
 import com.checkinface.activity.AzureMapActivity
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
 import com.checkinface.util.DateUtil
+import com.checkinface.util.FirestoreEventHelper
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class CreateAttendanceActivity : AppCompatActivity() {
     private lateinit var selectedDateRecyclerView: RecyclerView
+    private var startTimeSelected: Boolean = false
+    private var lateTimeSelected: Boolean = false
+    private var absentTimeSelected: Boolean = false
+    private var dateSelected: Boolean = false
+    private var dateRangeList: ArrayList<Long> = arrayListOf()
+    private var firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
 
     private val azureMapResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {result ->
@@ -194,6 +208,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 for (date in datesInRange) {
                     val model = DateModel(DateUtil.getFormattedDate(date))
                     dateModelList.add(model)
+                    dateRangeList.add(date.time)
                 }
 
                 selectedDateRecyclerView.adapter = SelectedDateAdapter(dateModelList)
@@ -203,25 +218,28 @@ class CreateAttendanceActivity : AppCompatActivity() {
         datePicker.addOnPositiveButtonClickListener {
             val message = "Select Date: " + DateUtil.getFormattedDate(Date(datePicker.selection!!))
             viewBinding.btnDatePicker.text = message
+            dateSelected = true
         }
 
         startTimePicker.addOnPositiveButtonClickListener {
             val message = "Select Start Time: " + startTimePicker.hour + ":" + startTimePicker.minute
             viewBinding.btnStartTimePicker.text = message
+            startTimeSelected = true
         }
 
         lateTimePicker.addOnPositiveButtonClickListener {
             val message = "Select Late Time: " + lateTimePicker.hour + ":" + lateTimePicker.minute
             viewBinding.btnLateTimePicker.text = message
+            lateTimeSelected = true
         }
 
         absentTimePicker.addOnPositiveButtonClickListener {
             val message = "Select Absent Time: " + absentTimePicker.hour + ":" + absentTimePicker.minute
             viewBinding.btnAbsentTimePicker.text = message
+            absentTimeSelected = true
         }
 
         // Pattern Lock
-
         val patternView = layoutInflater.inflate(R.layout.create_attendance_pattern_lock_layout, null)
         val mPatternLockView: PatternLockView = patternView.findViewById(R.id.pattern_lock_view)
         val mPatternLockViewListener: PatternLockViewListener = object : PatternLockViewListener {
@@ -247,6 +265,8 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 Log.d(javaClass.name, "Pattern has been cleared")
             }
         }
+
+        // Pattern Lock Dialog
         mPatternLockView.addPatternLockListener(mPatternLockViewListener)
         val dialog = MaterialAlertDialogBuilder(this).setView(patternView)
             .setNegativeButton("Cancel") { dialog, which ->
@@ -258,6 +278,66 @@ class CreateAttendanceActivity : AppCompatActivity() {
         val patternModal = dialog.create()
         viewBinding.btnPattern.setOnClickListener {
             patternModal.show()
+        }
+
+        // Handle Create Click
+        // TODO Update code for Geolocation
+        viewBinding.btnCreateAttendance.setOnClickListener {
+            Log.d("TEST", dateRangeList.toString())
+            // Check required settings are selected
+            if ((!dateSelected && dateRangeList.size == 0) || !startTimeSelected || !lateTimeSelected || !absentTimeSelected ) {
+                Toast.makeText(viewBinding.root.context, "Please set the time and date", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val sp = this.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+            val courseCode = sp.getString("COURSE_CODE", "");
+            if(courseCode == "" || courseCode.isNullOrEmpty()) {
+                Toast.makeText(viewBinding.root.context, "Error while getting course code", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if(viewBinding.checkboxRecurring.isChecked) {
+                // Add Events based on selected recurring date
+                var successCount = 0;
+                for (date in dateRangeList) {
+                    lifecycleScope.launch {
+                        firestoreEventHelper.addEvent(
+                            courseCode = courseCode,
+                            date = DateUtil.millisecondsToTimestamp(date),
+                            startTime = DateUtil.millisecondsToTimestamp(date + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
+                            lateTime = DateUtil.millisecondsToTimestamp(date + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
+                            absentTime = DateUtil.millisecondsToTimestamp(date + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),
+                            useGeolocation = viewBinding.checkboxGeolocation.isChecked,
+                            patternLock = if (mPatternLockView.pattern.size == 0) null else mPatternLockView.pattern.toString(),
+                            useQR = viewBinding.checkboxQrCode.isChecked,
+                            onSuccessListener = fun() {
+                                successCount++
+                                if(successCount == dateRangeList.size)
+                                    Toast.makeText(viewBinding.root.context, "Successfully Added Events", Toast.LENGTH_LONG).show()
+                            }
+                        )
+                    }
+                }
+            } else {
+                // Add Event based on selected date
+                lifecycleScope.launch {
+                    firestoreEventHelper.addEvent(
+                        courseCode = courseCode,
+                        date = DateUtil.millisecondsToTimestamp(datePicker.selection!!),
+                        startTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
+                        lateTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
+                        absentTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),
+                        useGeolocation = viewBinding.checkboxGeolocation.isChecked,
+                        patternLock = if (mPatternLockView.pattern.size == 0) null else mPatternLockView.pattern.toString(),
+                        useQR = viewBinding.checkboxQrCode.isChecked,
+                        onSuccessListener = fun() {
+                            Toast.makeText(viewBinding.root.context, "Successfully Added Event", Toast.LENGTH_LONG).show()
+                        }
+                    )
+                }
+            }
+
         }
 
     }
