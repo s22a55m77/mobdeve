@@ -313,8 +313,13 @@ class CreateAttendanceActivity : AppCompatActivity() {
                             useQR = viewBinding.checkboxQrCode.isChecked,
                             onSuccessListener = fun() {
                                 successCount++
-                                if(successCount == dateRangeList.size)
+                                if(successCount == dateRangeList.size) {
                                     Toast.makeText(viewBinding.root.context, "Successfully Added Events", Toast.LENGTH_LONG).show()
+                                    finish()
+                                }
+                            },
+                            onFailureListener = fun() {
+                                Toast.makeText(viewBinding.root.context, "Error while adding events", Toast.LENGTH_LONG).show()
                             }
                         )
                     }
@@ -333,11 +338,11 @@ class CreateAttendanceActivity : AppCompatActivity() {
                         useQR = viewBinding.checkboxQrCode.isChecked,
                         onSuccessListener = fun() {
                             Toast.makeText(viewBinding.root.context, "Successfully Added Event", Toast.LENGTH_LONG).show()
+                            finish()
                         }
                     )
                 }
             }
-
         }
 
     }
