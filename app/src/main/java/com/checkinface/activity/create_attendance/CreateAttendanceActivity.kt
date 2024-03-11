@@ -304,7 +304,6 @@ class CreateAttendanceActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         firestoreEventHelper.addEvent(
                             courseCode = courseCode,
-                            date = DateUtil.millisecondsToTimestamp(date),
                             startTime = DateUtil.millisecondsToTimestamp(date + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
                             lateTime = DateUtil.millisecondsToTimestamp(date + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
                             absentTime = DateUtil.millisecondsToTimestamp(date + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),
@@ -329,7 +328,6 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     firestoreEventHelper.addEvent(
                         courseCode = courseCode,
-                        date = DateUtil.millisecondsToTimestamp(datePicker.selection!!),
                         startTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
                         lateTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
                         absentTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),

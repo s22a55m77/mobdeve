@@ -1,9 +1,7 @@
 package com.checkinface.util
 
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import java.util.Date
 
 class FirestoreEventHelper {
     private val db = Firebase.firestore
@@ -14,11 +12,10 @@ class FirestoreEventHelper {
     }
 
 
-    fun addEvent(courseCode: String, date: String, startTime: String, lateTime: String, absentTime: String,
+    fun addEvent(courseCode: String, startTime: String, lateTime: String, absentTime: String,
                  useGeolocation: Boolean, patternLock:String?, useQR: Boolean,
                  onSuccessListener: () -> Unit, onFailureListener: (() -> Unit)? = null) {
         val event = hashMapOf(
-            "event_date" to date,
             "event_start_time" to startTime,
             "event_late_time" to lateTime,
             "event_absent_time" to absentTime,
