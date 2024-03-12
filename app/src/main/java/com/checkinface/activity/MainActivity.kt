@@ -1,14 +1,24 @@
 package com.checkinface.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -18,12 +28,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.checkinface.R
 import com.checkinface.databinding.ActivityMainBinding
 import com.checkinface.util.FirestoreUserHelper
+import com.checkinface.util.NotificationUtil
 import com.checkinface.util.UserRole
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +50,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationUtil = NotificationUtil()
+        notificationUtil.createChannel(notificationManager)
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.SET_ALARM
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted, request the permission
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.SET_ALARM),
+                123
+            )
+        }
 
         auth = Firebase.auth
 

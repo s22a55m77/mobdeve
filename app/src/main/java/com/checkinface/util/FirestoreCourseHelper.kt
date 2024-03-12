@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 
@@ -89,6 +90,10 @@ class FirestoreCourseHelper {
             "student_email" to Firebase.auth.currentUser?.email.toString(),
             "student_name" to Firebase.auth.currentUser?.displayName.toString()
         )
+
+        // this subscribe the student to all add/delete/modify of attendance event of this class
+        FirebaseMessaging.getInstance().subscribeToTopic("${courseCode}_event")
+
         db.collection("course")
             .whereEqualTo(COURSE_CODE, courseCode)
             .get()
