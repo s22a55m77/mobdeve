@@ -21,6 +21,7 @@ import com.checkinface.util.UserRole
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -95,7 +96,7 @@ class DashboardFragment : Fragment() {
                 }
                 else {
                     dialog.cancel()
-                    firestoreCourseHelper.addCourse(edAddCourse.text.toString(), fun(courseCode) {
+                    firestoreCourseHelper.addCourse(edAddCourse.text.toString(), Firebase.auth.currentUser?.email.toString(), fun(courseCode) {
                         generateQR(courseCode)
                         tvCreateCourseCode.text = courseCode
                         qrModal.show()

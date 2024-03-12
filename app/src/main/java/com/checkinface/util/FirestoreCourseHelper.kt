@@ -20,6 +20,7 @@ class FirestoreCourseHelper {
         private const val NEXT_CHECK_TIME_FIELD = "next_check_time"
         private const val STUDENT_COUNT_FIELD = "student_count"
         private const val CODE_FIELD = "course_code"
+        private const val TEACHER_FIELD = "course_teacher"
     }
     suspend fun getCourses(): ArrayList<DashboardModel> {
         val data: ArrayList<DashboardModel> = ArrayList()
@@ -52,10 +53,11 @@ class FirestoreCourseHelper {
         return data
     }
 
-    fun addCourse(courseName: String, onSuccessListener: (courseCode: String) -> Unit) {
+    fun addCourse(courseName: String, teacherEmail: String, onSuccessListener: (courseCode: String) -> Unit) {
         val course = hashMapOf(
             NAME_FIELD to courseName,
-            COLOR_FIELD to CourseUtil.generateColor()
+            COLOR_FIELD to CourseUtil.generateColor(),
+            TEACHER_FIELD to teacherEmail
         )
         var courseCode: String? = null;
         // Add Course
