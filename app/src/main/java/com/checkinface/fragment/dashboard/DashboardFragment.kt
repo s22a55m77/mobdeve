@@ -49,9 +49,12 @@ class DashboardFragment : Fragment() {
 
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
-            dashboardModelList = firestoreCourseHelper.getCourses()
-            if (userRole != null)
+            // this prevent app from crashing when the user is not yet log in
+            if (userRole != null) {
+                dashboardModelList = firestoreCourseHelper.getCourses()
                 recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+            }
+
         }
 
         // Course QR Code Dialog
