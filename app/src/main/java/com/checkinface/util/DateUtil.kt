@@ -21,6 +21,11 @@ class DateUtil {
             return dateFormat.format(date)
         }
 
+        fun getFormattedDate(outputDateFormat: String, date: Date): String {
+            val dateFormat = SimpleDateFormat(outputDateFormat, Locale.getDefault())
+            return dateFormat.format(date)
+        }
+
         fun millisecondsToTimestamp(millis: Long): String {
             // Create a SimpleDateFormat object with the desired date format
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

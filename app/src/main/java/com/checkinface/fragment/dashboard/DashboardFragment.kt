@@ -52,7 +52,7 @@ class DashboardFragment : Fragment() {
             userRole = firestoreUserHelper.getRole()
             // this prevent app from crashing when the user is not yet log in
             if (userRole != null) {
-                dashboardModelList = firestoreCourseHelper.getCourses()
+                dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email.toString(), userRole!!)
                 recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
             }
 
@@ -104,7 +104,7 @@ class DashboardFragment : Fragment() {
                         tvCreateCourseCode.text = courseCode
                         qrModal.show()
                         lifecycleScope.launch {
-                            dashboardModelList = firestoreCourseHelper.getCourses()
+                            dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
                             recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
                         }
                     })

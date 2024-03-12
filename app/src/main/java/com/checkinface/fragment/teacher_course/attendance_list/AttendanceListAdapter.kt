@@ -1,5 +1,6 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.activity.edit_attendance.EditAttendanceActivity
 import com.checkinface.databinding.AttendanceItemLayoutBinding
+import com.checkinface.util.DateUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -37,6 +39,12 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
         holder.itemView.setOnClickListener {
             val navController = holder.itemView.findNavController()
             navController.navigate(R.id.action_attendance_list_to_detail)
+            // Set Event
+            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+            with(sp.edit()) {
+                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
+                apply()
+            }
         }
 
         val settings = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_settings)

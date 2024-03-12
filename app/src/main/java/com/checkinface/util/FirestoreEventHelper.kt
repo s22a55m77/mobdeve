@@ -8,6 +8,7 @@ class FirestoreEventHelper {
 
     companion object {
         private const val COURSE_COLLECTION = "course"
+        private const val EVENT_COLLECTION = "events"
         private const val CODE_FIELD = "course_code"
     }
 
@@ -29,7 +30,7 @@ class FirestoreEventHelper {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val events = document.reference.collection("events")
+                    val events = document.reference.collection(EVENT_COLLECTION)
                     events.add(event)
                         .addOnSuccessListener {
                             onSuccessListener()

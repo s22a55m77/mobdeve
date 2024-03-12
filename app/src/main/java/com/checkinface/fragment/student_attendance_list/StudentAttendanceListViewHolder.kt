@@ -9,7 +9,7 @@ class StudentAttendanceListViewHolder(private val binding: StudentAttendanceItem
 
     fun bindData(studentAttendanceModel: StudentAttendanceModel) {
         val status = studentAttendanceModel.status.toString()
-        binding.tvAttendanceDate.text = DateUtil.getFormattedDate(studentAttendanceModel.date)
+        binding.tvAttendanceDate.text = DateUtil.getFormattedDate("MMM d, yyyy HH:mm", studentAttendanceModel.date)
         binding.tvAttendanceStatus.text = status.lowercase().replaceFirstChar { it.uppercase() }
 
         when (status) {

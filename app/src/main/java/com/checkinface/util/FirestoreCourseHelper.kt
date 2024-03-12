@@ -7,8 +7,10 @@ import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.fragment.teacher_course.attendance_detail_student_list.AttendanceDetailStudentModel
 import com.checkinface.fragment.teacher_course.student_list.StudentModel
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
@@ -32,32 +34,90 @@ class FirestoreCourseHelper {
         private const val STUDENT_NAME = "student_name"
         private const val STUDENT_EMAIL = "student_email"
     }
-    suspend fun getCourses(): ArrayList<DashboardModel> {
+    suspend fun getCourses(email: String, role: UserRole): ArrayList<DashboardModel> {
         val data: ArrayList<DashboardModel> = ArrayList()
-        val courses = db.collection(COURSE_COLLECTION)
-            .get()
-            .await()
 
-        for (course in courses) {
-            val date: Date?
-            val studentCount: Number?
-            if(course.get(NEXT_CHECK_TIME_FIELD) != null)
-                date = DateUtil.getDate(course.get(NEXT_CHECK_TIME_FIELD).toString())
-            else
-                date = null
-            if(course.get(STUDENT_COUNT_FIELD) != null)
-                studentCount = course.get(STUDENT_COUNT_FIELD).toString().toInt()
-            else
-                studentCount = null
-            data.add(
-                DashboardModel(
-                    course.get(NAME_FIELD).toString(),
-                    course.get(COLOR_FIELD).toString(),
-                    date,
-                    studentCount,
-                    course.get(COURSE_CODE).toString(),
+        var courses: QuerySnapshot? = null
+
+        if(role == UserRole.TEACHER) {
+            // Search Course that contains the email
+            courses = db.collection(COURSE_COLLECTION)
+                .whereEqualTo(TEACHER_FIELD, email)
+                .get()
+                .await()
+
+            // Add to data
+            if(courses != null) {
+                for (course in courses) {
+                    val date: Date?
+                    val studentCount: Number?
+                    if(course.get(NEXT_CHECK_TIME_FIELD) != null)
+                        date = DateUtil.getDate(course.get(NEXT_CHECK_TIME_FIELD).toString())
+                    else
+                        date = null
+                    if(course.get(STUDENT_COUNT_FIELD) != null)
+                        studentCount = course.get(STUDENT_COUNT_FIELD).toString().toInt()
+                    else
+                        studentCount = null
+                    data.add(
+                        DashboardModel(
+                            course.get(NAME_FIELD).toString(),
+                            course.get(COLOR_FIELD).toString(),
+                            date,
+                            studentCount,
+                            course.get(COURSE_CODE).toString(),
+                        )
+                    )
+                }
+            }
+        } else if(role == UserRole.STUDENT) {
+            // Get All Courses
+            courses = db.collection(COURSE_COLLECTION)
+                .get()
+                .await()
+
+            // Collect student where the email is found
+            val studentCourse = mutableListOf<String>()
+            for (course in courses.documents) {
+                val courseId = course.id
+                val studentQuery = db.collection(COURSE_COLLECTION)
+                    .document(courseId)
+                    .collection(STUDENT_COLLECTION)
+                    .whereEqualTo(STUDENT_EMAIL, email)
+                    .get()
+                    .await()
+                if (!studentQuery.isEmpty) {
+                    studentCourse.add(courseId)
+                }
+            }
+
+            for (id in studentCourse) {
+                val course = db.collection(COURSE_COLLECTION)
+                    .document(id)
+                    .get()
+                    .await()
+                val date: Date?
+                val studentCount: Number?
+                if(course.get(NEXT_CHECK_TIME_FIELD) != null)
+                    date = DateUtil.getDate(course.get(NEXT_CHECK_TIME_FIELD).toString())
+                else
+                    date = null
+                if(course.get(STUDENT_COUNT_FIELD) != null)
+                    studentCount = course.get(STUDENT_COUNT_FIELD).toString().toInt()
+                else
+                    studentCount = null
+                data.add(
+                    DashboardModel(
+                        course.get(NAME_FIELD).toString(),
+                        course.get(COLOR_FIELD).toString(),
+                        date,
+                        studentCount,
+                        course.get(COURSE_CODE).toString(),
+                    )
                 )
-            )
+
+            }
+
         }
 
         return data
@@ -94,12 +154,12 @@ class FirestoreCourseHelper {
         // this subscribe the student to all add/delete/modify of attendance event of this class
         FirebaseMessaging.getInstance().subscribeToTopic("${courseCode}_event")
 
-        db.collection("course")
+        db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val students = document.reference.collection("students")
+                    val students = document.reference.collection(STUDENT_COLLECTION)
                     students.add(student)
                         .addOnSuccessListener {
                             onSuccessListener()
@@ -133,7 +193,7 @@ class FirestoreCourseHelper {
         val students = db.collection(COURSE_COLLECTION)
             .document(id)
             .collection(STUDENT_COLLECTION)
-            .orderBy("student_email")
+            .orderBy(STUDENT_EMAIL)
             .get()
             .await()
 
@@ -145,7 +205,7 @@ class FirestoreCourseHelper {
         for (student in students.documents) {
             for (attendance in attendances.documents) {
                 // Current Student
-                if(student.get("student_email") == attendance.get(STUDENT_FIELD)) {
+                if(student.get(STUDENT_EMAIL) == attendance.get(STUDENT_FIELD)) {
                     when(attendance.get(STATUS_FIELD)) {
                         "PRESENT" -> presentCount++
                         "LATE" -> lateCount++
