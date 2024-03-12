@@ -89,12 +89,12 @@ class FirestoreCourseHelper {
             "student_email" to Firebase.auth.currentUser?.email.toString(),
             "student_name" to Firebase.auth.currentUser?.displayName.toString()
         )
-        db.collection("course")
+        db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val students = document.reference.collection("students")
+                    val students = document.reference.collection(STUDENT_COLLECTION)
                     students.add(student)
                         .addOnSuccessListener {
                             onSuccessListener()
@@ -128,7 +128,7 @@ class FirestoreCourseHelper {
         val students = db.collection(COURSE_COLLECTION)
             .document(id)
             .collection(STUDENT_COLLECTION)
-            .orderBy("student_email")
+            .orderBy(STUDENT_EMAIL)
             .get()
             .await()
 
@@ -140,7 +140,7 @@ class FirestoreCourseHelper {
         for (student in students.documents) {
             for (attendance in attendances.documents) {
                 // Current Student
-                if(student.get("student_email") == attendance.get(STUDENT_FIELD)) {
+                if(student.get(STUDENT_EMAIL) == attendance.get(STUDENT_FIELD)) {
                     when(attendance.get(STATUS_FIELD)) {
                         "PRESENT" -> presentCount++
                         "LATE" -> lateCount++
