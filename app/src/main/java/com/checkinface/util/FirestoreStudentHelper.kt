@@ -39,7 +39,6 @@ class FirestoreStudentHelper {
             .await()
 
         for(event in attendances.documents) {
-            Log.d("TEST", event.toString())
             var status: AttendanceStatus = AttendanceStatus.ABSENT
             when(event.get(STATUS_FIELD)) {
                 "PRESENT" -> status = AttendanceStatus.PRESENT
