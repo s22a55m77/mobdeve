@@ -9,7 +9,7 @@ import java.util.TimeZone
 class DateUtil {
     companion object {
         private val inputDateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        private val outputDateFormat = "MMM d, yyyy"
+        private val outputDateFormat = "MMM d, yyyy - HH:mm"
 
         fun getDate(date: String): Date {
             val dateFormat = SimpleDateFormat(inputDateFormat, Locale.getDefault())
