@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.util.FirestoreCourseHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.zxing.BarcodeFormat
@@ -21,9 +23,11 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import kotlinx.coroutines.launch
 
 class TeacherCourseStudentListFragment : Fragment() {
-    private val studentList: ArrayList<StudentModel> = StudentDataGenerator.loadData()
+    private val firestoreCourseHelper = FirestoreCourseHelper()
+    private var studentList: ArrayList<StudentModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnShowQR: ExtendedFloatingActionButton
     private lateinit var ivQrCode: ImageView
@@ -52,7 +56,15 @@ class TeacherCourseStudentListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = StudentListAdapter(this.studentList)
+        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+        val courseCode = sp.getString("COURSE_CODE", "")
+        if(courseCode != "" && courseCode != null)
+        lifecycleScope.launch {
+            studentList = firestoreCourseHelper.getStudentLists(courseCode!!)
+            recyclerView.adapter = StudentListAdapter(studentList)
+        }
+
+
 
         this.btnShowQR = view.findViewById(R.id.btn_show_qr_code)
         // show QR code for the course
