@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/btn_modify_student_present"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Present"
@@ -16,6 +17,7 @@
         app:iconTint="#4CAF50" />
 
     <Button
+        android:id="@+id/btn_modify_student_absent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -25,6 +27,7 @@
         app:iconTint="#F44336" />
 
     <Button
+        android:id="@+id/btn_modify_student_late"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

@@ -69,6 +69,7 @@ class FirestoreAttendanceHelper {
                     data.add(
                         AttendanceDetailStudentModel(
                             name = student.get(STUDENT_NAME).toString(),
+                            email = student.get(STUDENT_EMAIL).toString(),
                             status = status
                         ))
                 }
@@ -133,5 +134,41 @@ class FirestoreAttendanceHelper {
             lateCount = 0
         }
         return data
+    }
+
+    suspend fun updateAttendance(courseCode: String, studentEmail: String, eventTime: String, status: String,
+                                 onSuccessListener: () -> Unit) {
+        // Get Course Id
+        val id = db.collection(COURSE_COLLECTION)
+            .whereEqualTo(COURSE_CODE, courseCode)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        // Get attendances
+        val attendances = db.collection(COURSE_COLLECTION)
+            .document(id)
+            .collection(ATTENDANCE_COLLECTION)
+            .get()
+            .await()
+
+        // Get student attendance
+        val attendance = attendances.query
+            .whereEqualTo(STUDENT_FIELD, studentEmail)
+            .whereEqualTo(EVENT_TIME, eventTime)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        db.collection(COURSE_COLLECTION)
+            .document(id)
+            .collection(ATTENDANCE_COLLECTION)
+            .document(attendance)
+            .update(STATUS_FIELD, status)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+
+
     }
 }
