@@ -1,20 +1,25 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionInflater
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.activity.create_attendance.CreateAttendanceActivity
+import com.checkinface.util.FirestoreAttendanceHelper
+import kotlinx.coroutines.launch
 
 class TeacherCourseAttendanceListFragment : Fragment() {
-    private val attendanceList: ArrayList<TeacherAttendanceModel> = AttendanceDataGenerator.loadData()
+    private val firestoreAttendanceHelper = FirestoreAttendanceHelper()
+    private var attendanceList: ArrayList<TeacherAttendanceModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +51,25 @@ class TeacherCourseAttendanceListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = AttendanceListAdapter(this.attendanceList)
+        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+        val courseCode = sp.getString("COURSE_CODE", "")
+        if(courseCode != "" && courseCode != null)
+            lifecycleScope.launch {
+                attendanceList = firestoreAttendanceHelper.getEventsBasedOnCourse(courseCode)
+                recyclerView.adapter = AttendanceListAdapter(attendanceList)
+            }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val view = requireView()
+        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+        val courseCode = sp.getString("COURSE_CODE", "")
+        if(courseCode != "" && courseCode != null)
+            lifecycleScope.launch {
+                attendanceList = firestoreAttendanceHelper.getEventsBasedOnCourse(courseCode)
+                recyclerView.adapter = AttendanceListAdapter(attendanceList)
+            }
     }
 }

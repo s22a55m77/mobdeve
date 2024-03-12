@@ -1,5 +1,6 @@
 package com.checkinface.fragment.teacher_course.attendance_detail_student_list
 
+import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
@@ -7,17 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.util.FirestoreAttendanceHelper
 import com.google.android.material.chip.Chip
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 
 class AttendanceDetailStudentListFragment : Fragment() {
-    private val attendanceDetailStudentList: ArrayList<AttendanceDetailStudentModel> = AttendanceDetailStudentListDataGenerator.loadData()
+    private var attendanceDetailStudentList: ArrayList<AttendanceDetailStudentModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var chipPresent: Chip
     private lateinit var chipAbsent: Chip
     private lateinit var chipLate: Chip
+    private val firestoreAttendanceHelper: FirestoreAttendanceHelper = FirestoreAttendanceHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +48,16 @@ class AttendanceDetailStudentListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        this.recyclerView.adapter = AttendanceDetailStudentListAdapter(this.attendanceDetailStudentList)
+        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+        val courseCode = sp.getString("COURSE_CODE", "")
+        val eventTime = sp.getString("EVENT_TIME", "")
+
+        if(courseCode != "" && courseCode != null && eventTime != null) {
+            lifecycleScope.launch {
+                attendanceDetailStudentList = firestoreAttendanceHelper.getStudentListsBasedOnEvent(courseCode, eventTime)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(attendanceDetailStudentList)
+            }
+        }
 
         // resume animation
         view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
