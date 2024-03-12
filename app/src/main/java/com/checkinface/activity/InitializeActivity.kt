@@ -24,6 +24,7 @@ class InitializeActivity : AppCompatActivity() {
             firestoreUserHelper.addUser(
                 Firebase.auth.currentUser?.email!!,
                 UserRole.STUDENT,
+                Firebase.auth.currentUser?.displayName!!,
                 onSuccessListener = {
                     startActivity(intentToDashboard)
                 }
@@ -35,6 +36,7 @@ class InitializeActivity : AppCompatActivity() {
             firestoreUserHelper.addUser(
                 Firebase.auth.currentUser?.email!!,
                 UserRole.TEACHER,
+                Firebase.auth.currentUser?.displayName!!,
                 onSuccessListener = {
                     startActivity(intentToDashboard)
                 }
