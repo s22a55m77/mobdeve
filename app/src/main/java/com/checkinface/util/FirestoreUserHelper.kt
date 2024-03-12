@@ -12,12 +12,14 @@ class FirestoreUserHelper {
         const val USERS_COLLECTION = "users"
         const val EMAIL_FIELD = "email"
         const val ROLE_FIELD = "role"
+        const val NAME_FIELD= "name"
     }
 
-    fun addUser(email: String, role: UserRole, onSuccessListener: () -> Unit) {
+    fun addUser(email: String, role: UserRole, name: String, onSuccessListener: () -> Unit) {
         val user = hashMapOf(
             EMAIL_FIELD to email,
-            ROLE_FIELD to role
+            ROLE_FIELD to role,
+            NAME_FIELD to name
         )
         db.collection(USERS_COLLECTION)
             .add(user)
