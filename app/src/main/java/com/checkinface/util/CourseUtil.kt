@@ -7,7 +7,6 @@ import kotlin.random.Random
 class CourseUtil {
     companion object {
         fun generateCode(id: String): String {
-            // Hashing the ID using MD5
             val md = MessageDigest.getInstance("MD5")
             md.update(id.toByteArray())
             val byteData = md.digest()
@@ -15,8 +14,11 @@ class CourseUtil {
             // Convert the byte array to a positive integer
             val number = byteData.fold(0L) { acc, byteValue -> (acc shl 8) or (byteValue.toLong() and 0xff) }
 
-            // Truncate the number to 6 digits and take the absolute value
-            val sixDigitCode = (number % 1000000).toString().takeLast(6).toLong().toString()
+            // Ensure the number is positive
+            val positiveNumber = number and 0x7FFFFFFF
+
+            // Truncate the number to 6 digits
+            val sixDigitCode = String.format("%06d", positiveNumber % 1000000)
 
             return sixDigitCode
         }
