@@ -27,20 +27,28 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         val courseName = remoteMessage.data["courseName"].toString()
         val time = remoteMessage.data["eventDateMessage"].toString()
         val notificationId = remoteMessage.data["notificationId"]?.toInt()!!
-        if (type == "add") {
-            sendAddAttendanceNotification(courseName, time)
+        when (type) {
+            "exist" -> {
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "add" -> {
+                sendAddAttendanceNotification(courseName, time)
 
-            // schedule the notification before attendance checking
-            val calendar = setCalendar(remoteMessage)
-            scheduleNotification(calendar, courseName, notificationId)
-        } else if (type == "modify") {
-            sendModifyAttendanceNotification(courseName, time)
+                // schedule the notification before attendance checking
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "modify" -> {
+                sendModifyAttendanceNotification(courseName, time)
 
-            // schedule the notification before attendance checking
-            val calendar = setCalendar(remoteMessage)
-            scheduleNotification(calendar, courseName, notificationId)
-        } else if (type == "delete") {
-            deleteScheduledNotification(courseName, notificationId)
+                // schedule the notification before attendance checking
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "delete" -> {
+                deleteScheduledNotification(courseName, notificationId)
+            }
         }
     }
 
