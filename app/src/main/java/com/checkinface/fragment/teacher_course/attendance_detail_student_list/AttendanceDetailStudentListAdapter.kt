@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.AttendanceDetailStudentItemLayoutBinding
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -35,6 +39,9 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
     override fun onBindViewHolder(holder: AttendanceDetailStudentListViewHolder, position: Int) {
         holder.bindData(data[position])
 
+        val coroutineScope =
+            holder.itemView.findViewTreeLifecycleOwner()?.lifecycleScope ?: CoroutineScope(Dispatchers.IO)
+
         holder.itemView.setOnClickListener {
             val layoutInflater = LayoutInflater.from(holder.itemView.context)
             val modalView = layoutInflater.inflate(R.layout.modify_student_attendance_modal_layout, null)
@@ -50,7 +57,7 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
             val eventTime = sp.getString("EVENT_TIME", "")
 
             btnPresent.setOnClickListener {
-                GlobalScope.launch {
+                coroutineScope.launch {
                     firestoreAttendanceHelper.updateAttendance(
                         courseCode!!,
                         data[position].email,
@@ -67,7 +74,7 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
             }
 
             btnAbsent.setOnClickListener {
-                GlobalScope.launch {
+                coroutineScope.launch {
                     firestoreAttendanceHelper.updateAttendance(
                         courseCode!!,
                         data[position].email,
@@ -84,7 +91,7 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
             }
 
             btnLate.setOnClickListener {
-                GlobalScope.launch {
+                coroutineScope.launch {
                     firestoreAttendanceHelper.updateAttendance(
                         courseCode!!,
                         data[position].email,
