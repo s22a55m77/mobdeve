@@ -49,6 +49,11 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
 
         val settings = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_settings)
         settings.setOnClickListener {
+            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+            with(sp.edit()) {
+                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
+                apply()
+            }
             val intent = Intent(holder.itemView.context, EditAttendanceActivity::class.java)
             holder.itemView.context.startActivity(intent)
         }

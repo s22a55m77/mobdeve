@@ -6,6 +6,7 @@ import com.checkinface.fragment.teacher_course.attendance_detail_student_list.At
 import com.checkinface.fragment.teacher_course.attendance_list.TeacherAttendanceModel
 import com.checkinface.fragment.teacher_course.student_list.StudentModel
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat

@@ -68,12 +68,6 @@
                     android:layout_height="wrap_content"
                     android:text="Use QR Code"
                     android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_recurring"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recurring Event"
-                    android:textColor="@color/md_theme_light_surface" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -193,149 +187,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_recurring_day_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/seed"
-            android:visibility="gone"
-            app:cardElevation="5dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_date_group">
-            <LinearLayout
-                android:padding="10dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/md_theme_light_surface"
-                    android:text="Recurring Day"/>
-                <CheckBox
-                    android:id="@+id/checkbox_monday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/monday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_tuesday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tuesday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_wednesday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/wednesday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_thursday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/thursday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_friday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/friday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_saturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/saturday"
-                    android:textColor="@color/md_theme_light_surface" />
-                <CheckBox
-                    android:id="@+id/checkbox_sunday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sunday"
-                    android:textColor="@color/md_theme_light_surface" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_recurring_date_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/seed"
-            android:visibility="gone"
-            app:cardElevation="5dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_recurring_day_group">
-
-            <LinearLayout
-                android:padding="10dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/md_theme_light_surface"
-                    android:text="Date Range"/>
-                <Button
-                    android:id="@+id/btn_date_range_picker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Select Date"
-                    app:strokeWidth="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_pattern" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_recurring_selected_date_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/md_theme_light_secondaryContainer"
-            android:visibility="gone"
-            app:cardElevation="5dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_recurring_date_group">
-            <LinearLayout
-                android:padding="10dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Selected Date"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_selected_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
         <Button
             android:id="@+id/btn_edit_attendance"
             android:layout_width="match_parent"
@@ -349,7 +200,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_delete_attendance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_recurring_selected_date_group" />
+            app:layout_constraintTop_toBottomOf="@+id/card_view_date_group" />
 
         <Button
             android:id="@+id/btn_delete_attendance"

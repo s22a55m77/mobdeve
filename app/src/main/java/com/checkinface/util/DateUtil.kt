@@ -16,6 +16,18 @@ class DateUtil {
             return dateFormat.parse(date)!!
         }
 
+        fun getDate(inputDateFormat: String, date: String): Date {
+            val dateFormat = SimpleDateFormat(inputDateFormat, Locale.getDefault())
+            return dateFormat.parse(date)!!
+        }
+
+        fun getDate(inputDateFormat: String, date: String, toUTC0: Boolean): Date {
+            val dateFormat = SimpleDateFormat(inputDateFormat, Locale.getDefault())
+            if(toUTC0)
+                dateFormat.timeZone = TimeZone.getTimeZone("GMT+0")
+            return dateFormat.parse(date)!!
+        }
+
         fun getFormattedDate(date: Date): String {
             val dateFormat = SimpleDateFormat(outputDateFormat, Locale.ENGLISH)
             return dateFormat.format(date)
