@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
-import com.checkinface.util.AddCourseQR
+import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreCourseHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -90,7 +90,7 @@ class TeacherCourseStudentListFragment : Fragment() {
             val sp = view.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
             val courseCode = sp.getString("COURSE_CODE", "")
             if(courseCode != "" || courseCode.isNotEmpty()) {
-                val qr = AddCourseQR(courseCode!!, AddCourseQR.TYPE_ADD)
+                val qr = AddCourseQR(courseCode!!)
                 generateQR(Json.encodeToString(qr))
                 this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)
                 tvQrCode.text = courseCode

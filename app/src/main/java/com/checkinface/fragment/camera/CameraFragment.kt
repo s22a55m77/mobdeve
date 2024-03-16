@@ -6,13 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.checkinface.R
+import com.checkinface.fragment.dashboard.DashboardAdapter
+import com.checkinface.fragment.dashboard.DashboardFragment
+import com.checkinface.util.FirestoreCourseHelper
+import com.checkinface.util.qr.AddCourseQR
+import com.checkinface.util.qr.CheckAttendanceQR
+import com.checkinface.util.qr.CommonQR
+import com.checkinface.util.qr.QrSerializer
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +69,27 @@ class CameraFragment : Fragment() {
                 Log.d("FAIL", exception.stackTraceToString())
             }
             .addOnSuccessListener { barcode ->
-                barcode.rawValue?.let { Log.d("CameraFragment", it) }
+                barcode.rawValue?.let {
+
+                    val code = Json.decodeFromString(QrSerializer(), it)
+
+                    when (code) {
+                        is AddCourseQR -> {
+                            val firestoreCourseHelper = FirestoreCourseHelper()
+                            lifecycleScope.launch {
+                                firestoreCourseHelper.addStudent(code.courseCode)
+                                val navController = findNavController()
+                                navController.navigate(R.id.navigation_dashboard)
+                            }
+                        }
+                        is CheckAttendanceQR -> {
+                            Log.d("CODE", code.eventId)
+                        }
+                        else -> {
+                        }
+                    }
+
+                }
             }
     }
 

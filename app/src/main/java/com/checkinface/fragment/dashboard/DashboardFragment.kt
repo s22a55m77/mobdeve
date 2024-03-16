@@ -14,10 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
-import com.checkinface.util.AddCourseQR
+import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.UserRole
+import com.checkinface.util.qr.CommonQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.Firebase
@@ -42,6 +43,7 @@ class DashboardFragment : Fragment() {
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreCourseHelper: FirestoreCourseHelper = FirestoreCourseHelper()
     private var userRole: UserRole? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.recyclerView = view.findViewById(R.id.dashboardRv)
@@ -101,7 +103,7 @@ class DashboardFragment : Fragment() {
                 else {
                     dialog.cancel()
                     firestoreCourseHelper.addCourse(edAddCourse.text.toString(), Firebase.auth.currentUser?.email.toString(), fun(courseCode) {
-                        val qr = AddCourseQR(courseCode, AddCourseQR.TYPE_ADD)
+                        val qr = AddCourseQR(courseCode)
                         generateQR(Json.encodeToString(qr))
                         tvCreateCourseCode.text = courseCode
                         qrModal.show()
