@@ -146,7 +146,7 @@ class FirestoreCourseHelper {
             }
     }
 
-    suspend fun addStudent(courseCode: String, onSuccessListener: () -> Unit, onFailureListener: () -> Unit) {
+    suspend fun addStudent(courseCode: String, onSuccessListener: (() -> Unit)? = null, onFailureListener: (() -> Unit)? = null) {
         val student = hashMapOf(
             "student_email" to Firebase.auth.currentUser?.email.toString(),
             "student_name" to Firebase.auth.currentUser?.displayName.toString()
@@ -164,10 +164,14 @@ class FirestoreCourseHelper {
                     val students = document.reference.collection(STUDENT_COLLECTION)
                     students.add(student)
                         .addOnSuccessListener {
-                            onSuccessListener()
+                            if (onSuccessListener != null) {
+                                onSuccessListener()
+                            }
                         }
                         .addOnFailureListener { e ->
-                            onFailureListener()
+                            if (onFailureListener != null) {
+                                onFailureListener()
+                            }
                             Log.e("Firestore","Error adding student document to course document: $e")
                         }
                 }

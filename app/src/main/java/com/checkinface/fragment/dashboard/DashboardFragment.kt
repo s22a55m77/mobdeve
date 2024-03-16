@@ -14,21 +14,23 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
-import com.checkinface.util.CourseUtil
+import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.UserRole
+import com.checkinface.util.qr.CommonQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 
 class DashboardFragment : Fragment() {
@@ -41,6 +43,7 @@ class DashboardFragment : Fragment() {
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreCourseHelper: FirestoreCourseHelper = FirestoreCourseHelper()
     private var userRole: UserRole? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.recyclerView = view.findViewById(R.id.dashboardRv)
@@ -100,7 +103,8 @@ class DashboardFragment : Fragment() {
                 else {
                     dialog.cancel()
                     firestoreCourseHelper.addCourse(edAddCourse.text.toString(), Firebase.auth.currentUser?.email.toString(), fun(courseCode) {
-                        generateQR(courseCode)
+                        val qr = AddCourseQR(courseCode)
+                        generateQR(Json.encodeToString(qr))
                         tvCreateCourseCode.text = courseCode
                         qrModal.show()
                         lifecycleScope.launch {

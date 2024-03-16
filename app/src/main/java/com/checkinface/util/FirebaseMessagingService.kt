@@ -14,55 +14,59 @@ import java.util.Calendar
 import kotlin.random.Random
 
 class FirebaseMessagingService: FirebaseMessagingService() {
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // Handle FCM messages here
         Log.d("RECEIVE MESSAGE", remoteMessage.data.toString())
+        val settingSharedPreference = SettingSharedPreference(applicationContext)
+        if (!settingSharedPreference.isNotification())
+            return
 
         // there is a new attendance event
         val type = remoteMessage.data["type"].toString()
-        if (type == "add") {
-            val courseName = remoteMessage.data["courseName"].toString()
-            val time = remoteMessage.data["eventDateMessage"].toString()
-            val notificationId = remoteMessage.data["notificationId"]?.toInt()!!
+        val courseName = remoteMessage.data["courseName"].toString()
+        val time = remoteMessage.data["eventDateMessage"].toString()
+        val notificationId = remoteMessage.data["notificationId"]?.toInt()!!
+        when (type) {
+            "exist" -> {
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "add" -> {
+                sendAddAttendanceNotification(courseName, time)
 
-            sendAddAttendanceNotification(courseName, time)
+                // schedule the notification before attendance checking
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "modify" -> {
+                sendModifyAttendanceNotification(courseName, time)
 
-            // schedule the notification before attendance checking
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.YEAR, remoteMessage.data["year"]?.toInt()!!)
-            calendar.set(Calendar.MONTH, remoteMessage.data["month"]?.toInt()!!)
-            calendar.set(Calendar.DAY_OF_MONTH, remoteMessage.data["day"]?.toInt()!!)
-            calendar.set(Calendar.HOUR_OF_DAY, remoteMessage.data["hour"]?.toInt()!!)
-            // minus 10 to set the notification 10 min before the attendance
-            calendar.set(Calendar.MINUTE, remoteMessage.data["minute"]?.toInt()!! - 10)
-            calendar.set(Calendar.SECOND, remoteMessage.data["second"]?.toInt()!!)
-            scheduleNotification(calendar, courseName, notificationId)
-        } else if (type == "modify") {
-            val courseName = remoteMessage.data["courseName"].toString()
-            val time = remoteMessage.data["eventDateMessage"].toString()
-            val notificationId = remoteMessage.data["notificationId"]?.toInt()!!
-
-            sendModifyAttendanceNotification(courseName, time)
-
-            // schedule the notification before attendance checking
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.YEAR, remoteMessage.data["year"]?.toInt()!!)
-            calendar.set(Calendar.MONTH, remoteMessage.data["month"]?.toInt()!!)
-            calendar.set(Calendar.DAY_OF_MONTH, remoteMessage.data["day"]?.toInt()!!)
-            calendar.set(Calendar.HOUR_OF_DAY, remoteMessage.data["hour"]?.toInt()!!)
-            // minus 10 to set the notification 10 min before the attendance
-            calendar.set(Calendar.MINUTE, remoteMessage.data["minute"]?.toInt()!! - 10)
-            calendar.set(Calendar.SECOND, remoteMessage.data["second"]?.toInt()!!)
-            scheduleNotification(calendar, courseName, notificationId)
-        } else if (type == "delete") {
-            val notificationId = remoteMessage.data["notificationId"]?.toInt()!!
-            val courseName = remoteMessage.data["courseName"].toString()
-            deleteScheduledNotification(courseName, notificationId)
+                // schedule the notification before attendance checking
+                val calendar = setCalendar(remoteMessage)
+                scheduleNotification(calendar, courseName, notificationId)
+            }
+            "delete" -> {
+                deleteScheduledNotification(courseName, notificationId)
+            }
         }
     }
 
     override fun onNewToken(token: String) {
         Log.d("TOKEN", token)
+    }
+
+    private fun setCalendar(remoteMessage: RemoteMessage): Calendar {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, remoteMessage.data["year"]?.toInt()!!)
+        calendar.set(Calendar.MONTH, remoteMessage.data["month"]?.toInt()!!)
+        calendar.set(Calendar.DAY_OF_MONTH, remoteMessage.data["day"]?.toInt()!!)
+        calendar.set(Calendar.HOUR_OF_DAY, remoteMessage.data["hour"]?.toInt()!!)
+        // minus 10 to set the notification 10 min before the attendance
+        calendar.set(Calendar.MINUTE, remoteMessage.data["minute"]?.toInt()!! - 10)
+        calendar.set(Calendar.SECOND, remoteMessage.data["second"]?.toInt()!!)
+
+        return calendar
     }
 
     private fun sendModifyAttendanceNotification(courseName: String, time: String) {

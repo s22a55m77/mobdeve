@@ -55,19 +55,6 @@ class MainActivity : AppCompatActivity() {
         val notificationUtil = NotificationUtil()
         notificationUtil.createChannel(notificationManager)
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.SET_ALARM
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Permission is not granted, request the permission
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.SET_ALARM),
-                123
-            )
-        }
-
         auth = Firebase.auth
 
         // redirect to login page if not login
