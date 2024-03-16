@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
+import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.google.android.material.chip.Chip
 import com.google.firebase.Firebase
@@ -68,29 +69,67 @@ class AttendanceDetailStudentListFragment : Fragment() {
             }
         })
 
+        // Handle filter
+        fun filterAttendanceListByStatus(attendanceList: ArrayList<AttendanceDetailStudentModel>, statuses: ArrayList<AttendanceStatus>): ArrayList<AttendanceDetailStudentModel> {
+            val filteredList = ArrayList<AttendanceDetailStudentModel>()
+            for (student in attendanceList) {
+                if (student.status in statuses) {
+                    filteredList.add(student)
+                }
+            }
+            return filteredList
+        }
+
+        // Selected List
+        val selectedStatuses: ArrayList<AttendanceStatus> = arrayListOf(AttendanceStatus.PRESENT, AttendanceStatus.LATE, AttendanceStatus.ABSENT)
+
         // handle filter check
         this.chipPresent = view.findViewById(R.id.chip_filter_present)
         this.chipAbsent = view.findViewById(R.id.chip_filter_absent)
         this.chipLate = view.findViewById(R.id.chip_filter_late)
         chipPresent.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked)
+            if(isChecked) {
                 chipPresent.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
-            else
+                selectedStatuses.add(AttendanceStatus.PRESENT)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
+            else {
                 chipPresent.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
+                selectedStatuses.remove(AttendanceStatus.PRESENT)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
         }
 
         chipAbsent.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked)
+            if(isChecked) {
                 chipAbsent.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
-            else
+                selectedStatuses.add(AttendanceStatus.ABSENT)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
+            else {
                 chipAbsent.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
+                selectedStatuses.remove(AttendanceStatus.ABSENT)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
         }
 
         chipLate.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked)
+            if(isChecked) {
                 chipLate.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
-            else
+                selectedStatuses.add(AttendanceStatus.LATE)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
+            else {
                 chipLate.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
+                selectedStatuses.remove(AttendanceStatus.LATE)
+                val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
+            }
         }
     }
 }
