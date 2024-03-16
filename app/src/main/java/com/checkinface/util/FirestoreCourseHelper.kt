@@ -127,7 +127,8 @@ class FirestoreCourseHelper {
         val course = hashMapOf(
             NAME_FIELD to courseName,
             COLOR_FIELD to CourseUtil.generateColor(),
-            TEACHER_FIELD to teacherEmail
+            TEACHER_FIELD to teacherEmail,
+            STUDENT_COUNT_FIELD to 0,
         )
         var courseCode: String? = null;
         // Add Course
@@ -145,7 +146,7 @@ class FirestoreCourseHelper {
             }
     }
 
-    fun addStudent(courseCode: String, onSuccessListener: () -> Unit, onFailureListener: () -> Unit) {
+    suspend fun addStudent(courseCode: String, onSuccessListener: () -> Unit, onFailureListener: () -> Unit) {
         val student = hashMapOf(
             "student_email" to Firebase.auth.currentUser?.email.toString(),
             "student_name" to Firebase.auth.currentUser?.displayName.toString()
@@ -154,6 +155,7 @@ class FirestoreCourseHelper {
         // this subscribe the student to all add/delete/modify of attendance event of this class
         FirebaseMessaging.getInstance().subscribeToTopic("${courseCode}_event")
 
+        // Add Student to Course
         db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
             .get()
@@ -170,6 +172,25 @@ class FirestoreCourseHelper {
                         }
                 }
             }
+
+        // Get Course Id
+        val id = db.collection(COURSE_COLLECTION)
+            .whereEqualTo(COURSE_CODE, courseCode)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        var studentCount = db.collection(COURSE_COLLECTION)
+            .document(id)
+            .get()
+            .await()
+            .get(STUDENT_COUNT_FIELD)
+            .toString()
+            .toInt() + 1
+
+        db.collection(COURSE_COLLECTION)
+            .document(id)
+            .update(STUDENT_COUNT_FIELD, studentCount)
     }
 
     suspend fun getStudentLists(courseCode: String): ArrayList<StudentModel> {
