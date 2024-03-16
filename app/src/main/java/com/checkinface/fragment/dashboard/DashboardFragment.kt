@@ -124,13 +124,20 @@ class DashboardFragment : Fragment() {
                     Toast.makeText(this.context, "Please enter the course code", Toast.LENGTH_LONG).show()
                 }
                 else {
-                    firestoreCourseHelper.addStudent(edAddCourse.text.toString(),
-                        fun() {
-                            Toast.makeText(this.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
-                        },
-                        fun() {
-                            Toast.makeText(this.context, "Error While Adding to the Course", Toast.LENGTH_LONG).show()
-                    })
+                    lifecycleScope.launch {
+                        firestoreCourseHelper.addStudent(edAddCourse.text.toString(),
+                            fun() {
+                                // Update Dashboard
+                                lifecycleScope.launch {
+                                    dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
+                                    recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                                    Toast.makeText(view.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
+                                }
+                            },
+                            fun() {
+                                Toast.makeText(view.context, "Error While Adding to the Course", Toast.LENGTH_LONG).show()
+                            })
+                    }
                 }
             }
 

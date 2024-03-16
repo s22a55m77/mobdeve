@@ -61,9 +61,15 @@ class StudentAttendanceListFragment : Fragment() {
 
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
-            attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
-            if (userRole != null)
+            if (userRole != null) {
+                val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+                val studentEmail = sp.getString("STUDENT_EMAIL", "")
+                if(userRole == UserRole.STUDENT)
+                    attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
+                else
+                    attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!,studentEmail!!)
                 recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
+            }
         }
 
         // resume animation
