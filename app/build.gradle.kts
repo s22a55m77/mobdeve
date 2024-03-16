@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.firebase.crashlytics")
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -43,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("com.azure.android:azure-maps-control:1.+")
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     implementation("com.squareup.picasso:picasso:2.8")
