@@ -5,6 +5,7 @@ import com.checkinface.databinding.StudentItemLayoutBinding
 
 class StudentListViewHolder(private val binding: StudentItemLayoutBinding): ViewHolder(binding.root) {
     fun bindData(studentModel: StudentModel) {
+        binding.tvStudentId.text = studentModel.id.toString()
         binding.tvStudentName.text = studentModel.name
         binding.tvStudentPresent.text = studentModel.presentCount.toString()
         binding.tvStudentAbsent.text = studentModel.absentCount.toString()

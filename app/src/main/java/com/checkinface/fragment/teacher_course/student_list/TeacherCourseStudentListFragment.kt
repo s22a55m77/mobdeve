@@ -62,10 +62,10 @@ class TeacherCourseStudentListFragment : Fragment() {
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
         if(courseCode != "" && courseCode != null)
-        lifecycleScope.launch {
-            studentList = firestoreCourseHelper.getStudentLists(courseCode!!)
-            recyclerView.adapter = StudentListAdapter(studentList)
-        }
+            lifecycleScope.launch {
+                studentList = firestoreCourseHelper.getStudentLists(courseCode)
+                recyclerView.adapter = StudentListAdapter(studentList)
+            }
 
 
 

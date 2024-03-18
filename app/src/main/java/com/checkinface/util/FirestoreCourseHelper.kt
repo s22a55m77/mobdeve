@@ -23,6 +23,7 @@ class FirestoreCourseHelper {
         private const val COURSE_COLLECTION = "course"
         private const val ATTENDANCE_COLLECTION = "attendances"
         private const val STUDENT_COLLECTION = "students"
+        private const val USER_COLLECTION = "users"
         private const val NAME_FIELD = "course_name"
         private const val COLOR_FIELD = "course_color"
         private const val NEXT_CHECK_TIME_FIELD = "next_check_time"
@@ -31,8 +32,10 @@ class FirestoreCourseHelper {
         private const val TEACHER_FIELD = "course_teacher"
         private const val STUDENT_FIELD = "student"
         private const val STATUS_FIELD = "status"
+        private const val EMAIL_FIELD = "email"
         private const val STUDENT_NAME = "student_name"
         private const val STUDENT_EMAIL = "student_email"
+        private const val STUDENT_ID = "student_id"
     }
     suspend fun getCourses(email: String, role: UserRole): ArrayList<DashboardModel> {
         val data: ArrayList<DashboardModel> = ArrayList()
@@ -147,9 +150,19 @@ class FirestoreCourseHelper {
     }
 
     suspend fun addStudent(courseCode: String, onSuccessListener: (() -> Unit)? = null, onFailureListener: (() -> Unit)? = null) {
+        // get student id
+        val studentId = db.collection(USER_COLLECTION)
+            .whereEqualTo(EMAIL_FIELD, Firebase.auth.currentUser?.email.toString())
+            .get()
+            .await()
+            .documents
+            .get(0)
+            .get(STUDENT_ID)
+
         val student = hashMapOf(
-            "student_email" to Firebase.auth.currentUser?.email.toString(),
-            "student_name" to Firebase.auth.currentUser?.displayName.toString()
+            STUDENT_EMAIL to Firebase.auth.currentUser?.email.toString(),
+            STUDENT_NAME to Firebase.auth.currentUser?.displayName.toString(),
+            STUDENT_ID to studentId
         )
 
         // this subscribe the student to all add/delete/modify of attendance event of this class
@@ -177,6 +190,7 @@ class FirestoreCourseHelper {
                 }
             }
 
+        // Increase student count
         // Get Course Id
         val id = db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
@@ -241,6 +255,7 @@ class FirestoreCourseHelper {
             // add to data
             data.add(
                 StudentModel(
+                    id = student.get(STUDENT_ID)?.toString(),
                     name = student.get(STUDENT_NAME).toString(),
                     email = student.get(STUDENT_EMAIL).toString(),
                     presentCount = presentCount,
