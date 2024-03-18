@@ -50,6 +50,11 @@
            />
     </com.google.android.material.chip.ChipGroup>
 
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_view"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_attendance_detail_student_list"
         android:layout_width="match_parent"

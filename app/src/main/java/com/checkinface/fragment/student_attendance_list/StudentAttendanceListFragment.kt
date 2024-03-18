@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ class StudentAttendanceListFragment : Fragment() {
     private var attendanceModelList: ArrayList<StudentAttendanceModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewBinding: FragmentStudentAttendanceBinding
+    private lateinit var emptyView: LinearLayout
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreStudentHelper: FirestoreStudentHelper = FirestoreStudentHelper()
     private var userRole: UserRole? = null
@@ -56,6 +58,8 @@ class StudentAttendanceListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
+        this.emptyView = view.findViewById(R.id.empty_view)
+
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
 
@@ -68,6 +72,8 @@ class StudentAttendanceListFragment : Fragment() {
                     attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
                 else
                     attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!,studentEmail!!)
+                if(attendanceModelList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
             }
         }

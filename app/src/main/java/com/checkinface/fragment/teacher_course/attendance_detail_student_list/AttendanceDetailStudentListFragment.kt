@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ class AttendanceDetailStudentListFragment : Fragment() {
     private lateinit var chipPresent: Chip
     private lateinit var chipAbsent: Chip
     private lateinit var chipLate: Chip
+    private lateinit var emptyView: LinearLayout
     private val firestoreAttendanceHelper: FirestoreAttendanceHelper = FirestoreAttendanceHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +51,8 @@ class AttendanceDetailStudentListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
+        this.emptyView = view.findViewById(R.id.empty_view)
+
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
         val eventTime = sp.getString("EVENT_TIME", "")
@@ -56,6 +60,8 @@ class AttendanceDetailStudentListFragment : Fragment() {
         if(courseCode != "" && courseCode != null && eventTime != null) {
             lifecycleScope.launch {
                 attendanceDetailStudentList = firestoreAttendanceHelper.getStudentListsBasedOnEvent(courseCode, eventTime)
+                if(attendanceDetailStudentList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(attendanceDetailStudentList)
             }
         }
@@ -92,12 +98,20 @@ class AttendanceDetailStudentListFragment : Fragment() {
                 chipPresent.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
                 selectedStatuses.add(AttendanceStatus.PRESENT)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
             else {
                 chipPresent.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
                 selectedStatuses.remove(AttendanceStatus.PRESENT)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
         }
@@ -107,12 +121,20 @@ class AttendanceDetailStudentListFragment : Fragment() {
                 chipAbsent.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
                 selectedStatuses.add(AttendanceStatus.ABSENT)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
             else {
                 chipAbsent.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
                 selectedStatuses.remove(AttendanceStatus.ABSENT)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
         }
@@ -122,12 +144,20 @@ class AttendanceDetailStudentListFragment : Fragment() {
                 chipLate.chipBackgroundColor = resources.getColorStateList(R.color.md_theme_light_primaryContainer)
                 selectedStatuses.add(AttendanceStatus.LATE)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
             else {
                 chipLate.chipBackgroundColor = resources.getColorStateList(com.google.android.material.R.color.m3_ref_palette_white)
                 selectedStatuses.remove(AttendanceStatus.LATE)
                 val filterList = filterAttendanceListByStatus(attendanceDetailStudentList, selectedStatuses)
+                if(filterList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                else
+                    emptyView.visibility = LinearLayout.GONE
                 recyclerView.adapter = AttendanceDetailStudentListAdapter(filterList)
             }
         }
