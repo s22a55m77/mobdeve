@@ -102,15 +102,21 @@ class DashboardFragment : Fragment() {
                 }
                 else {
                     dialog.cancel()
-                    firestoreCourseHelper.addCourse(edAddCourse.text.toString(), Firebase.auth.currentUser?.email.toString(), fun(courseCode) {
-                        val qr = AddCourseQR(courseCode)
-                        generateQR(Json.encodeToString(qr))
-                        tvCreateCourseCode.text = courseCode
-                        qrModal.show()
-                        lifecycleScope.launch {
-                            dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
-                            recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
-                        }
+                    firestoreCourseHelper.addCourse(
+                        edAddCourse.text.toString(),
+                        Firebase.auth.currentUser?.email.toString(),
+                        fun(courseCode) {
+                            val qr = AddCourseQR(courseCode)
+                            generateQR(Json.encodeToString(qr))
+                            tvCreateCourseCode.text = courseCode
+                            qrModal.show()
+                            lifecycleScope.launch {
+                                dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
+                                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                            }
+                        },
+                        fun(e) {
+                            Toast.makeText(view.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                     })
                 }
             }
@@ -138,8 +144,8 @@ class DashboardFragment : Fragment() {
                                     Toast.makeText(view.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
                                 }
                             },
-                            fun() {
-                                Toast.makeText(view.context, "Error While Adding to the Course", Toast.LENGTH_LONG).show()
+                            fun(e) {
+                                Toast.makeText(view.context, "Error While Adding to the Course: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                             })
                     }
                 }

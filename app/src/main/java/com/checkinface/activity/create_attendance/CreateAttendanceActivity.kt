@@ -317,8 +317,8 @@ class CreateAttendanceActivity : AppCompatActivity() {
                                     finish()
                                 }
                             },
-                            onFailureListener = fun() {
-                                Toast.makeText(viewBinding.root.context, "Error while adding events", Toast.LENGTH_LONG).show()
+                            onFailureListener = fun(e) {
+                                Toast.makeText(viewBinding.root.context, "Error while adding events: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                             }
                         )
                     }
@@ -337,6 +337,9 @@ class CreateAttendanceActivity : AppCompatActivity() {
                         onSuccessListener = fun() {
                             Toast.makeText(viewBinding.root.context, "Successfully Added Event", Toast.LENGTH_LONG).show()
                             finish()
+                        },
+                        onFailureListener = fun(e) {
+                            Toast.makeText(viewBinding.root.context, "Error while adding events: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                         }
                     )
                 }

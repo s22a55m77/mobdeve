@@ -68,6 +68,9 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
                             data[position].status = AttendanceStatus.PRESENT
                             notifyItemChanged(position)
                             modal.dismiss()
+                        },
+                        fun(e) {
+                            Toast.makeText(holder.itemView.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                         }
                     )
                 }
@@ -85,6 +88,9 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
                             data[position].status = AttendanceStatus.ABSENT
                             notifyItemChanged(position)
                             modal.dismiss()
+                        },
+                        fun(e) {
+                            Toast.makeText(holder.itemView.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                         }
                     )
                 }
@@ -102,6 +108,9 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
                             data[position].status = AttendanceStatus.LATE
                             notifyItemChanged(position)
                             modal.dismiss()
+                        },
+                        fun(e) {
+                            Toast.makeText(holder.itemView.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                         }
                     )
                 }

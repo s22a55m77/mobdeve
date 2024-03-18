@@ -70,7 +70,7 @@ class FirestoreUserHelper {
             id
     }
 
-    suspend fun updateId(email: String, updatedId: String, onSuccessListener: () -> Unit) {
+    suspend fun updateId(email: String, updatedId: String, onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
         // get student
         val id = db.collection(USER_COLLECTION)
             .whereEqualTo(EMAIL_FIELD, email)
@@ -83,6 +83,9 @@ class FirestoreUserHelper {
             .update(STUDENT_ID, updatedId)
             .addOnSuccessListener {
                 onSuccessListener()
+            }
+            .addOnFailureListener { e ->
+                onFailureListener(e)
             }
     }
 }

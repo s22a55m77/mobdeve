@@ -112,6 +112,9 @@ class UserProfileFragment : Fragment() {
                             viewBinding.textInputUserId.text.toString(),
                             fun() {
                                 Toast.makeText(view.context, "Change Applied", Toast.LENGTH_LONG).show()
+                            },
+                            fun (e){
+                                Toast.makeText(view.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                             })
                     }
                 }
