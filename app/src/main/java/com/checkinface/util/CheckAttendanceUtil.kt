@@ -12,6 +12,8 @@ import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
+import com.checkinface.util.qr.CheckAttendanceQR
+import com.checkinface.util.qr.QrSerializer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -21,6 +23,8 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
 
 class CheckAttendanceUtil(private val activity: Activity, private val context: Context) {
     private val firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
@@ -85,9 +89,19 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         val scanner = GmsBarcodeScanning.getClient(activity.applicationContext, options)
 
         val scanResult = scanner.startScan().await()
-        if (scanResult.rawValue.toString() != match) {
-            Toast.makeText(context, "QR Code Incorrect", Toast.LENGTH_LONG).show()
-            return false
+        val code = Json.decodeFromString(QrSerializer(), scanResult.rawValue.toString())
+
+        when (code) {
+            is CheckAttendanceQR -> {
+                if (code.eventId != match) {
+                    Toast.makeText(context, "QR Code Incorrect", Toast.LENGTH_LONG).show()
+                    return false
+                }
+1            }
+            else -> {
+                Toast.makeText(context, "QR Code Incorrect", Toast.LENGTH_LONG).show()
+                return false
+            }
         }
 
         return true
@@ -160,7 +174,7 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         return DateUtil.isPassed(lateTime)
     }
 
-    suspend fun checkAttendance(code: String? = null, id: String? = null) {
+    suspend fun checkAttendance(code: String? = null, id: String? = null, onSuccessListener: (() -> Unit)? = null ) {
         var courseCode = code
         var eventId = id
         if (courseCode == null) {
@@ -211,8 +225,14 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
                 else {
                     if (isLate(lateTime)) {
                         updateAttendanceStatus(courseCode, startTime, "LATE")
+                        if (onSuccessListener != null) {
+                            onSuccessListener()
+                        }
                     } else {
                         updateAttendanceStatus(courseCode, startTime, "PRESENT")
+                        if (onSuccessListener != null) {
+                            onSuccessListener()
+                        }
                     }
                 }
 
@@ -220,8 +240,14 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         } else {
             if (isLate(lateTime)) {
                 updateAttendanceStatus(courseCode, startTime, "LATE")
+                if (onSuccessListener != null) {
+                    onSuccessListener()
+                }
             } else {
                 updateAttendanceStatus(courseCode, startTime, "PRESENT")
+                if (onSuccessListener != null) {
+                    onSuccessListener()
+                }
             }
         }
     }

@@ -115,7 +115,12 @@ class StudentAttendanceListFragment : Fragment() {
 
             lifecycleScope.launch {
                 val checkAttendanceUtil = CheckAttendanceUtil(requireActivity(), requireContext())
-                checkAttendanceUtil.checkAttendance()
+                checkAttendanceUtil.checkAttendance(onSuccessListener = fun() {
+                    lifecycleScope.launch {
+                        attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
+                        recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
+                    }
+                })
             }
         }
     }
