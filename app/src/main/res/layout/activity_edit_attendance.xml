@@ -76,29 +76,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/card_view_option_group">
 
-            <Button
-                android:id="@+id/btn_geolocation"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/ll_geolocation_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:text="Select Geolocation"
-                app:strokeWidth="0dp" />
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal">
 
-            <Button
-                android:id="@+id/btn_use_current_geolocation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:text="Use Current Geolocation"
-                app:strokeWidth="0dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Location: " />
+
+                <TextView
+                    android:id="@+id/tv_geolocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_geolocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:text="Select Geolocation"
+                    app:strokeWidth="0dp" />
+
+                <Button
+                    android:id="@+id/btn_use_current_geolocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:text="Use Current Geolocation"
+                    app:strokeWidth="0dp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <Button

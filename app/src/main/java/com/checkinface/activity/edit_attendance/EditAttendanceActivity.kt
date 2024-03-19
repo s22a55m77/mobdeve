@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.util.Pair
@@ -36,6 +37,7 @@ class EditAttendanceActivity : AppCompatActivity() {
     private val firestoreEventHelper = FirestoreEventHelper()
     private var geolocation: String? = null
     private var patternString: String? = null
+    private lateinit var viewBinding: ActivityEditAttendanceBinding
 
     private val azureMapResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
@@ -43,12 +45,14 @@ class EditAttendanceActivity : AppCompatActivity() {
             val lon = result.data?.getStringExtra(AzureMapActivity.LON_KEY)!!
             val lat = result.data?.getStringExtra(AzureMapActivity.LAT_KEY)!!
             geolocation = "$lon $lat"
+            viewBinding.llGeolocationText.visibility = LinearLayout.VISIBLE
+            viewBinding.tvGeolocation.text = geolocation
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewBinding = ActivityEditAttendanceBinding.inflate(layoutInflater)
+        viewBinding = ActivityEditAttendanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         val sp = viewBinding.root.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
@@ -249,6 +253,8 @@ class EditAttendanceActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             geolocation = geolocationService.getCurrentLonLat()
+            viewBinding.llGeolocationText.visibility = LinearLayout.VISIBLE
+            viewBinding.tvGeolocation.text = geolocation
         }
 
         // Handle Save

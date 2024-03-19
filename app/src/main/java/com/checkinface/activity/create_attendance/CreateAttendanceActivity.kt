@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,6 +46,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
     private var firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
     private var geolocation: String? = null
     private var patternString: String? = null
+    private lateinit var viewBinding: ActivityCreateAttendanceBinding
 
     private val azureMapResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {result ->
@@ -52,12 +54,14 @@ class CreateAttendanceActivity : AppCompatActivity() {
             val lon = result.data?.getStringExtra(AzureMapActivity.LON_KEY)!!
             val lat = result.data?.getStringExtra(AzureMapActivity.LAT_KEY)!!
             geolocation = "$lon $lat"
+            viewBinding.llGeolocationText.visibility = LinearLayout.VISIBLE
+            viewBinding.tvGeolocation.text = geolocation
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewBinding = ActivityCreateAttendanceBinding.inflate(layoutInflater)
+        viewBinding = ActivityCreateAttendanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         // initialize date picker
@@ -293,6 +297,8 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             geolocation = geolocationService.getCurrentLonLat()
+            viewBinding.llGeolocationText.visibility = LinearLayout.VISIBLE
+            viewBinding.tvGeolocation.text = geolocation
         }
 
         // Handle Create Click
