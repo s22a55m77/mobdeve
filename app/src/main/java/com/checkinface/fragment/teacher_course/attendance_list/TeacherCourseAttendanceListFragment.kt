@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.activity.create_attendance.CreateAttendanceActivity
 import com.checkinface.util.FirestoreAttendanceHelper
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.launch
 
 class TeacherCourseAttendanceListFragment : Fragment() {
@@ -24,6 +25,7 @@ class TeacherCourseAttendanceListFragment : Fragment() {
     private var attendanceList: ArrayList<TeacherAttendanceModel> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,7 @@ class TeacherCourseAttendanceListFragment : Fragment() {
         this.recyclerView = view.findViewById(R.id.rv_attendance_list)
 
         this.emptyView = view.findViewById(R.id.empty_view)
+        this.progressBar = view.findViewById(R.id.progress_circular)
 
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
@@ -64,6 +67,9 @@ class TeacherCourseAttendanceListFragment : Fragment() {
                 if(attendanceList.size == 0)
                     emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = AttendanceListAdapter(attendanceList)
+            }.invokeOnCompletion {
+                progressBar.hide()
+                progressBar.setVisibilityAfterHide(View.GONE)
             }
 
     }

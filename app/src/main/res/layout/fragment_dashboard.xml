@@ -8,6 +8,9 @@
     tools:context=".fragment.dashboard.DashboardFragment">
 
     <include
+        layout="@layout/progress_indicator" />
+
+    <include
         android:id="@+id/empty_view"
         layout="@layout/empty_view"
         android:visibility="gone"/>

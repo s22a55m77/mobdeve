@@ -22,6 +22,7 @@ import com.checkinface.util.UserRole
 import com.checkinface.util.qr.CommonQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.zxing.BarcodeFormat
@@ -42,6 +43,7 @@ class DashboardFragment : Fragment() {
     private lateinit var edAddCourse: EditText
     private lateinit var tvCreateCourseCode: TextView
     private lateinit var emptyView: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreCourseHelper: FirestoreCourseHelper = FirestoreCourseHelper()
     private var userRole: UserRole? = null
@@ -54,6 +56,7 @@ class DashboardFragment : Fragment() {
         this.recyclerView.layoutManager = gridLayoutManager
 
         this.emptyView = view.findViewById(R.id.empty_view)
+        this.progressBar = view.findViewById(R.id.progress_circular)
 
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
@@ -65,6 +68,9 @@ class DashboardFragment : Fragment() {
                 recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
             }
 
+        }.invokeOnCompletion {
+            progressBar.hide()
+            progressBar.setVisibilityAfterHide(View.GONE)
         }
 
         // Course QR Code Dialog
@@ -115,6 +121,7 @@ class DashboardFragment : Fragment() {
                             val qr = AddCourseQR(courseCode)
                             generateQR(Json.encodeToString(qr))
                             tvCreateCourseCode.text = courseCode
+                            tvCreateCourseCode.visibility = TextView.VISIBLE
                             qrModal.show()
                             lifecycleScope.launch {
                                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)

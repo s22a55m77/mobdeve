@@ -46,26 +46,6 @@ class EditAttendanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun parsePatternLockString(patternString: String): List<PatternLockView.Dot> {
-        val dotList = mutableListOf<PatternLockView.Dot>()
-
-        // Define the pattern for extracting row and column values
-        val pattern = Regex("Row = (\\d+), Col = (\\d+)")
-
-        // Find all matches in the input patternString
-        pattern.findAll(patternString).forEach { matchResult ->
-            // Extract row and column values from the match
-            val row = matchResult.groupValues[1].toInt()
-            val col = matchResult.groupValues[2].toInt()
-
-            // Create PatternLockView.Dot object and add to the list
-            val dot = PatternLockView.Dot.of(row, col)
-            dotList.add(dot)
-        }
-
-        return dotList
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding = ActivityEditAttendanceBinding.inflate(layoutInflater)

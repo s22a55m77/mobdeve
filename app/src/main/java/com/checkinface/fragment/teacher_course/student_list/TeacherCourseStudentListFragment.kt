@@ -20,6 +20,7 @@ import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreCourseHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -37,6 +38,7 @@ class TeacherCourseStudentListFragment : Fragment() {
     private lateinit var ivQrCode: ImageView
     private lateinit var tvQrCode: TextView
     private lateinit var emptyView: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +64,7 @@ class TeacherCourseStudentListFragment : Fragment() {
         this.recyclerView.layoutManager = linearLayoutManager
 
         this.emptyView = view.findViewById(R.id.empty_view)
+        this.progressBar = view.findViewById(R.id.progress_circular)
 
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
@@ -71,6 +74,9 @@ class TeacherCourseStudentListFragment : Fragment() {
                 if(studentList.size == 0)
                     emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = StudentListAdapter(studentList)
+            }.invokeOnCompletion {
+                progressBar.hide()
+                progressBar.setVisibilityAfterHide(View.GONE)
             }
 
 
@@ -101,6 +107,7 @@ class TeacherCourseStudentListFragment : Fragment() {
                 generateQR(courseCode!!)
                 this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)
                 tvQrCode.text = courseCode
+                tvQrCode.visibility = TextView.VISIBLE
                 qrModal.show()
             } else {
                 Toast.makeText(view.context, "Error while generating QR Code", Toast.LENGTH_LONG).show()

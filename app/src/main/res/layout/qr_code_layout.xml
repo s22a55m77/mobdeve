@@ -25,9 +25,10 @@
         android:id="@+id/tv_create_course_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="324 155"
+        android:text=""
         android:textStyle="bold"
         android:textSize="15sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_qr_code_container" />
