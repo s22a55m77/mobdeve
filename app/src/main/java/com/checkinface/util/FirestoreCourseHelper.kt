@@ -110,6 +110,10 @@ class FirestoreCourseHelper {
                 val currentTimeInMillis = currentDate.time
                 for (event in events.documents) {
                     val date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss", event.get(START_TIME).toString())
+                    // Skip events that have already occurred
+                    if (date.time < currentTimeInMillis) {
+                        continue
+                    }
                     val difference = Math.abs(currentTimeInMillis - date.time)
                     if (difference < minDifference) {
                         minDifference = difference

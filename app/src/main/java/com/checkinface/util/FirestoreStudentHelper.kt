@@ -35,6 +35,7 @@ class FirestoreStudentHelper {
             .document(id)
             .collection(ATTENDANCE_COLLECTION)
             .whereEqualTo(STUDENT_FIELD, email)
+            .orderBy(DATE_FIELD)
             .get()
             .await()
 
