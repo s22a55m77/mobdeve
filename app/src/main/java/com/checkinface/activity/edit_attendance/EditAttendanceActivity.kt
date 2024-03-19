@@ -111,10 +111,10 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             val lateTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 LATE_TIME).toString())).toInt()
-            val lateTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+            val lateTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 LATE_TIME).toString())).toInt()
             message =
-                "Select Start Time: $lateTimeHour:$lateTimeMinute"
+                "Select Late Time: $lateTimeHour:$lateTimeMinute"
             viewBinding.btnLateTimePicker.text = message
 
             lateTimePicker =
@@ -127,10 +127,10 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             val absentTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 ABSENT_TIME).toString())).toInt()
-            val absentTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+            val absentTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 ABSENT_TIME).toString())).toInt()
             message =
-                "Select Start Time: $absentTimeHour:$absentTimeMinute"
+                "Select Absent Time: $absentTimeHour:$absentTimeMinute"
             viewBinding.btnAbsentTimePicker.text = message
 
             absentTimePicker =
