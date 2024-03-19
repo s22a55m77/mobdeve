@@ -190,7 +190,8 @@ class EditAttendanceActivity : AppCompatActivity() {
                 }
             }
             mPatternLockView.addPatternLockListener(mPatternLockViewListener)
-            mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, PatternLockUtils.stringToPattern(mPatternLockView, eventDetail?.get(PATTERN_LOCK).toString()))
+            if(eventDetail?.get(PATTERN_LOCK) != null)
+                mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, PatternLockUtils.stringToPattern(mPatternLockView, eventDetail?.get(PATTERN_LOCK).toString()))
         }
 
         // listener binding
@@ -295,7 +296,7 @@ class EditAttendanceActivity : AppCompatActivity() {
                     lateTime = lateTime,
                     absentTime = absentTime,
                     useGeolocation = viewBinding.checkboxGeolocation.isChecked,
-                    patternLock = if (mPatternLockView.pattern.size == 0) null else mPatternLockView.pattern.toString(),
+                    patternLock = if (mPatternLockView.pattern.size == 0) null else PatternLockUtils.patternToString(mPatternLockView, mPatternLockView.pattern),
                     useQR = viewBinding.checkboxQrCode.isChecked,
                     onSuccessListener = fun() {
                         Toast.makeText(viewBinding.root.context, "Saved", Toast.LENGTH_LONG).show()
