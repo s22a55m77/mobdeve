@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreCourseHelper
+import com.checkinface.util.VariableHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -66,8 +67,9 @@ class TeacherCourseStudentListFragment : Fragment() {
         this.emptyView = view.findViewById(R.id.empty_view)
         this.progressBar = view.findViewById(R.id.progress_circular)
 
-        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
+//        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+        val courseCode = VariableHolder.getInstance().courseCode
         if(courseCode != "" && courseCode != null)
             lifecycleScope.launch {
                 studentList = firestoreCourseHelper.getStudentLists(courseCode)
@@ -101,8 +103,9 @@ class TeacherCourseStudentListFragment : Fragment() {
             }
             val qrDialog = MaterialAlertDialogBuilder(this.requireContext()).setView(qrModalView)
             val qrModal = qrDialog.create()
-            val sp = view.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            val courseCode = sp.getString("COURSE_CODE", "")
+//            val sp = view.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            val courseCode = sp.getString("COURSE_CODE", "")
+            val courseCode = VariableHolder.getInstance().courseCode
             if(courseCode != "" || courseCode.isNotEmpty()) {
                 generateQR(courseCode!!)
                 this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)

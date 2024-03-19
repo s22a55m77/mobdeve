@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.activity.create_attendance.CreateAttendanceActivity
 import com.checkinface.util.FirestoreAttendanceHelper
+import com.checkinface.util.VariableHolder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.launch
 
@@ -59,8 +60,9 @@ class TeacherCourseAttendanceListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
-        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
+//        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+        val courseCode = VariableHolder.getInstance().courseCode
         if(courseCode != "" && courseCode != null)
             lifecycleScope.launch {
                 attendanceList = firestoreAttendanceHelper.getEventsBasedOnCourse(courseCode)
@@ -77,8 +79,9 @@ class TeacherCourseAttendanceListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val view = requireView()
-        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
+//        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+        val courseCode = VariableHolder.getInstance().courseCode
         if(courseCode != "" && courseCode != null)
             lifecycleScope.launch {
                 attendanceList = firestoreAttendanceHelper.getEventsBasedOnCourse(courseCode)

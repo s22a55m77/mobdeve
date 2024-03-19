@@ -180,8 +180,9 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
             var courseCode = code
             var eventId = id
             if (courseCode == null) {
-                val sp = context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-                courseCode = sp.getString("COURSE_CODE", "")
+//                val sp = context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//                courseCode = sp.getString("COURSE_CODE", "")
+                courseCode = VariableHolder.getInstance().courseCode
             }
 
             var event: MutableMap<String, Any>? = null

@@ -1,13 +1,11 @@
 package com.checkinface.activity.create_attendance
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +18,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.activity.AzureMapActivity
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
+import com.checkinface.util.VariableHolder
 import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
@@ -28,12 +27,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 
 class CreateAttendanceActivity : AppCompatActivity() {
@@ -310,8 +305,9 @@ class CreateAttendanceActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val sp = this.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            val courseCode = sp.getString("COURSE_CODE", "");
+//            val sp = this.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            val courseCode = sp.getString("COURSE_CODE", "");
+            val courseCode = VariableHolder.getInstance().courseCode
             if(courseCode == "" || courseCode.isNullOrEmpty()) {
                 Toast.makeText(viewBinding.root.context, "Error while getting course code", Toast.LENGTH_LONG).show()
                 return@setOnClickListener

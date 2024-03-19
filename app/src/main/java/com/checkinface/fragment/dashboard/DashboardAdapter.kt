@@ -1,6 +1,5 @@
 package com.checkinface.fragment.dashboard
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.DashboardItemLayoutBinding
+import com.checkinface.util.VariableHolder
 import com.checkinface.util.UserRole
 
 class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val role: UserRole): Adapter<DashboardViewHolder>() {
@@ -37,11 +37,12 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val 
 
         holder.itemView.setOnClickListener {
             val navController = holder.itemView.findNavController()
-            val sp = holder.itemView.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            with(sp.edit()) {
-                putString("COURSE_CODE", data[position].courseCode)
-                apply()
-            }
+            VariableHolder.getInstance().courseCode = data[position].courseCode
+//            val sp = holder.itemView.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            with(sp.edit()) {
+//                putString("COURSE_CODE", data[position].courseCode)
+//                apply()
+//            }
 
             if (role === UserRole.STUDENT) {
                 navController.navigate(R.id.action_dashboard_to_course)

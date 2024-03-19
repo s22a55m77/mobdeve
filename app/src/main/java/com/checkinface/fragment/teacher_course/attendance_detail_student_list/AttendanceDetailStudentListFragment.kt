@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.checkinface.R
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.util.FirestoreAttendanceHelper
+import com.checkinface.util.VariableHolder
 import com.google.android.material.chip.Chip
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.Firebase
@@ -57,9 +58,11 @@ class AttendanceDetailStudentListFragment : Fragment() {
         this.emptyView = view.findViewById(R.id.empty_view)
         this.progressBar = view.findViewById(R.id.progress_circular)
 
-        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
-        val eventTime = sp.getString("EVENT_TIME", "")
+//        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+//        val eventTime = sp.getString("EVENT_TIME", "")
+        val courseCode = VariableHolder.getInstance().courseCode
+        val eventTime = VariableHolder.getInstance().eventTime
 
         if(courseCode != "" && courseCode != null && eventTime != null) {
             lifecycleScope.launch {

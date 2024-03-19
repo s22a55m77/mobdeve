@@ -1,44 +1,29 @@
 package com.checkinface.fragment.student_attendance_list
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.andrognito.patternlockview.PatternLockView
-import com.andrognito.patternlockview.listener.PatternLockViewListener
-import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.databinding.FragmentStudentAttendanceBinding
 import com.checkinface.util.CheckAttendanceUtil
-import com.checkinface.util.DateUtil
+import com.checkinface.util.VariableHolder
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.FirestoreStudentHelper
 import com.checkinface.util.FirestoreUserHelper
-import com.checkinface.util.GeolocationService
 import com.checkinface.util.UserRole
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 
 class StudentAttendanceListFragment : Fragment() {
@@ -74,14 +59,15 @@ class StudentAttendanceListFragment : Fragment() {
         this.emptyView = view.findViewById(R.id.empty_view)
         this.progressBar = view.findViewById(R.id.progress_circular)
 
-        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
-
+//        val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+        val courseCode = VariableHolder.getInstance().courseCode
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
             if (userRole != null) {
-                val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-                val studentEmail = sp.getString("STUDENT_EMAIL", "")
+//                val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//                val studentEmail = sp.getString("STUDENT_EMAIL", "")
+                val studentEmail = VariableHolder.getInstance().studentEmail
                 if(userRole == UserRole.STUDENT)
                     attendanceModelList = firestoreStudentHelper.getAttendance(courseCode!!, Firebase.auth.currentUser?.email!!)
                 else

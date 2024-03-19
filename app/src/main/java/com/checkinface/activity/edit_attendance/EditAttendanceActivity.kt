@@ -26,6 +26,7 @@ import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
+import com.checkinface.util.VariableHolder
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -55,9 +56,11 @@ class EditAttendanceActivity : AppCompatActivity() {
         viewBinding = ActivityEditAttendanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        val sp = viewBinding.root.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
-        val eventTime = sp.getString("EVENT_TIME", "")
+//        val sp = viewBinding.root.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+//        val eventTime = sp.getString("EVENT_TIME", "")
+        val courseCode = VariableHolder.getInstance().courseCode
+        val eventTime = VariableHolder.getInstance().eventTime
         var eventDetail: MutableMap<String, Any>? = mutableMapOf()
 
         var datePicker: MaterialDatePicker<Long>? = null

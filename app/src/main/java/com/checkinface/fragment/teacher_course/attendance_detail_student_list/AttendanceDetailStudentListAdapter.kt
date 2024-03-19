@@ -13,6 +13,7 @@ import com.checkinface.R
 import com.checkinface.databinding.AttendanceDetailStudentItemLayoutBinding
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.util.FirestoreAttendanceHelper
+import com.checkinface.util.VariableHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,9 +53,11 @@ class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceD
             val btnAbsent = modalView.findViewById<Button>(R.id.btn_modify_student_absent)
             val btnLate = modalView.findViewById<Button>(R.id.btn_modify_student_late)
 
-            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            val courseCode = sp.getString("COURSE_CODE", "")
-            val eventTime = sp.getString("EVENT_TIME", "")
+//            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            val courseCode = sp.getString("COURSE_CODE", "")
+//            val eventTime = sp.getString("EVENT_TIME", "")
+            val courseCode = VariableHolder.getInstance().courseCode
+            val eventTime = VariableHolder.getInstance().eventTime
 
             btnPresent.setOnClickListener {
                 coroutineScope.launch {

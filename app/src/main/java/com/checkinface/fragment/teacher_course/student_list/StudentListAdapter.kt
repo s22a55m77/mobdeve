@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
 import com.checkinface.databinding.StudentItemLayoutBinding
+import com.checkinface.util.VariableHolder
 
 
 class StudentListAdapter(private val data: ArrayList<StudentModel>): Adapter<StudentListViewHolder>() {
@@ -38,11 +39,12 @@ class StudentListAdapter(private val data: ArrayList<StudentModel>): Adapter<Stu
         // Handle click on student
         holder.itemView.setOnClickListener {
             // Put student email into SP for the detail page usage
-            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            with(sp.edit()) {
-                putString("STUDENT_EMAIL", data[position].email)
-                apply()
-            }
+//            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            with(sp.edit()) {
+//                putString("STUDENT_EMAIL", data[position].email)
+//                apply()
+//            }
+            VariableHolder.getInstance().studentEmail = data[position].email
             // Navigate to detail page
             val navController = holder.itemView.findNavController()
             navController.navigate(R.id.action_student_list_to_student_attendance, bundle)
