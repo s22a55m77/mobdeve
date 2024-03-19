@@ -190,9 +190,9 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         val startTime = event.get(FirestoreEventHelper.START_TIME) as String
         if(!checkAttendanceIsOpen(absentTime, startTime)) return
 
-        val geolocation = event.get(FirestoreEventHelper.GEOLOCATION).toString()
-        if (geolocation.isNotEmpty()) {
-            if(!checkGeolocation(geolocation)) return
+        val geolocation = event.get(FirestoreEventHelper.GEOLOCATION)
+        if (geolocation != null) {
+            if(!checkGeolocation(geolocation.toString())) return
         }
 
         val useQr = event.get(FirestoreEventHelper.QR) as Boolean
