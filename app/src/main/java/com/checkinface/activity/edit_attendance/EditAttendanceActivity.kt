@@ -26,6 +26,8 @@ import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -89,6 +91,12 @@ class EditAttendanceActivity : AppCompatActivity() {
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select Date Range")
                     .setSelection(date.time)
+                    .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setValidator(DateValidatorPointForward.now())
+                            .build()
+                    )
                     .build()
 
             // Firestore String to Date to Hour String to Int

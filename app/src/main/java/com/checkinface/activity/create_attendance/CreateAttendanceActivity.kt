@@ -23,6 +23,8 @@ import com.checkinface.databinding.ActivityCreateAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -68,12 +70,24 @@ class CreateAttendanceActivity : AppCompatActivity() {
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select Date Range")
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.now())
+                        .build()
+                )
                 .build()
 
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select Date Range")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.now())
+                        .build()
+                )
                 .build()
 
         val startTimePicker =
@@ -303,7 +317,6 @@ class CreateAttendanceActivity : AppCompatActivity() {
 
         // Handle Create Click
         viewBinding.btnCreateAttendance.setOnClickListener {
-            Log.d("TEST", dateRangeList.toString())
             // Check required settings are selected
             if ((!dateSelected && dateRangeList.size == 0) || !startTimeSelected || !lateTimeSelected || !absentTimeSelected ) {
                 Toast.makeText(viewBinding.root.context, "Please set the time and date", Toast.LENGTH_LONG).show()
