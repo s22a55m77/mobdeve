@@ -107,7 +107,7 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             val lateTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 FirestoreEventHelper.LATE_TIME).toString())).toInt()
-            val lateTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+            val lateTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 FirestoreEventHelper.LATE_TIME).toString())).toInt()
             message =
                 "Select Late Time: $lateTimeHour:$lateTimeMinute"
@@ -123,7 +123,7 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             val absentTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 FirestoreEventHelper.ABSENT_TIME).toString())).toInt()
-            val absentTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+            val absentTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
                 FirestoreEventHelper.ABSENT_TIME).toString())).toInt()
             message =
                 "Select Absent Time: $absentTimeHour:$absentTimeMinute"
