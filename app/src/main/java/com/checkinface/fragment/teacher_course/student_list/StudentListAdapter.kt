@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
@@ -27,6 +28,14 @@ class StudentListAdapter(private val data: ArrayList<StudentModel>): Adapter<Stu
         holder.bindData(data[position])
         val bundle = Bundle()
         bundle.putString("studentEmail", data[position].email)
+
+        // Handle null ID
+        if (data[position].id == null) {
+            val tvId = holder.itemView.findViewById<TextView>(R.id.tv_student_id)
+            tvId.visibility = TextView.GONE
+        }
+
+        // Handle click on student
         holder.itemView.setOnClickListener {
             // Put student email into SP for the detail page usage
             val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)

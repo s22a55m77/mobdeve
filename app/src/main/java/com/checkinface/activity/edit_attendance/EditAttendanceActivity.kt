@@ -232,9 +232,9 @@ class EditAttendanceActivity : AppCompatActivity() {
 
         viewBinding.checkboxGeolocation.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                viewBinding.btnGeolocation.visibility = View.VISIBLE
+                viewBinding.llGeolocationGroup.visibility = View.VISIBLE
             } else {
-                viewBinding.btnGeolocation.visibility = View.GONE
+                viewBinding.llGeolocationGroup.visibility = View.GONE
             }
         }
 
@@ -320,6 +320,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                     onSuccessListener = fun() {
                         Toast.makeText(viewBinding.root.context, "Saved", Toast.LENGTH_LONG).show()
                         finish()
+                    },
+                    onFailureListener = fun(e) {
+                        Toast.makeText(viewBinding.root.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                     }
                 )
             }
@@ -333,6 +336,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                     fun() {
                         Toast.makeText(viewBinding.root.context, "Deleted", Toast.LENGTH_LONG).show()
                         finish()
+                    },
+                    fun(e) {
+                        Toast.makeText(viewBinding.root.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                     })
             }
         }

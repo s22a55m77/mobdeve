@@ -34,7 +34,7 @@ class DateUtil {
         }
 
         fun getFormattedDate(outputDateFormat: String, date: Date): String {
-            val dateFormat = SimpleDateFormat(outputDateFormat, Locale.getDefault())
+            val dateFormat = SimpleDateFormat(outputDateFormat, Locale.ENGLISH)
             return dateFormat.format(date)
         }
 

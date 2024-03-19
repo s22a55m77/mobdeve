@@ -30,6 +30,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/tv_student_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/md_theme_light_primary"/>
+
+            <TextView
                 android:id="@+id/tv_student_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

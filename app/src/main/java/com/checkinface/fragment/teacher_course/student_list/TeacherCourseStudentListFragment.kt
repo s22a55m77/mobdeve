@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ class TeacherCourseStudentListFragment : Fragment() {
     private lateinit var btnShowQR: ExtendedFloatingActionButton
     private lateinit var ivQrCode: ImageView
     private lateinit var tvQrCode: TextView
+    private lateinit var emptyView: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +61,17 @@ class TeacherCourseStudentListFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity?.applicationContext)
         this.recyclerView.layoutManager = linearLayoutManager
 
+        this.emptyView = view.findViewById(R.id.empty_view)
+
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
         if(courseCode != "" && courseCode != null)
-        lifecycleScope.launch {
-            studentList = firestoreCourseHelper.getStudentLists(courseCode!!)
-            recyclerView.adapter = StudentListAdapter(studentList)
-        }
+            lifecycleScope.launch {
+                studentList = firestoreCourseHelper.getStudentLists(courseCode)
+                if(studentList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
+                recyclerView.adapter = StudentListAdapter(studentList)
+            }
 
 
 

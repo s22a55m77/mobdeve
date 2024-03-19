@@ -10,9 +10,11 @@ class FirestoreUserHelper {
 
     companion object {
         const val USERS_COLLECTION = "users"
+        const val USER_COLLECTION = "users"
         const val EMAIL_FIELD = "email"
         const val ROLE_FIELD = "role"
         const val NAME_FIELD= "name"
+        const val STUDENT_ID = "student_id"
     }
 
     fun addUser(email: String, role: UserRole, name: String, onSuccessListener: () -> Unit) {
@@ -50,5 +52,40 @@ class FirestoreUserHelper {
             }
         }
         return null
+    }
+
+    suspend fun getId(email: String): String? {
+        // get student
+        val id = db.collection(USER_COLLECTION)
+            .whereEqualTo(EMAIL_FIELD, email)
+            .get()
+            .await()
+            .documents.get(0)
+            .get(STUDENT_ID)
+            .toString()
+
+        return if(id == "null")
+            null
+        else
+            id
+    }
+
+    suspend fun updateId(email: String, updatedId: String, onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
+        // get student
+        val id = db.collection(USER_COLLECTION)
+            .whereEqualTo(EMAIL_FIELD, email)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        db.collection(USER_COLLECTION)
+            .document(id)
+            .update(STUDENT_ID, updatedId)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener { e ->
+                onFailureListener(e)
+            }
     }
 }

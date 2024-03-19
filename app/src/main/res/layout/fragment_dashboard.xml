@@ -7,6 +7,11 @@
     android:background="@color/background_gray"
     tools:context=".fragment.dashboard.DashboardFragment">
 
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_view"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboardRv"
         android:layout_width="match_parent"

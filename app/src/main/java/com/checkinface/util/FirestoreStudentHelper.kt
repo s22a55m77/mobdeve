@@ -22,7 +22,7 @@ class FirestoreStudentHelper {
     }
 
     suspend fun getAttendance(courseCode: String, email: String):ArrayList<StudentAttendanceModel> {
-        val data:ArrayList<StudentAttendanceModel> = arrayListOf()
+        val data: ArrayList<StudentAttendanceModel> = arrayListOf()
         // Get Course Id
         val id = db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
@@ -38,19 +38,21 @@ class FirestoreStudentHelper {
             .get()
             .await()
 
-        for(event in attendances.documents) {
+        for (event in attendances.documents) {
             var status: AttendanceStatus = AttendanceStatus.ABSENT
-            when(event.get(STATUS_FIELD)) {
+            when (event.get(STATUS_FIELD)) {
                 "PRESENT" -> status = AttendanceStatus.PRESENT
                 "LATE" -> status = AttendanceStatus.LATE
                 "ABSENT" -> status = AttendanceStatus.ABSENT
             }
-            val dateFormat =  SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val date =  dateFormat.parse(event.get(DATE_FIELD).toString())!!
-            data.add(StudentAttendanceModel(
-                date,
-                status
-            ))
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val date = dateFormat.parse(event.get(DATE_FIELD).toString())!!
+            data.add(
+                StudentAttendanceModel(
+                    date,
+                    status
+                )
+            )
         }
         return data
     }

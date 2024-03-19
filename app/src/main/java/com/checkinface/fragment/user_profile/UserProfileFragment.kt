@@ -5,9 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +31,7 @@ import kotlinx.coroutines.launch
 class UserProfileFragment : Fragment() {
     private lateinit var viewBinding: FragmentUserProfileBinding
     private val authUser = Firebase.auth.currentUser
+    private val firestoreUserHelper = FirestoreUserHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +59,21 @@ class UserProfileFragment : Fragment() {
         }
 
         lifecycleScope.launch {
+            // Set view based on Role
             val firestoreUserHelper = FirestoreUserHelper()
             val role = firestoreUserHelper.getRole()
             if (role == UserRole.TEACHER) {
                 viewBinding.cardViewId.visibility = View.GONE
                 viewBinding.cardViewNotification.visibility = View.GONE
+            }
+
+            // Set student Id
+            if(role == UserRole.STUDENT) {
+                val student = firestoreUserHelper.getId(Firebase.auth.currentUser?.email.toString())
+                Log.d("TEST", student.toString())
+                if(student != null) {
+                    viewBinding.textInputUserId.setText(student)
+                }
             }
         }
 
@@ -87,6 +100,25 @@ class UserProfileFragment : Fragment() {
 
             }
 
+        }
+
+        // Handle edit student id
+        viewBinding.textInputUserId.setOnFocusChangeListener { view, isFocus ->
+            if (!isFocus) {
+                if(viewBinding.textInputUserId.text.toString() != "") {
+                    lifecycleScope.launch {
+                        firestoreUserHelper.updateId(
+                            Firebase.auth.currentUser?.email.toString(),
+                            viewBinding.textInputUserId.text.toString(),
+                            fun() {
+                                Toast.makeText(view.context, "Change Applied", Toast.LENGTH_LONG).show()
+                            },
+                            fun (e){
+                                Toast.makeText(view.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
+                            })
+                    }
+                }
+            }
         }
     }
 

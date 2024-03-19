@@ -138,7 +138,7 @@ class FirestoreAttendanceHelper {
     }
 
     suspend fun updateAttendance(courseCode: String, studentEmail: String, eventTime: String, status: String,
-                                 onSuccessListener: () -> Unit) {
+                                 onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
         // Get Course Id
         val id = db.collection(COURSE_COLLECTION)
             .whereEqualTo(COURSE_CODE, courseCode)
@@ -168,6 +168,9 @@ class FirestoreAttendanceHelper {
             .update(STATUS_FIELD, status)
             .addOnSuccessListener {
                 onSuccessListener()
+            }
+            .addOnFailureListener { e ->
+                onFailureListener(e)
             }
 
 

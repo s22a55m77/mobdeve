@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -40,6 +41,7 @@ class DashboardFragment : Fragment() {
     private lateinit var ivQrCode: ImageView
     private lateinit var edAddCourse: EditText
     private lateinit var tvCreateCourseCode: TextView
+    private lateinit var emptyView: LinearLayout
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreCourseHelper: FirestoreCourseHelper = FirestoreCourseHelper()
     private var userRole: UserRole? = null
@@ -51,11 +53,15 @@ class DashboardFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(activity?.applicationContext, 2)
         this.recyclerView.layoutManager = gridLayoutManager
 
+        this.emptyView = view.findViewById(R.id.empty_view)
+
         lifecycleScope.launch {
             userRole = firestoreUserHelper.getRole()
             // this prevent app from crashing when the user is not yet log in
             if (userRole != null) {
                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email.toString(), userRole!!)
+                if(dashboardModelList.size == 0)
+                    emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
             }
 
@@ -102,15 +108,21 @@ class DashboardFragment : Fragment() {
                 }
                 else {
                     dialog.cancel()
-                    firestoreCourseHelper.addCourse(edAddCourse.text.toString(), Firebase.auth.currentUser?.email.toString(), fun(courseCode) {
-                        val qr = AddCourseQR(courseCode)
-                        generateQR(Json.encodeToString(qr))
-                        tvCreateCourseCode.text = courseCode
-                        qrModal.show()
-                        lifecycleScope.launch {
-                            dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
-                            recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
-                        }
+                    firestoreCourseHelper.addCourse(
+                        edAddCourse.text.toString(),
+                        Firebase.auth.currentUser?.email.toString(),
+                        fun(courseCode) {
+                            val qr = AddCourseQR(courseCode)
+                            generateQR(Json.encodeToString(qr))
+                            tvCreateCourseCode.text = courseCode
+                            qrModal.show()
+                            lifecycleScope.launch {
+                                dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
+                                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                            }
+                        },
+                        fun(e) {
+                            Toast.makeText(view.context, "Error: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                     })
                 }
             }
@@ -138,8 +150,8 @@ class DashboardFragment : Fragment() {
                                     Toast.makeText(view.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
                                 }
                             },
-                            fun() {
-                                Toast.makeText(view.context, "Error While Adding to the Course", Toast.LENGTH_LONG).show()
+                            fun(e) {
+                                Toast.makeText(view.context, "Error While Adding to the Course: ${e.message.toString()}", Toast.LENGTH_LONG).show()
                             })
                     }
                 }

@@ -35,7 +35,7 @@ class FirestoreEventHelper {
 
     fun addEvent(courseCode: String, startTime: String, lateTime: String, absentTime: String,
                  useGeolocation: Boolean, patternLock:String?, useQR: Boolean,
-                 onSuccessListener: () -> Unit, onFailureListener: (() -> Unit)? = null) {
+                 onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
         val event = hashMapOf(
             "event_start_time" to startTime,
             "event_late_time" to lateTime,
@@ -57,14 +57,14 @@ class FirestoreEventHelper {
                         }
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 if(onFailureListener != null)
-                    onFailureListener()
+                    onFailureListener(e)
             }
 
     }
 
-    suspend fun deleteEvent(courseCode: String, eventTime: String, onSuccessListener: () -> Unit) {
+    suspend fun deleteEvent(courseCode: String, eventTime: String, onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
         // Get Course Id
         val id = db.collection(COURSE_COLLECTION)
             .whereEqualTo(CODE_FIELD, courseCode)
@@ -90,11 +90,14 @@ class FirestoreEventHelper {
             .addOnSuccessListener {
                 onSuccessListener()
             }
+            .addOnFailureListener { e ->
+                onFailureListener(e)
+            }
     }
 
     suspend fun updateEvent(courseCode: String, origEventTime: String, startTime: String, lateTime: String, absentTime: String,
                             useGeolocation: Boolean, patternLock:String?, useQR: Boolean,
-                            onSuccessListener: () -> Unit, onFailureListener: (() -> Unit)? = null) {
+                            onSuccessListener: () -> Unit, onFailureListener: ((e: Exception) -> Unit)? = null) {
 
         val event = mutableMapOf<String, Any?>(
             "event_start_time" to startTime,
@@ -129,9 +132,9 @@ class FirestoreEventHelper {
             .addOnSuccessListener {
                 onSuccessListener()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 if(onFailureListener != null)
-                    onFailureListener()
+                    onFailureListener(e)
             }
     }
 }
