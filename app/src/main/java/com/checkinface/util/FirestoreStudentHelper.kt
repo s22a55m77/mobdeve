@@ -45,11 +45,17 @@ class FirestoreStudentHelper {
                 "LATE" -> status = AttendanceStatus.LATE
                 "ABSENT" -> status = AttendanceStatus.ABSENT
             }
+
+            val firestoreEventHelper = FirestoreEventHelper()
+            val eventDetail = firestoreEventHelper.getEventFromId(courseCode, event.get(FirestoreAttendanceHelper.EVENT_ID) as String)
+
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val date = dateFormat.parse(event.get(DATE_FIELD).toString())!!
+            val absentTime = dateFormat.parse(eventDetail?.get(FirestoreEventHelper.ABSENT_TIME).toString())!!
             data.add(
                 StudentAttendanceModel(
                     date,
+                    absentTime,
                     status
                 )
             )

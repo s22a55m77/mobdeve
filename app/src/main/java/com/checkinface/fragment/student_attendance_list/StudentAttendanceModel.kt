@@ -4,5 +4,6 @@ import java.util.Date
 
 data class StudentAttendanceModel(
     val date: Date,
+    val absentTime: Date,
     var status: AttendanceStatus
 )

@@ -13,19 +13,20 @@ class StudentAttendanceListViewHolder(private val binding: StudentAttendanceItem
         binding.tvAttendanceDate.text = DateUtil.getFormattedDate("MMM d, yyyy HH:mm", studentAttendanceModel.date)
         binding.tvAttendanceStatus.text = status.lowercase().replaceFirstChar { it.uppercase() }
 
-        if (studentAttendanceModel.date.time < Date().time) {
-            when (status) {
-                "PRESENT" -> binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_check)
-                "ABSENT" -> binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_close)
-                "LATE" -> binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_clock)
+        // not yet pass absent time
+        if (studentAttendanceModel.absentTime.time > Date().time) {
+            if (status == "ABSENT") {
+                binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_pending)
+                binding.tvAttendanceStatus.text = "Pending"
+            } else {
+                when (status) {
+                    "PRESENT" -> binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_check)
+                    "LATE" -> binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_clock)
+                }
             }
+        } else {
+            binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_close)
         }
-        else {
-            binding.ivAttendanceIconStatus.setImageResource(R.drawable.ic_pending)
-            binding.tvAttendanceStatus.text = "Pending"
-        }
-
-
     }
 
 }
