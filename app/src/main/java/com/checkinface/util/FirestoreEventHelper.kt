@@ -10,8 +10,13 @@ class FirestoreEventHelper {
     companion object {
         private const val COURSE_COLLECTION = "course"
         private const val EVENT_COLLECTION = "events"
-        private const val CODE_FIELD = "course_code"
-        private const val START_TIME = "event_start_time"
+        const val CODE_FIELD = "course_code"
+        const val START_TIME = "event_start_time"
+        const val LATE_TIME = "event_late_time"
+        const val ABSENT_TIME = "event_absent_time"
+        const val GEOLOCATION = "geolocation"
+        const val PATTERN = "pattern_lock"
+        const val QR = "use_qr"
     }
 
     suspend fun getEventDetailBasedOnEvent(courseCode: String, eventTime: String): MutableMap<String, Any>? {
@@ -34,15 +39,15 @@ class FirestoreEventHelper {
     }
 
     fun addEvent(courseCode: String, startTime: String, lateTime: String, absentTime: String,
-                 useGeolocation: Boolean, patternLock:String?, useQR: Boolean,
+                 geolocation: String?, patternLock:String?, useQr: Boolean,
                  onSuccessListener: () -> Unit, onFailureListener: (e: Exception) -> Unit) {
         val event = hashMapOf(
-            "event_start_time" to startTime,
-            "event_late_time" to lateTime,
-            "event_absent_time" to absentTime,
-            "use_geolocation" to useGeolocation,
-            "pattern_lock" to patternLock,
-            "use_qr" to useQR,
+            START_TIME to startTime,
+            LATE_TIME to lateTime,
+            ABSENT_TIME to absentTime,
+            GEOLOCATION to geolocation,
+            PATTERN to patternLock,
+            QR to useQr,
         )
 
         db.collection(COURSE_COLLECTION)
@@ -136,5 +141,31 @@ class FirestoreEventHelper {
                 if(onFailureListener != null)
                     onFailureListener(e)
             }
+    }
+
+    suspend fun getIncomingEvent(courseCode: String): Pair<String, MutableMap<String, Any>>? {
+        // Get Course Id
+        val id = db.collection(COURSE_COLLECTION)
+            .whereEqualTo(CODE_FIELD, courseCode)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        val events = db.collection(COURSE_COLLECTION)
+            .document(id)
+            .collection(EVENT_COLLECTION)
+            .get()
+            .await()
+
+        for (event in events) {
+            val eventTime = event.get(START_TIME) as String
+            val currentDate = DateUtil.getCurrentDate()
+            if (eventTime.startsWith(currentDate)) {
+                val eventId = event.id
+                val eventData = event.data
+                return Pair(eventId, eventData)
+            }
+        }
+        return null
     }
 }

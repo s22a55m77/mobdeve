@@ -64,8 +64,8 @@ class AzureMapActivity : AppCompatActivity() {
 
         viewBinding.btnSetLocation.setOnClickListener{
             val returnIntent = Intent()
-            returnIntent.putExtra(LAT_KEY, lat)
-            returnIntent.putExtra(LON_KEY, lon)
+            returnIntent.putExtra(LAT_KEY, lat.toString())
+            returnIntent.putExtra(LON_KEY, lon.toString())
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
         }

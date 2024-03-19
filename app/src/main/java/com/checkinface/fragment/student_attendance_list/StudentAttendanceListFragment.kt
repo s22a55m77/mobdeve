@@ -1,7 +1,10 @@
 package com.checkinface.fragment.student_attendance_list
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +13,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +23,12 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.databinding.FragmentStudentAttendanceBinding
+import com.checkinface.util.CheckAttendanceUtil
+import com.checkinface.util.DateUtil
+import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.FirestoreStudentHelper
 import com.checkinface.util.FirestoreUserHelper
+import com.checkinface.util.GeolocationService
 import com.checkinface.util.UserRole
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Firebase
@@ -29,6 +37,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class StudentAttendanceListFragment : Fragment() {
@@ -39,7 +48,9 @@ class StudentAttendanceListFragment : Fragment() {
     private lateinit var emptyView: LinearLayout
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreStudentHelper: FirestoreStudentHelper = FirestoreStudentHelper()
+    private val firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
     private var userRole: UserRole? = null
+    private var patternResult: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,65 +102,15 @@ class StudentAttendanceListFragment : Fragment() {
             viewBinding.fabCheck.visibility = View.GONE
         }
 
-        // Pattern Lock
-        val patternView = layoutInflater.inflate(R.layout.create_attendance_pattern_lock_layout, null)
-        val mPatternLockView: PatternLockView = patternView.findViewById(R.id.pattern_lock_view)
-        val mPatternLockViewListener: PatternLockViewListener = object : PatternLockViewListener {
-            override fun onStarted() {
-                Log.d(javaClass.name, "Pattern drawing started")
-            }
 
-            override fun onProgress(progressPattern: List<PatternLockView.Dot>) {
-                Log.d(
-                    javaClass.name, "Pattern progress: " +
-                            PatternLockUtils.patternToString(mPatternLockView, progressPattern)
-                )
-            }
-
-            override fun onComplete(pattern: List<PatternLockView.Dot>) {
-                Log.d(
-                    javaClass.name, "Pattern complete: " +
-                            PatternLockUtils.patternToString(mPatternLockView, pattern)
-                )
-            }
-
-            override fun onCleared() {
-                Log.d(javaClass.name, "Pattern has been cleared")
-            }
-        }
-        mPatternLockView.addPatternLockListener(mPatternLockViewListener)
-        //modal for pattern lock
-        val dialog = MaterialAlertDialogBuilder(this.requireContext()).setView(patternView)
-            .setNegativeButton("Cancel") { dialog, which ->
-                dialog.dismiss()
-            }
-            .setPositiveButton("Submit") { dialog, which ->
-                Toast.makeText(
-                    requireContext(),
-                    "Attendance Checked",
-                    Toast.LENGTH_LONG
-                ).show()
-                dialog.cancel()
-            }
-        val patternModal = dialog.create()
 
         //check listener
         this.viewBinding.fabCheck.setOnClickListener {
-            val options = GmsBarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                    Barcode.FORMAT_QR_CODE)
-                .enableAutoZoom()
-                .build()
 
-            val scanner = GmsBarcodeScanning.getClient(requireActivity().applicationContext, options)
-
-            scanner.startScan()
-                .addOnSuccessListener { barcode ->
-                    barcode.rawValue?.let {
-                        patternModal.show()
-                        Log.d("CheckAttendance", it)
-                    }
-                }
+            lifecycleScope.launch {
+                val checkAttendanceUtil = CheckAttendanceUtil(requireActivity(), requireContext())
+                checkAttendanceUtil.checkAttendance()
+            }
         }
     }
 

@@ -51,6 +51,21 @@ class DateUtil {
             // Format the Date object to a string and return it
             return dateFormat.format(date)
         }
+
+        fun getCurrentDate(): String {
+            val calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            return dateFormat.format(calendar.time)
+        }
+
+        fun isPassed(time: String): Boolean {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val date = dateFormat.parse(time)
+            val currentDate = Date()
+
+            return date?.time ?: 0 < currentDate.time
+        }
+
     }
 
 
