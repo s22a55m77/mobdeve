@@ -232,9 +232,9 @@ class EditAttendanceActivity : AppCompatActivity() {
 
         viewBinding.checkboxGeolocation.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                viewBinding.btnGeolocation.visibility = View.VISIBLE
+                viewBinding.llGeolocationGroup.visibility = View.VISIBLE
             } else {
-                viewBinding.btnGeolocation.visibility = View.GONE
+                viewBinding.llGeolocationGroup.visibility = View.GONE
             }
         }
 

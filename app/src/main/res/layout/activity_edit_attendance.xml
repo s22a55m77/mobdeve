@@ -71,19 +71,36 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/btn_geolocation"
+        <LinearLayout
+            android:id="@+id/ll_geolocation_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
-            android:text="Select Geolocation"
             android:visibility="gone"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_option_group" />
+            app:layout_constraintTop_toBottomOf="@+id/card_view_option_group">
+
+            <Button
+                android:id="@+id/btn_geolocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="Select Geolocation"
+                app:strokeWidth="0dp" />
+
+            <Button
+                android:id="@+id/btn_use_current_geolocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="Use Current Geolocation"
+                app:strokeWidth="0dp" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btn_pattern"
             android:layout_width="match_parent"
@@ -96,7 +113,7 @@
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_geolocation" />
+            app:layout_constraintTop_toBottomOf="@+id/ll_geolocation_group" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_time_group"
