@@ -16,17 +16,18 @@ class FirestoreAttendanceHelper {
     private val db = Firebase.firestore
 
     companion object {
-        private const val COURSE_COLLECTION = "course"
-        private const val ATTENDANCE_COLLECTION = "attendances"
-        private const val STUDENT_COLLECTION = "students"
-        private const val EVENT_COLLECTION = "events"
-        private const val COURSE_CODE = "course_code"
-        private const val STUDENT_FIELD = "student"
-        private const val STATUS_FIELD = "status"
-        private const val START_TIME = "event_start_time"
-        private const val EVENT_TIME = "event"
-        private const val STUDENT_EMAIL = "student_email"
-        private const val STUDENT_NAME = "student_name"
+        const val COURSE_COLLECTION = "course"
+        const val ATTENDANCE_COLLECTION = "attendances"
+        const val STUDENT_COLLECTION = "students"
+        const val EVENT_COLLECTION = "events"
+        const val COURSE_CODE = "course_code"
+        const val STUDENT_FIELD = "student"
+        const val STATUS_FIELD = "status"
+        const val START_TIME = "event_start_time"
+        const val EVENT_TIME = "event"
+        const val STUDENT_EMAIL = "student_email"
+        const val STUDENT_NAME = "student_name"
+        const val EVENT_ID = "event_id"
     }
 
     suspend fun getStudentListsBasedOnEvent(courseCode: String, eventTime: String): ArrayList<AttendanceDetailStudentModel> {
@@ -173,7 +174,24 @@ class FirestoreAttendanceHelper {
             .addOnFailureListener { e ->
                 onFailureListener(e)
             }
+    }
 
+    suspend fun getAttendanceByEmailAndEventId(courseCode: String, eventId: String, email: String): MutableMap<String, Any>? {
+        // Get Course Id
+        val id = db.collection(COURSE_COLLECTION)
+            .whereEqualTo(COURSE_CODE, courseCode)
+            .get()
+            .await()
+            .documents.get(0).id
 
+        val event = db.collection(COURSE_COLLECTION)
+            .document(id)
+            .collection(ATTENDANCE_COLLECTION)
+            .whereEqualTo(EVENT_ID, eventId)
+            .whereEqualTo(STUDENT_EMAIL, email)
+            .get()
+            .await()
+
+        return event.documents[0].data
     }
 }

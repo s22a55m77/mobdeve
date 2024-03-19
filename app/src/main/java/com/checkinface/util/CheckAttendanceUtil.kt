@@ -146,6 +146,17 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         return DateUtil.isPassed(lateTime)
     }
 
+    suspend fun checkAttendanceIsChecked(courseCode: String, eventId: String, email: String): Boolean {
+        val event = firestoreAttendanceHelper.getAttendanceByEmailAndEventId(courseCode, eventId, email)!!
+        val status = event.get(FirestoreAttendanceHelper.STATUS_FIELD)
+        if (status != "ABSENT") {
+            Toast.makeText(context, "You have Checked the Attendance", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        return true
+    }
+
     suspend fun checkAttendance(code: String? = null, id: String? = null) {
         var courseCode = code
         var eventId = id
@@ -174,7 +185,9 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
 
         val absentTime = event.get(FirestoreEventHelper.ABSENT_TIME) as String
         val startTime = event.get(FirestoreEventHelper.START_TIME) as String
-        if(!checkAttendanceIsOpen(absentTime, startTime)) return
+        if (!checkAttendanceIsOpen(absentTime, startTime)) return
+
+        if (!checkAttendanceIsChecked(courseCode, eventId, Firebase.auth.currentUser?.email!!)) return
 
         val geolocation = event.get(FirestoreEventHelper.GEOLOCATION).toString()
         if (geolocation.isNotEmpty()) {
