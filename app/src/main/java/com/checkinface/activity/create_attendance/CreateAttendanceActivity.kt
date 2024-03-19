@@ -42,11 +42,15 @@ class CreateAttendanceActivity : AppCompatActivity() {
     private var dateSelected: Boolean = false
     private var dateRangeList: ArrayList<Long> = arrayListOf()
     private var firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
+    private var geolocation: String? = null
+    private var patternString: String? = null
 
     private val azureMapResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {result ->
         if (result.resultCode == RESULT_OK) {
-            // TODO get the lon and lat
+            val lon = result.data?.getStringExtra(AzureMapActivity.LON_KEY)!!
+            val lat = result.data?.getStringExtra(AzureMapActivity.LAT_KEY)!!
+            geolocation = "$lon $lat"
         }
     }
 
@@ -255,6 +259,7 @@ class CreateAttendanceActivity : AppCompatActivity() {
             }
 
             override fun onComplete(pattern: List<Dot>) {
+                patternString = PatternLockUtils.patternToString(mPatternLockView, pattern)
                 Log.d(
                     javaClass.name, "Pattern complete: " +
                             PatternLockUtils.patternToString(mPatternLockView, pattern)
@@ -307,9 +312,9 @@ class CreateAttendanceActivity : AppCompatActivity() {
                             startTime = DateUtil.millisecondsToTimestamp(date + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
                             lateTime = DateUtil.millisecondsToTimestamp(date + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
                             absentTime = DateUtil.millisecondsToTimestamp(date + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),
-                            useGeolocation = viewBinding.checkboxGeolocation.isChecked,
-                            patternLock = if (mPatternLockView.pattern.size == 0) null else mPatternLockView.pattern.toString(),
-                            useQR = viewBinding.checkboxQrCode.isChecked,
+                            geolocation = geolocation,
+                            patternLock = patternString,
+                            useQr = viewBinding.checkboxQrCode.isChecked,
                             onSuccessListener = fun() {
                                 successCount++
                                 if(successCount == dateRangeList.size) {
@@ -331,9 +336,9 @@ class CreateAttendanceActivity : AppCompatActivity() {
                         startTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + startTimePicker.hour * 3600000 + startTimePicker.minute * 60000),
                         lateTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + lateTimePicker.hour * 3600000 + lateTimePicker.minute * 60000),
                         absentTime = DateUtil.millisecondsToTimestamp(datePicker.selection!! + absentTimePicker.hour * 3600000 + absentTimePicker.minute * 60000),
-                        useGeolocation = viewBinding.checkboxGeolocation.isChecked,
-                        patternLock = if (mPatternLockView.pattern.size == 0) null else mPatternLockView.pattern.toString(),
-                        useQR = viewBinding.checkboxQrCode.isChecked,
+                        geolocation = geolocation,
+                        patternLock = patternString,
+                        useQr = viewBinding.checkboxQrCode.isChecked,
                         onSuccessListener = fun() {
                             Toast.makeText(viewBinding.root.context, "Successfully Added Event", Toast.LENGTH_LONG).show()
                             finish()
