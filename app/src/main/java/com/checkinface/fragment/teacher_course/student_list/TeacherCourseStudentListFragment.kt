@@ -107,6 +107,7 @@ class TeacherCourseStudentListFragment : Fragment() {
                 generateQR(courseCode!!)
                 this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)
                 tvQrCode.text = courseCode
+                tvQrCode.visibility = TextView.VISIBLE
                 qrModal.show()
             } else {
                 Toast.makeText(view.context, "Error while generating QR Code", Toast.LENGTH_LONG).show()

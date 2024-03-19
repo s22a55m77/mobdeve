@@ -121,6 +121,7 @@ class DashboardFragment : Fragment() {
                             val qr = AddCourseQR(courseCode)
                             generateQR(Json.encodeToString(qr))
                             tvCreateCourseCode.text = courseCode
+                            tvCreateCourseCode.visibility = TextView.VISIBLE
                             qrModal.show()
                             lifecycleScope.launch {
                                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
