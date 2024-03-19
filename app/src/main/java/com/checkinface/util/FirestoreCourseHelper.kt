@@ -14,7 +14,9 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class FirestoreCourseHelper {
     private val db = Firebase.firestore
@@ -24,9 +26,9 @@ class FirestoreCourseHelper {
         private const val ATTENDANCE_COLLECTION = "attendances"
         private const val STUDENT_COLLECTION = "students"
         private const val USER_COLLECTION = "users"
+        private const val EVENT_COLLECTION = "events"
         private const val NAME_FIELD = "course_name"
         private const val COLOR_FIELD = "course_color"
-        private const val NEXT_CHECK_TIME_FIELD = "next_check_time"
         private const val STUDENT_COUNT_FIELD = "student_count"
         private const val COURSE_CODE = "course_code"
         private const val TEACHER_FIELD = "course_teacher"
@@ -36,6 +38,7 @@ class FirestoreCourseHelper {
         private const val STUDENT_NAME = "student_name"
         private const val STUDENT_EMAIL = "student_email"
         private const val STUDENT_ID = "student_id"
+        private const val START_TIME = "event_start_time"
     }
     suspend fun getCourses(email: String, role: UserRole): ArrayList<DashboardModel> {
         val data: ArrayList<DashboardModel> = ArrayList()
@@ -52,12 +55,7 @@ class FirestoreCourseHelper {
             // Add to data
             if(courses != null) {
                 for (course in courses) {
-                    val date: Date?
                     val studentCount: Number?
-                    if(course.get(NEXT_CHECK_TIME_FIELD) != null)
-                        date = DateUtil.getDate(course.get(NEXT_CHECK_TIME_FIELD).toString())
-                    else
-                        date = null
                     if(course.get(STUDENT_COUNT_FIELD) != null)
                         studentCount = course.get(STUDENT_COUNT_FIELD).toString().toInt()
                     else
@@ -66,7 +64,7 @@ class FirestoreCourseHelper {
                         DashboardModel(
                             course.get(NAME_FIELD).toString(),
                             course.get(COLOR_FIELD).toString(),
-                            date,
+                            null,
                             studentCount,
                             course.get(COURSE_CODE).toString(),
                         )
@@ -94,26 +92,44 @@ class FirestoreCourseHelper {
                 }
             }
 
+            // Loop the course
             for (id in studentCourse) {
                 val course = db.collection(COURSE_COLLECTION)
                     .document(id)
                     .get()
                     .await()
-                val date: Date?
+                // Get next check time
+                val events = db.collection(COURSE_COLLECTION)
+                    .document(id)
+                    .collection(EVENT_COLLECTION)
+                    .get()
+                    .await()
+                val currentDate = Date()
+                var nearestDate: Date? = null
+                var minDifference = Long.MAX_VALUE
+                val currentTimeInMillis = currentDate.time
+                for (event in events.documents) {
+                    val date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss", event.get(START_TIME).toString())
+                    val difference = Math.abs(currentTimeInMillis - date.time)
+                    if (difference < minDifference) {
+                        minDifference = difference
+                        nearestDate = date
+                    }
+                }
+
+                // Get student Count
                 val studentCount: Number?
-                if(course.get(NEXT_CHECK_TIME_FIELD) != null)
-                    date = DateUtil.getDate(course.get(NEXT_CHECK_TIME_FIELD).toString())
-                else
-                    date = null
                 if(course.get(STUDENT_COUNT_FIELD) != null)
                     studentCount = course.get(STUDENT_COUNT_FIELD).toString().toInt()
                 else
                     studentCount = null
+
+                // Add to data list
                 data.add(
                     DashboardModel(
                         course.get(NAME_FIELD).toString(),
                         course.get(COLOR_FIELD).toString(),
-                        date,
+                        nearestDate,
                         studentCount,
                         course.get(COURSE_CODE).toString(),
                     )

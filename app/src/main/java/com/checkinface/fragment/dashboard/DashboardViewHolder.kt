@@ -9,7 +9,7 @@ class DashboardViewHolder(private val binding: DashboardItemLayoutBinding): View
     fun bindData(dashboardModel: DashboardModel) {
         binding.tvDashboardCourse.text = dashboardModel.course
         if (dashboardModel.nextCheckTime !== null) {
-            binding.tvDashboardCheckTime.text = DateUtil.getFormattedDate(dashboardModel.nextCheckTime)
+            binding.tvDashboardCheckTime.text = DateUtil.getFormattedDate("MMM d, yyyy HH:mm", dashboardModel.nextCheckTime)
         }
 
         if (dashboardModel.studentCount !== null) {
