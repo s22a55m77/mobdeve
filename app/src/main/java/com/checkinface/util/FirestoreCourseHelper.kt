@@ -1,22 +1,15 @@
 package com.checkinface.util
 
 import android.util.Log
-import android.widget.Toast
 import com.checkinface.fragment.dashboard.DashboardModel
-import com.checkinface.fragment.student_attendance_list.AttendanceStatus
-import com.checkinface.fragment.teacher_course.attendance_detail_student_list.AttendanceDetailStudentModel
 import com.checkinface.fragment.teacher_course.student_list.StudentModel
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 class FirestoreCourseHelper {
     private val db = Firebase.firestore

@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.checkinface.R
-import com.checkinface.fragment.dashboard.DashboardAdapter
-import com.checkinface.fragment.dashboard.DashboardFragment
 import com.checkinface.util.CheckAttendanceUtil
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.qr.CheckAttendanceQR
-import com.checkinface.util.qr.CommonQR
 import com.checkinface.util.qr.QrSerializer
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
@@ -24,9 +21,6 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
 
 class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

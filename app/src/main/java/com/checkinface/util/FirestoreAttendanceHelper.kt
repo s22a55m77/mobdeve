@@ -1,12 +1,9 @@
 package com.checkinface.util
 
-import android.util.Log
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.fragment.teacher_course.attendance_detail_student_list.AttendanceDetailStudentModel
 import com.checkinface.fragment.teacher_course.attendance_list.TeacherAttendanceModel
-import com.checkinface.fragment.teacher_course.student_list.StudentModel
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat

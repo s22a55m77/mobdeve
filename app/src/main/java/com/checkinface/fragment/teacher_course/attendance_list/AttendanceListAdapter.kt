@@ -1,6 +1,5 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +8,10 @@ import android.widget.ImageView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
-import com.checkinface.activity.edit_attendance.EditAttendanceActivity
+import com.checkinface.activity.EditAttendanceActivity
 import com.checkinface.databinding.AttendanceItemLayoutBinding
 import com.checkinface.util.DateUtil
+import com.checkinface.util.VariableHolder
 import com.checkinface.util.qr.CheckAttendanceQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.BarcodeFormat
@@ -43,20 +43,22 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
             val navController = holder.itemView.findNavController()
             navController.navigate(R.id.action_attendance_list_to_detail)
             // Set Event
-            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            with(sp.edit()) {
-                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
-                apply()
-            }
+//            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            with(sp.edit()) {
+//                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
+//                apply()
+//            }
+            VariableHolder.getInstance().eventTime = DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date)
         }
 
         val settings = holder.itemView.findViewById<ImageView>(R.id.iv_attendance_settings)
         settings.setOnClickListener {
-            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            with(sp.edit()) {
-                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
-                apply()
-            }
+//            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            with(sp.edit()) {
+//                putString("EVENT_TIME", DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date))
+//                apply()
+//            }
+            VariableHolder.getInstance().eventTime = DateUtil.getFormattedDate("yyyy-MM-dd HH:mm:ss", data[position].date)
             val intent = Intent(holder.itemView.context, EditAttendanceActivity::class.java)
             holder.itemView.context.startActivity(intent)
         }
@@ -66,8 +68,9 @@ class AttendanceListAdapter(private val data: ArrayList<TeacherAttendanceModel>)
             val layoutInflater = LayoutInflater.from(holder.itemView.context)
             val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
             this.ivQrCode = qrModalView.findViewById(R.id.iv_qr_code_container)
-            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-            val courseCode = sp.getString("COURSE_CODE", "")
+//            val sp = holder.itemView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//            val courseCode = sp.getString("COURSE_CODE", "")
+            val courseCode = VariableHolder.getInstance().courseCode
             val eventId = data[position].eventId
             val qr = CheckAttendanceQR(eventId, courseCode!!)
             val jsonString = Json.encodeToString(qr)

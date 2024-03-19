@@ -1,6 +1,5 @@
-package com.checkinface.activity.edit_attendance
+package com.checkinface.activity
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,23 +8,16 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.util.Pair
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
-import com.checkinface.activity.AzureMapActivity
-import com.checkinface.activity.create_attendance.DateModel
-import com.checkinface.activity.create_attendance.SelectedDateAdapter
-import com.checkinface.activity.create_attendance.SelectedDays
 import com.checkinface.databinding.ActivityEditAttendanceBinding
 import com.checkinface.util.DateUtil
-import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
+import com.checkinface.util.VariableHolder
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -57,9 +49,11 @@ class EditAttendanceActivity : AppCompatActivity() {
         viewBinding = ActivityEditAttendanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        val sp = viewBinding.root.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
-        val eventTime = sp.getString("EVENT_TIME", "")
+//        val sp = viewBinding.root.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+//        val courseCode = sp.getString("COURSE_CODE", "")
+//        val eventTime = sp.getString("EVENT_TIME", "")
+        val courseCode = VariableHolder.getInstance().courseCode
+        val eventTime = VariableHolder.getInstance().eventTime
         var eventDetail: MutableMap<String, Any>? = mutableMapOf()
 
         var datePicker: MaterialDatePicker<Long>? = null

@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,7 +20,6 @@ import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.qr.CommonQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -65,7 +65,7 @@ class DashboardFragment : Fragment() {
                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email.toString(), userRole!!)
                 if(dashboardModelList.size == 0)
                     emptyView.visibility = LinearLayout.VISIBLE
-                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!, requireActivity() as AppCompatActivity)
             }
 
         }.invokeOnCompletion {
@@ -125,7 +125,7 @@ class DashboardFragment : Fragment() {
                             qrModal.show()
                             lifecycleScope.launch {
                                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
-                                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+                                recyclerView.adapter?.notifyDataSetChanged()
                             }
                         },
                         fun(e) {
@@ -153,7 +153,8 @@ class DashboardFragment : Fragment() {
                                 // Update Dashboard
                                 lifecycleScope.launch {
                                     dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
-                                    recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!)
+
+                                    recyclerView.adapter?.notifyDataSetChanged()
                                     Toast.makeText(view.context, "Successfully Added to the Course", Toast.LENGTH_LONG).show()
                                 }
                             },
