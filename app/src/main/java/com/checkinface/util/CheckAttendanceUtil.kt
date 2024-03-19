@@ -47,22 +47,8 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
     private fun checkGeolocation(geoString: String): Boolean {
         val geolocationService = GeolocationService(activity)
 
-        if (!geolocationService.checkPermission()) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-            )
+        if (!geolocationService.getPermissionAndGPS())
             return false
-        }
-
-        if (!geolocationService.isGPSEnabled()) {
-            val callGPSSettingIntent = Intent(
-                Settings.ACTION_LOCATION_SOURCE_SETTINGS
-            )
-            activity.startActivity(callGPSSettingIntent)
-            return false
-        }
 
         val lonLat = geolocationService.getCurrentLonLat()
         if (lonLat == null) {

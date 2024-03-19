@@ -37,7 +37,8 @@ class FirebaseMessagingService: FirebaseMessagingService() {
 
                 // schedule the notification before attendance checking
                 val calendar = setCalendar(remoteMessage)
-                scheduleNotification(calendar, courseName, notificationId)
+                if (calendar.after(Calendar.getInstance()))
+                    scheduleNotification(calendar, courseName, notificationId)
             }
             "modify" -> {
                 sendModifyAttendanceNotification(courseName, time)

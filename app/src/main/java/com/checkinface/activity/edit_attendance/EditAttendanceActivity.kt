@@ -24,6 +24,7 @@ import com.checkinface.databinding.ActivityEditAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.FirestoreEventHelper
+import com.checkinface.util.GeolocationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -33,21 +34,16 @@ import java.util.Date
 
 class EditAttendanceActivity : AppCompatActivity() {
     private val firestoreEventHelper = FirestoreEventHelper()
+    private var geolocation: String? = null
+    private var patternString: String? = null
 
     private val azureMapResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            // TODO get the lon and lat
+            val lon = result.data?.getStringExtra(AzureMapActivity.LON_KEY)!!
+            val lat = result.data?.getStringExtra(AzureMapActivity.LAT_KEY)!!
+            geolocation = "$lon $lat"
         }
-    }
-
-    companion object {
-        private const val START_TIME = "event_start_time"
-        private const val LATE_TIME = "event_late_time"
-        private const val ABSENT_TIME = "event_absent_time"
-        private const val PATTERN_LOCK = "pattern_lock"
-        private const val USE_GEOLOCATION = "use_geolocation"
-        private const val USE_QR = "use_qr"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,13 +71,13 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             // Initialize Edit State
             // CheckBox
-            viewBinding.checkboxGeolocation.isChecked = eventDetail?.get(USE_GEOLOCATION).toString().toBoolean()
-            if(eventDetail?.get(PATTERN_LOCK) != null)
+            viewBinding.checkboxGeolocation.isChecked = eventDetail?.get(FirestoreEventHelper.GEOLOCATION) != null
+            if(eventDetail?.get(FirestoreEventHelper.PATTERN) != null)
                 viewBinding.checkboxPatternPassword.isChecked = true
-            viewBinding.checkboxQrCode.isChecked = eventDetail?.get(USE_QR).toString().toBoolean()
+            viewBinding.checkboxQrCode.isChecked = eventDetail?.get(FirestoreEventHelper.QR).toString().toBoolean()
 
             // Date
-            val date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(START_TIME).toString(), true)
+            val date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(FirestoreEventHelper.START_TIME).toString(), true)
             var message = "Select Date: " + DateUtil.getFormattedDate(date)
             viewBinding.btnDatePicker.text = message
 
@@ -93,9 +89,9 @@ class EditAttendanceActivity : AppCompatActivity() {
 
             // Firestore String to Date to Hour String to Int
             val startTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                START_TIME).toString())).toInt()
+                FirestoreEventHelper.START_TIME).toString())).toInt()
             val startTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                START_TIME).toString())).toInt()
+                FirestoreEventHelper.START_TIME).toString())).toInt()
             message = "Select Start Time: $startTimeHour:$startTimeMinute"
             viewBinding.btnStartTimePicker.text = message
 
@@ -110,9 +106,9 @@ class EditAttendanceActivity : AppCompatActivity() {
 
 
             val lateTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                LATE_TIME).toString())).toInt()
-            val lateTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                LATE_TIME).toString())).toInt()
+                FirestoreEventHelper.LATE_TIME).toString())).toInt()
+            val lateTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+                FirestoreEventHelper.LATE_TIME).toString())).toInt()
             message =
                 "Select Late Time: $lateTimeHour:$lateTimeMinute"
             viewBinding.btnLateTimePicker.text = message
@@ -126,9 +122,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                     .build()
 
             val absentTimeHour = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                ABSENT_TIME).toString())).toInt()
-            val absentTimeMinute = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                ABSENT_TIME).toString())).toInt()
+                FirestoreEventHelper.ABSENT_TIME).toString())).toInt()
+            val absentTimeMinute = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
+                FirestoreEventHelper.ABSENT_TIME).toString())).toInt()
             message =
                 "Select Absent Time: $absentTimeHour:$absentTimeMinute"
             viewBinding.btnAbsentTimePicker.text = message
@@ -179,6 +175,7 @@ class EditAttendanceActivity : AppCompatActivity() {
                 }
 
                 override fun onComplete(pattern: List<PatternLockView.Dot>) {
+                    patternString = PatternLockUtils.patternToString(mPatternLockView, pattern)
                     Log.d(
                         javaClass.name, "Pattern complete: " +
                                 PatternLockUtils.patternToString(mPatternLockView, pattern)
@@ -190,8 +187,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                 }
             }
             mPatternLockView.addPatternLockListener(mPatternLockViewListener)
-            if(eventDetail?.get(PATTERN_LOCK) != null)
-                mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, PatternLockUtils.stringToPattern(mPatternLockView, eventDetail?.get(PATTERN_LOCK).toString()))
+            patternString = eventDetail?.get(FirestoreEventHelper.PATTERN).toString()
+            val pattern = PatternLockUtils.stringToPattern(mPatternLockView, patternString)
+            mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, pattern)
         }
 
         // listener binding
@@ -244,6 +242,15 @@ class EditAttendanceActivity : AppCompatActivity() {
             patternModal.show()
         }
 
+        viewBinding.btnUseCurrentGeolocation.setOnClickListener {
+            val geolocationService = GeolocationService(this@EditAttendanceActivity)
+            if(!geolocationService.getPermissionAndGPS()) {
+                Toast.makeText(applicationContext, "Please enable GPS", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            geolocation = geolocationService.getCurrentLonLat()
+        }
+
         // Handle Save
         viewBinding.btnEditAttendance.setOnClickListener {
             val selectedDateInMillis = datePicker?.selection ?: 0
@@ -260,9 +267,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                 startTimeMinuteMillis = (startTimePicker?.minute ?: 0) * 60000
             } catch (e: Exception) {
                 startTimeHourMillis = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    START_TIME).toString())).toInt() * 3600000
+                    FirestoreEventHelper.START_TIME).toString())).toInt() * 3600000
                 startTimeMinuteMillis = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    START_TIME).toString())).toInt() * 60000
+                    FirestoreEventHelper.START_TIME).toString())).toInt() * 60000
             }
 
             try {
@@ -270,9 +277,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                 lateTimeMinuteMillis = (lateTimePicker?.minute ?: 0) * 60000
             } catch (e: Exception) {
                 lateTimeHourMillis = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    LATE_TIME).toString())).toInt() * 3600000
+                    FirestoreEventHelper.LATE_TIME).toString())).toInt() * 3600000
                 lateTimeMinuteMillis = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    LATE_TIME).toString())).toInt() * 60000
+                    FirestoreEventHelper.LATE_TIME).toString())).toInt() * 60000
             }
 
             try {
@@ -280,9 +287,9 @@ class EditAttendanceActivity : AppCompatActivity() {
                 absentTimeMinuteMillis = (absentTimePicker?.minute ?: 0) * 60000
             } catch (e: Exception) {
                 absentTimeHourMillis = DateUtil.getFormattedDate("HH", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    ABSENT_TIME).toString())).toInt() * 3600000
+                    FirestoreEventHelper.ABSENT_TIME).toString())).toInt() * 3600000
                 absentTimeMinuteMillis = DateUtil.getFormattedDate("mm", DateUtil.getDate("yyyy-MM-dd HH:mm:ss", eventDetail?.get(
-                    ABSENT_TIME).toString())).toInt() * 60000
+                    FirestoreEventHelper.ABSENT_TIME).toString())).toInt() * 60000
             }
 
             val startTime = DateUtil.millisecondsToTimestamp(selectedDateInMillis + startTimeHourMillis + startTimeMinuteMillis)
@@ -295,8 +302,8 @@ class EditAttendanceActivity : AppCompatActivity() {
                     startTime = startTime,
                     lateTime = lateTime,
                     absentTime = absentTime,
-                    useGeolocation = viewBinding.checkboxGeolocation.isChecked,
-                    patternLock = if (mPatternLockView.pattern.size == 0) null else PatternLockUtils.patternToString(mPatternLockView, mPatternLockView.pattern),
+                    geolocation = geolocation,
+                    patternLock = patternString,
                     useQR = viewBinding.checkboxQrCode.isChecked,
                     onSuccessListener = fun() {
                         Toast.makeText(viewBinding.root.context, "Saved", Toast.LENGTH_LONG).show()
