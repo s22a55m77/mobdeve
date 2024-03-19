@@ -125,7 +125,7 @@ class DashboardFragment : Fragment() {
                             qrModal.show()
                             lifecycleScope.launch {
                                 dashboardModelList = firestoreCourseHelper.getCourses(Firebase.auth.currentUser?.email!!, userRole!!)
-                                recyclerView.adapter?.notifyDataSetChanged()
+                                recyclerView.adapter = DashboardAdapter(dashboardModelList, userRole!!, requireActivity() as AppCompatActivity)
                             }
                         },
                         fun(e) {
