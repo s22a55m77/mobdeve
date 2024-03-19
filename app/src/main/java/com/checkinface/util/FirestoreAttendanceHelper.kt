@@ -185,10 +185,9 @@ class FirestoreAttendanceHelper {
             .document(id)
             .collection(ATTENDANCE_COLLECTION)
             .whereEqualTo(EVENT_ID, eventId)
-            .whereEqualTo(STUDENT_EMAIL, email)
+            .whereEqualTo(STUDENT_FIELD, email)
             .get()
             .await()
-
         return event.documents[0].data
     }
 }

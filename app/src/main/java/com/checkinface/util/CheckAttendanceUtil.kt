@@ -167,91 +167,86 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
     }
 
     suspend fun checkAttendance(code: String? = null, id: String? = null, onSuccessListener: (() -> Unit)? = null) {
-        suspend fun checkAttendance(
-            code: String? = null,
-            id: String? = null,
-            onSuccessListener: (() -> Unit)? = null
-        ) {
-            var courseCode = code
-            var eventId = id
-            if (courseCode == null) {
+        var courseCode = code
+        var eventId = id
+        if (courseCode == null) {
 //                val sp = context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
 //                courseCode = sp.getString("COURSE_CODE", "")
-                courseCode = VariableHolder.getInstance().courseCode
-            }
+            courseCode = VariableHolder.getInstance().courseCode
+        }
 
-            var event: MutableMap<String, Any>? = null
-            if (eventId != null) {
-                event = firestoreEventHelper.getEventFromId(courseCode!!, eventId)
-                if (event == null) {
-                    Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
-                    return
-                }
+        var event: MutableMap<String, Any>? = null
+        if (eventId != null) {
+            event = firestoreEventHelper.getEventFromId(courseCode!!, eventId)
+            if (event == null) {
+                Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
+                return
+            }
+        } else {
+            val result = firestoreEventHelper.getIncomingEvent(courseCode!!)
+            if (result == null) {
+                Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
+                return
             } else {
-                val result = firestoreEventHelper.getIncomingEvent(courseCode!!)
-                if (result == null) {
-                    Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
-                    return
-                } else {
-                    eventId = result.first
-                    event = result.second
-                }
+                eventId = result.first
+                event = result.second
             }
+        }
 
-            val absentTime = event.get(FirestoreEventHelper.ABSENT_TIME) as String
-            val startTime = event.get(FirestoreEventHelper.START_TIME) as String
-            if (!checkAttendanceIsOpen(absentTime, startTime)) return
+        val absentTime = event.get(FirestoreEventHelper.ABSENT_TIME) as String
+        val startTime = event.get(FirestoreEventHelper.START_TIME) as String
+        if (!checkAttendanceIsOpen(absentTime, startTime)) return
 
-            if (!checkAttendanceIsChecked(
-                    courseCode,
-                    eventId,
-                    Firebase.auth.currentUser?.email!!
-                )
-            ) return
+        Log.d("CHECK", "USER ${Firebase.auth.currentUser?.email!!} EVENT ID $eventId CODE $courseCode")
+        if (!checkAttendanceIsChecked(
+                courseCode,
+                eventId,
+                Firebase.auth.currentUser?.email!!
+            )
+        ) return
 
-            val geolocation = event.get(FirestoreEventHelper.GEOLOCATION)
-            if (geolocation != null) {
-                if (!checkGeolocation(geolocation.toString())) return
-            }
+        val geolocation = event.get(FirestoreEventHelper.GEOLOCATION)
+        if (geolocation != null) {
+            if (!checkGeolocation(geolocation.toString())) return
+        }
 
-            val useQr = event.get(FirestoreEventHelper.QR) as Boolean
-            if (useQr && (id == null)) {
-                if (!checkQr(eventId)) return
-            }
+        val useQr = event.get(FirestoreEventHelper.QR) as Boolean
+        if (useQr && (id == null)) {
+            if (!checkQr(eventId)) return
+        }
 
-            val pattern = event.get(FirestoreEventHelper.PATTERN) as String?
-            val lateTime = event.get(FirestoreEventHelper.LATE_TIME) as String
-            if (pattern != null) {
-                createPatternLock { patternString ->
-                    Log.d("PATTERN", patternString)
-                    if (patternString != event.get(FirestoreEventHelper.PATTERN))
-                        Toast.makeText(context, "Pattern Incorrect", Toast.LENGTH_LONG).show()
-                    else {
-                        if (isLate(lateTime)) {
-                            updateAttendanceStatus(courseCode, startTime, "LATE")
-                            if (onSuccessListener != null) {
-                                onSuccessListener()
-                            }
-                        } else {
-                            updateAttendanceStatus(courseCode, startTime, "PRESENT")
-                            if (onSuccessListener != null) {
-                                onSuccessListener()
-                            }
+        val pattern = event.get(FirestoreEventHelper.PATTERN) as String?
+        val lateTime = event.get(FirestoreEventHelper.LATE_TIME) as String
+        if (pattern != null) {
+            createPatternLock { patternString ->
+                Log.d("PATTERN", patternString)
+                if (patternString != event.get(FirestoreEventHelper.PATTERN))
+                    Toast.makeText(context, "Pattern Incorrect", Toast.LENGTH_LONG).show()
+                else {
+                    if (isLate(lateTime)) {
+                        updateAttendanceStatus(courseCode, startTime, "LATE")
+                        if (onSuccessListener != null) {
+                            onSuccessListener()
+                        }
+                    } else {
+                        updateAttendanceStatus(courseCode, startTime, "PRESENT")
+                        if (onSuccessListener != null) {
+                            onSuccessListener()
                         }
                     }
+                }
 
+            }
+        } else {
+            if (isLate(lateTime)) {
+                updateAttendanceStatus(courseCode, startTime, "LATE")
+                if (onSuccessListener != null) {
+                    onSuccessListener()
                 }
             } else {
-                if (isLate(lateTime)) {
-                    updateAttendanceStatus(courseCode, startTime, "LATE")
-                    if (onSuccessListener != null) {
-                        onSuccessListener()
-                    }
-                } else {
-                    updateAttendanceStatus(courseCode, startTime, "PRESENT")
-                    if (onSuccessListener != null) {
-                        onSuccessListener()
-                    }
+                updateAttendanceStatus(courseCode, startTime, "PRESENT")
+                if (onSuccessListener != null) {
+                    onSuccessListener()
                 }
             }
         }
