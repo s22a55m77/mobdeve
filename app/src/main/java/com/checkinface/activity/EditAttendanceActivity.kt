@@ -194,8 +194,10 @@ class EditAttendanceActivity : AppCompatActivity() {
             }
             mPatternLockView.addPatternLockListener(mPatternLockViewListener)
             patternString = eventDetail?.get(FirestoreEventHelper.PATTERN).toString()
-            val pattern = PatternLockUtils.stringToPattern(mPatternLockView, patternString)
-            mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, pattern)
+            if(patternString != "null") {
+                val pattern = PatternLockUtils.stringToPattern(mPatternLockView, patternString)
+                mPatternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT, pattern)
+            }
         }
 
         // listener binding
