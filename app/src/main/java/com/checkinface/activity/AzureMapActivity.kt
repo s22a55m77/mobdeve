@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.azure.android.maps.control.AzureMap
 import com.azure.android.maps.control.AzureMaps
 import com.azure.android.maps.control.MapControl

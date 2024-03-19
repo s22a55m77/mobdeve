@@ -1,6 +1,5 @@
 package com.checkinface.fragment.student_attendance_list
 
-import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater

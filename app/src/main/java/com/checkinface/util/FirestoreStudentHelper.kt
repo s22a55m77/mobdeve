@@ -1,6 +1,5 @@
 package com.checkinface.util;
 
-import android.util.Log
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.fragment.student_attendance_list.StudentAttendanceModel
 import com.google.firebase.Firebase

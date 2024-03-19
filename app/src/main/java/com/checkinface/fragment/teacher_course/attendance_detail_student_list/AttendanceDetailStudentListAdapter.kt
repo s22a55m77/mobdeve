@@ -1,7 +1,5 @@
 package com.checkinface.fragment.teacher_course.attendance_detail_student_list
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -17,7 +15,6 @@ import com.checkinface.util.VariableHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class AttendanceDetailStudentListAdapter(private val data: ArrayList<AttendanceDetailStudentModel>): Adapter<AttendanceDetailStudentListViewHolder>() {

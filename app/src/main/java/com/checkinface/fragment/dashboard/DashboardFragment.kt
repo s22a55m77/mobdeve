@@ -20,7 +20,6 @@ import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.UserRole
-import com.checkinface.util.qr.CommonQR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator

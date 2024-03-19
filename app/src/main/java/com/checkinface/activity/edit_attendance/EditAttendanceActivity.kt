@@ -1,6 +1,5 @@
 package com.checkinface.activity.edit_attendance
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,21 +8,14 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.util.Pair
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
 import com.checkinface.activity.AzureMapActivity
-import com.checkinface.activity.create_attendance.DateModel
-import com.checkinface.activity.create_attendance.SelectedDateAdapter
-import com.checkinface.activity.create_attendance.SelectedDays
 import com.checkinface.databinding.ActivityEditAttendanceBinding
 import com.checkinface.util.DateUtil
-import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.FirestoreEventHelper
 import com.checkinface.util.GeolocationService
 import com.checkinface.util.VariableHolder

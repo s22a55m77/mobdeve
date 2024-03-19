@@ -1,13 +1,9 @@
 package com.checkinface.util
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
@@ -24,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
 
 class CheckAttendanceUtil(private val activity: Activity, private val context: Context) {
     private val firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()

@@ -1,9 +1,7 @@
 package com.checkinface.fragment.teacher_course.attendance_detail_student_list
 
-import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +17,6 @@ import com.checkinface.util.FirestoreAttendanceHelper
 import com.checkinface.util.VariableHolder
 import com.google.android.material.chip.Chip
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 class AttendanceDetailStudentListFragment : Fragment() {

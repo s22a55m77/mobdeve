@@ -1,6 +1,5 @@
 package com.checkinface.fragment.teacher_course.student_list
 
-import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log

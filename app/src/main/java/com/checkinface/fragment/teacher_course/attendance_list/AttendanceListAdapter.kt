@@ -1,6 +1,5 @@
 package com.checkinface.fragment.teacher_course.attendance_list
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
