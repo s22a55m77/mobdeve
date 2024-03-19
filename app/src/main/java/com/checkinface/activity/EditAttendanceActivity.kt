@@ -1,4 +1,4 @@
-package com.checkinface.activity.edit_attendance
+package com.checkinface.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,6 @@ import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.checkinface.R
-import com.checkinface.activity.AzureMapActivity
 import com.checkinface.databinding.ActivityEditAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreEventHelper

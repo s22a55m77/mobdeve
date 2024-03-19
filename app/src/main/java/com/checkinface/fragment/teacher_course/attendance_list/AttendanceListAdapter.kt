@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
-import com.checkinface.activity.edit_attendance.EditAttendanceActivity
+import com.checkinface.activity.EditAttendanceActivity
 import com.checkinface.databinding.AttendanceItemLayoutBinding
 import com.checkinface.util.DateUtil
 import com.checkinface.util.VariableHolder

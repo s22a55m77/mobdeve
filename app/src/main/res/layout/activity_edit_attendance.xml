@@ -12,7 +12,7 @@
         android:id="@+id/cl_edit_attendance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.edit_attendance.EditAttendanceActivity">
+        tools:context=".activity.EditAttendanceActivity">
 
         <TextView
             android:id="@+id/tv_edit_attendance_title"

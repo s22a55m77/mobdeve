@@ -28,7 +28,7 @@
             android:name=".activity.AzureMapActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.edit_attendance.EditAttendanceActivity"
+            android:name=".activity.EditAttendanceActivity"
             android:exported="false" />
         <activity
             android:name=".activity.create_attendance.CreateAttendanceActivity"
