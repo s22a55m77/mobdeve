@@ -31,6 +31,7 @@ import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.GeolocationService
 import com.checkinface.util.UserRole
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -46,6 +47,7 @@ class StudentAttendanceListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewBinding: FragmentStudentAttendanceBinding
     private lateinit var emptyView: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
     private val firestoreUserHelper: FirestoreUserHelper = FirestoreUserHelper()
     private val firestoreStudentHelper: FirestoreStudentHelper = FirestoreStudentHelper()
     private val firestoreEventHelper: FirestoreEventHelper = FirestoreEventHelper()
@@ -70,6 +72,7 @@ class StudentAttendanceListFragment : Fragment() {
         this.recyclerView.layoutManager = linearLayoutManager
 
         this.emptyView = view.findViewById(R.id.empty_view)
+        this.progressBar = view.findViewById(R.id.progress_circular)
 
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
@@ -87,6 +90,9 @@ class StudentAttendanceListFragment : Fragment() {
                     emptyView.visibility = LinearLayout.VISIBLE
                 recyclerView.adapter = StudentAttendanceListAdapter(attendanceModelList, userRole!!)
             }
+        }.invokeOnCompletion {
+            progressBar.hide()
+            progressBar.setVisibilityAfterHide(View.GONE)
         }
 
         // resume animation

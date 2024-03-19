@@ -9,6 +9,9 @@
     tools:context=".fragment.student_attendance_list.StudentAttendanceListFragment">
 
     <include
+        layout="@layout/progress_indicator" />
+
+    <include
         android:id="@+id/empty_view"
         layout="@layout/empty_view"
         android:visibility="gone"/>

@@ -3,6 +3,7 @@ package com.checkinface.fragment.teacher_course.attendance_detail_student_list
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.checkinface.R
 import com.checkinface.fragment.student_attendance_list.AttendanceStatus
 import com.checkinface.util.FirestoreAttendanceHelper
 import com.google.android.material.chip.Chip
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class AttendanceDetailStudentListFragment : Fragment() {
     private lateinit var chipAbsent: Chip
     private lateinit var chipLate: Chip
     private lateinit var emptyView: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
     private val firestoreAttendanceHelper: FirestoreAttendanceHelper = FirestoreAttendanceHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +55,7 @@ class AttendanceDetailStudentListFragment : Fragment() {
         this.recyclerView.layoutManager = linearLayoutManager
 
         this.emptyView = view.findViewById(R.id.empty_view)
+        this.progressBar = view.findViewById(R.id.progress_circular)
 
         val sp = view.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
         val courseCode = sp.getString("COURSE_CODE", "")
@@ -62,7 +66,11 @@ class AttendanceDetailStudentListFragment : Fragment() {
                 attendanceDetailStudentList = firestoreAttendanceHelper.getStudentListsBasedOnEvent(courseCode, eventTime)
                 if(attendanceDetailStudentList.size == 0)
                     emptyView.visibility = LinearLayout.VISIBLE
-                recyclerView.adapter = AttendanceDetailStudentListAdapter(attendanceDetailStudentList)
+                else
+                    recyclerView.adapter = AttendanceDetailStudentListAdapter(attendanceDetailStudentList)
+            }.invokeOnCompletion {
+                progressBar.hide()
+                progressBar.setVisibilityAfterHide(View.GONE)
             }
         }
 
