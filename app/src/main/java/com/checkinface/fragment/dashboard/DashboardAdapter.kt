@@ -1,8 +1,10 @@
 package com.checkinface.fragment.dashboard
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.checkinface.R
@@ -10,7 +12,7 @@ import com.checkinface.databinding.DashboardItemLayoutBinding
 import com.checkinface.util.VariableHolder
 import com.checkinface.util.UserRole
 
-class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val role: UserRole): Adapter<DashboardViewHolder>() {
+class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val role: UserRole, private val activity: AppCompatActivity): Adapter<DashboardViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DashboardItemLayoutBinding.inflate(inflater, parent, false)
@@ -44,12 +46,12 @@ class DashboardAdapter(private val data: ArrayList<DashboardModel>, private val 
 //                apply()
 //            }
 
+            Log.d("COURSE", data[position].course)
+            activity.supportActionBar?.title = data[position].course
             if (role === UserRole.STUDENT) {
                 navController.navigate(R.id.action_dashboard_to_course)
-                navController.currentDestination?.label = data[position].course
             } else if (role === UserRole.TEACHER) {
                 navController.navigate(R.id.action_dashboard_to_teacher_course)
-                navController.currentDestination?.label = data[position].course
             }
         }
     }

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -30,6 +31,7 @@ import com.checkinface.databinding.ActivityMainBinding
 import com.checkinface.util.FirestoreUserHelper
 import com.checkinface.util.NotificationUtil
 import com.checkinface.util.UserRole
+import com.checkinface.util.VariableHolder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.firebase.Firebase
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             // control the highlight of the navbar
             navView.menu.findItem(destination.id)?.isChecked = true
 
+//            supportActionBar?.title = VariableHolder.getInstance().courseCode
             lifecycleScope.launch {
                 // only teacher side will need this logic
                 if (firestoreUserHelper.getRole() == UserRole.TEACHER) {
