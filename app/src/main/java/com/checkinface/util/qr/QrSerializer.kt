@@ -6,7 +6,7 @@ import kotlinx.serialization.json.jsonObject
 
 class QrSerializer: JsonContentPolymorphicSerializer<CommonQR>(CommonQR::class) {
     override fun selectDeserializer(element: JsonElement) = when {
-        "courseCode" in element.jsonObject -> AddCourseQR.serializer()
-        else -> CheckAttendanceQR.serializer()
+        "eventId" in element.jsonObject -> CheckAttendanceQR.serializer()
+        else -> AddCourseQR.serializer()
     }
 }

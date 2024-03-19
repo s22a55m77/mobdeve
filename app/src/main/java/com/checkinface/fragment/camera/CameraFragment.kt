@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.checkinface.R
 import com.checkinface.fragment.dashboard.DashboardAdapter
 import com.checkinface.fragment.dashboard.DashboardFragment
+import com.checkinface.util.CheckAttendanceUtil
 import com.checkinface.util.FirestoreCourseHelper
 import com.checkinface.util.qr.AddCourseQR
 import com.checkinface.util.qr.CheckAttendanceQR
@@ -83,9 +84,13 @@ class CameraFragment : Fragment() {
                             }
                         }
                         is CheckAttendanceQR -> {
-                            Log.d("CODE", code.eventId)
+                            val checkAttendanceUtil = CheckAttendanceUtil(requireActivity(), requireContext())
+                            lifecycleScope.launch {
+                                checkAttendanceUtil.checkAttendance(code.courseCode, code.eventId)
+                            }
                         }
                         else -> {
+
                         }
                     }
 

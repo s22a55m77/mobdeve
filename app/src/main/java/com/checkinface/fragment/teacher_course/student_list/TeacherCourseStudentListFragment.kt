@@ -87,9 +87,11 @@ class TeacherCourseStudentListFragment : Fragment() {
             val qrModalView = layoutInflater.inflate(R.layout.qr_code_layout, null)
             this.ivQrCode = qrModalView.findViewById(R.id.iv_qr_code_container)
             fun generateQR(courseCode: String) {
+                val qr = AddCourseQR(courseCode)
+                val jsonString = Json.encodeToString(qr)
                 val writer = MultiFormatWriter()
                 try {
-                    val matrix: BitMatrix = writer.encode(courseCode, BarcodeFormat.QR_CODE, 400, 400)
+                    val matrix: BitMatrix = writer.encode(jsonString, BarcodeFormat.QR_CODE, 400, 400)
                     val encoder = BarcodeEncoder()
                     val bitmap = encoder.createBitmap(matrix)
                     this.ivQrCode.setImageBitmap(bitmap)
@@ -102,8 +104,7 @@ class TeacherCourseStudentListFragment : Fragment() {
             val sp = view.rootView.context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
             val courseCode = sp.getString("COURSE_CODE", "")
             if(courseCode != "" || courseCode.isNotEmpty()) {
-                val qr = AddCourseQR(courseCode!!)
-                generateQR(Json.encodeToString(qr))
+                generateQR(courseCode!!)
                 this.tvQrCode = qrModalView.findViewById(R.id.tv_create_course_code)
                 tvQrCode.text = courseCode
                 qrModal.show()

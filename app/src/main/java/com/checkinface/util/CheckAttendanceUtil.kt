@@ -160,18 +160,31 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         return DateUtil.isPassed(lateTime)
     }
 
-    suspend fun checkAttendance() {
-        val sp = context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
-        val courseCode = sp.getString("COURSE_CODE", "")
-
-        val result = firestoreEventHelper.getIncomingEvent(courseCode!!)
-
-        if (result == null) {
-            Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
-            return
+    suspend fun checkAttendance(code: String? = null, id: String? = null) {
+        var courseCode = code
+        var eventId = id
+        if (courseCode == null) {
+            val sp = context.getSharedPreferences("COURSE_FILE", Context.MODE_PRIVATE)
+            courseCode = sp.getString("COURSE_CODE", "")
         }
 
-        val (eventId, event) = result
+        var event: MutableMap<String, Any>? = null
+        if (eventId != null) {
+            event = firestoreEventHelper.getEventFromId(courseCode!!, eventId)
+            if (event == null) {
+                Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
+                return
+            }
+        } else {
+            val result = firestoreEventHelper.getIncomingEvent(courseCode!!)
+            if (result == null) {
+                Toast.makeText(context, "No Attendance to Check", Toast.LENGTH_LONG).show()
+                return
+            } else {
+                eventId = result.first
+                event = result.second
+            }
+        }
 
         val absentTime = event.get(FirestoreEventHelper.ABSENT_TIME) as String
         val startTime = event.get(FirestoreEventHelper.START_TIME) as String
@@ -183,7 +196,7 @@ class CheckAttendanceUtil(private val activity: Activity, private val context: C
         }
 
         val useQr = event.get(FirestoreEventHelper.QR) as Boolean
-        if (useQr) {
+        if (useQr && (id == null)) {
             if(!checkQr(eventId)) return
         }
 
