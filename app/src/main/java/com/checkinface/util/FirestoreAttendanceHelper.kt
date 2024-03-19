@@ -123,6 +123,7 @@ class FirestoreAttendanceHelper {
             val date = dateFormat.parse(event.get(START_TIME).toString())
             data.add(
                 TeacherAttendanceModel(
+                    event.id,
                     date,
                     presentCount,
                     absentCount,

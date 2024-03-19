@@ -143,6 +143,23 @@ class FirestoreEventHelper {
             }
     }
 
+    suspend fun getEventFromId(courseCode: String, eventId: String): MutableMap<String, Any>? {
+        val id = db.collection(COURSE_COLLECTION)
+            .whereEqualTo(CODE_FIELD, courseCode)
+            .get()
+            .await()
+            .documents.get(0).id
+
+        val event = db.collection(COURSE_COLLECTION)
+            .document(id)
+            .collection(EVENT_COLLECTION)
+            .document(eventId)
+            .get()
+            .await()
+
+        return event.data
+    }
+
     suspend fun getIncomingEvent(courseCode: String): Pair<String, MutableMap<String, Any>>? {
         // Get Course Id
         val id = db.collection(COURSE_COLLECTION)
