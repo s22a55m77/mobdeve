@@ -14,6 +14,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.IBinder
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -50,6 +51,26 @@ class GeolocationService(private val activity: Activity): Service() {
             activity.applicationContext,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun getPermissionAndGPS(): Boolean {
+        if (!checkPermission()) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+            return false
+        }
+
+        if (!isGPSEnabled()) {
+            val callGPSSettingIntent = Intent(
+                Settings.ACTION_LOCATION_SOURCE_SETTINGS
+            )
+            activity.startActivity(callGPSSettingIntent)
+            return false
+        }
+        return true
     }
 
     fun checkPermission(): Boolean {

@@ -21,6 +21,7 @@ import com.checkinface.activity.AzureMapActivity
 import com.checkinface.databinding.ActivityCreateAttendanceBinding
 import com.checkinface.util.DateUtil
 import com.checkinface.util.FirestoreEventHelper
+import com.checkinface.util.GeolocationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -285,8 +286,16 @@ class CreateAttendanceActivity : AppCompatActivity() {
             patternModal.show()
         }
 
+        viewBinding.btnUseCurrentGeolocation.setOnClickListener {
+            val geolocationService = GeolocationService(this@CreateAttendanceActivity)
+            if(!geolocationService.getPermissionAndGPS()) {
+                Toast.makeText(applicationContext, "Please enable GPS", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            geolocation = geolocationService.getCurrentLonLat()
+        }
+
         // Handle Create Click
-        // TODO Update code for Geolocation
         viewBinding.btnCreateAttendance.setOnClickListener {
             Log.d("TEST", dateRangeList.toString())
             // Check required settings are selected

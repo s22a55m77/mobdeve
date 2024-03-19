@@ -101,16 +101,16 @@ class FirestoreEventHelper {
     }
 
     suspend fun updateEvent(courseCode: String, origEventTime: String, startTime: String, lateTime: String, absentTime: String,
-                            useGeolocation: Boolean, patternLock:String?, useQR: Boolean,
+                            geolocation: String?, patternLock: String?, useQR: Boolean,
                             onSuccessListener: () -> Unit, onFailureListener: ((e: Exception) -> Unit)? = null) {
 
         val event = mutableMapOf<String, Any?>(
-            "event_start_time" to startTime,
-            "event_late_time" to lateTime,
-            "event_absent_time" to absentTime,
-            "use_geolocation" to useGeolocation,
-            "pattern_lock" to patternLock,
-            "use_qr" to useQR
+            START_TIME to startTime,
+            LATE_TIME to lateTime,
+            ABSENT_TIME to absentTime,
+            GEOLOCATION to geolocation,
+            PATTERN to patternLock,
+            QR to useQR
         )
 
         // Get Course Id
