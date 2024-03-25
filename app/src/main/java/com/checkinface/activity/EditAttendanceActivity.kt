@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -72,6 +73,12 @@ class EditAttendanceActivity : AppCompatActivity() {
             // Initialize Edit State
             // CheckBox
             viewBinding.checkboxGeolocation.isChecked = eventDetail?.get(FirestoreEventHelper.GEOLOCATION) != null
+            if(viewBinding.checkboxGeolocation.isChecked) {
+                geolocation = eventDetail?.get(FirestoreEventHelper.GEOLOCATION).toString()
+                viewBinding.tvGeolocation.text = geolocation
+                viewBinding.llGeolocationText.visibility = LinearLayout.VISIBLE
+            }
+
             if(eventDetail?.get(FirestoreEventHelper.PATTERN) != null)
                 viewBinding.checkboxPatternPassword.isChecked = true
             viewBinding.checkboxQrCode.isChecked = eventDetail?.get(FirestoreEventHelper.QR).toString().toBoolean()
